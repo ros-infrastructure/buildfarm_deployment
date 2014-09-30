@@ -7,10 +7,6 @@ jenkins::plugin {
 }
 
 jenkins::plugin {
-  "ansicolor" : ;
-}
-
-jenkins::plugin {
   "bazaar" : ;
 }
 
