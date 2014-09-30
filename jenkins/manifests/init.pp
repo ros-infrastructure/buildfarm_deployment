@@ -15,6 +15,20 @@ jenkins::plugin {
 }
 
 jenkins::plugin {
+  "collapsing-console-sections" : ;
+}
+
+# Config for collapsing console sections
+file { "/var/lib/jenkins/org.jvnet.hudson.plugins.collapsingconsolesections.CollapsingSectionNote.xml":
+    mode   => 640,
+    owner  => jenkins,
+    group  => jenkins,
+    source => "puppet:///modules/jenkins_files/var/lib/jenkins/org.jvnet.hudson.plugins.collapsingconsolesections.CollapsingSectionNote.xml",
+    require => Jenkins::Plugin['collapsing-console-sections'],
+    notify => Service['jenkins'],
+}
+
+jenkins::plugin {
   "git" : ;
 }
 
