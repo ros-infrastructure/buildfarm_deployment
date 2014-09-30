@@ -55,23 +55,21 @@ jenkins::plugin {
 }
 
 
-#jenkins::security { "jsecurity":
-#  security_model => 'full_control',
-#}
-
-#jenkins::user {'johndoe':
-#  email    => 'jdoe@example.com',
-#  password => 'changeme',
-#}
 
 
-## In puppet:
-#anchor {'jenkins-bootstrap-start': } ->
-#  Class['jenkins::cli_helper'] ->
-#    Exec[foobar]->
-#        anchor {'jenkins-bootstrap-complete': }
+#hack to wait for initialization of jenkins so the cli can interact with it. 
+exec {"wait for service":
+  require => Service["jenkins"],
+  command => "/bin/sleep 20 && /usr/bin/wget --spider --tries 10 --retry-connrefused --no-check-certificate http://localhost:8080",
+}
 
-#exec {"foobar":
-#     command => 'service jenkins start',
-#     path    => "/usr/local/bin/:/bin/",
-#}
+jenkins::user {'johndoe':
+  email    => 'jdoe@example.com',
+  password => 'changeme',
+  require => Exec['wait for service'],
+}
+
+class {'jenkins::security':
+  security_model => "full_control",
+  require => [Exec['wait for service'], jenkins::user['johndoe'] ],
+}
