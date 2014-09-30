@@ -1,6 +1,10 @@
 include jenkins
 
+include jenkins_files
 
+jenkins::plugin {
+  "analysis-core" : ;
+}
 
 jenkins::plugin {
   "ansicolor" : ;
@@ -19,6 +23,10 @@ jenkins::plugin {
 }
 
 jenkins::plugin {
+  "git-client" : ;
+}
+
+jenkins::plugin {
   "github-api" : ;
 }
 
@@ -32,6 +40,14 @@ jenkins::plugin {
 
 jenkins::plugin {
   "PrioritySorter" : ;
+}
+
+jenkins::plugin {
+  "scm-api" : ;
+}
+
+jenkins::plugin {
+  "script-security" : ;
 }
 
 jenkins::plugin {
@@ -55,7 +71,23 @@ jenkins::plugin {
 }
 
 
+### Dependencies for Scripting
+package {"python3-yaml":
+  ensure => "installed",
+}
 
+
+# Add Chunking override to avoid cli errors
+# https://issues.jenkins-ci.org/browse/JENKINS-23223
+# from jenkins_files
+file { "/etc/default/jenkins":
+    mode   => 644,
+    owner  => root,
+    group  => root,
+    source => "puppet:///modules/jenkins_files/etc/default/jenkins",
+    require => Package['jenkins'],
+    notify => Service['jenkins'],
+}
 
 #hack to wait for initialization of jenkins so the cli can interact with it. 
 exec {"wait for service":
@@ -66,10 +98,17 @@ exec {"wait for service":
 jenkins::user {'johndoe':
   email    => 'jdoe@example.com',
   password => 'changeme',
-  require => Exec['wait for service'],
+  require => [Exec['wait for service'],
+              File["/etc/default/jenkins"],
+              ]
 }
 
 class {'jenkins::security':
   security_model => "full_control",
-  require => [Exec['wait for service'], jenkins::user['johndoe'] ],
+  require => [Exec['wait for service'], Jenkins::User['johndoe'] ],
+  notify => Exec['safe_restart'],
+}
+
+exec {"safe_restart":
+  command => "/bin/sleep 10 && /usr/bin/java -jar /usr/share/jenkins/jenkins-cli.jar -s http://localhost:8080 safe-restart --username johndoe --password changeme && sleep 30",
 }

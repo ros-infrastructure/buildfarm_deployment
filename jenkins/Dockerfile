@@ -11,8 +11,9 @@ RUN apt-get install -y git wget openjdk-7-jdk ca-certificates
 RUN gem install puppet --no-rdoc --no-ri
 RUN puppet module install rtyler/jenkins
 
-ADD manifests /tmp/manifests
+ADD . /tmp/jenkins
 
-RUN puppet apply -v /tmp/manifests/init.pp
+WORKDIR /tmp/jenkins
+RUN puppet apply -v /tmp/jenkins/manifests/init.pp --modulepath=/etc/puppet/modules:/usr/share/puppet/modules:/tmp/jenkins
 EXPOSE 8080
 CMD service jenkins start && bash
