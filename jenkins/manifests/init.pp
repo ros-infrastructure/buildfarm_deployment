@@ -99,26 +99,69 @@ file { "/etc/default/jenkins":
     notify => Service['jenkins'],
 }
 
-#hack to wait for initialization of jenkins so the cli can interact with it. 
-exec {"wait for service":
-  require => Service["jenkins"],
-  command => "/bin/sleep 20 && /usr/bin/wget --spider --tries 10 --retry-connrefused --no-check-certificate http://localhost:8080",
+
+
+
+
+# make sure that the config.xml is present. 
+# It does not get generated initially see https://github.com/ros-infrastructure/buildfarm_deployment/issues/2
+# This is too strong, if puppet is rerun it will override any changed configs
+file { "/var/lib/jenkins/config.xml":
+  ensure => 'present',
+  mode   => 640,
+  owner  => jenkins,
+  group  => jenkins,
+  source => "puppet:///modules/jenkins_files/var/lib/jenkins/config.xml",
+  require => Package['jenkins'],
+  notify => Service['jenkins'],
 }
 
-jenkins::user {'johndoe':
-  email    => 'jdoe@example.com',
-  password => 'changeme',
-  require => [Exec['wait for service'],
-              File["/etc/default/jenkins"],
-              ]
+$user_dirs = ["/var/lib/jenkins/users",
+              "/var/lib/jenkins/users/admin"]
+
+file { $user_dirs :
+  ensure => 'directory',
+  mode   => 640,
+  owner  => jenkins,
+  group  => jenkins,
 }
 
-class {'jenkins::security':
-  security_model => "full_control",
-  require => [Exec['wait for service'], Jenkins::User['johndoe'] ],
-  notify => Exec['safe_restart'],
+# Create an admin user: 
+file { "/var/lib/jenkins/users/admin/config.xml":
+  ensure => 'present',
+  mode   => 640,
+  owner  => jenkins,
+  group  => jenkins,
+  source => "puppet:///modules/jenkins_files/var/lib/jenkins/users/admin/config.xml",
+  require => [Package['jenkins'],
+              File[$user_dirs],],
+  notify => Service['jenkins'],
 }
 
-exec {"safe_restart":
-  command => "/bin/sleep 10 && /usr/bin/java -jar /usr/share/jenkins/jenkins-cli.jar -s http://localhost:8080 safe-restart --username johndoe --password changeme && sleep 30",
-}
+
+#Potential way to add new users if not doing raw config file manipulation
+#exec {"wait for service":
+#  require => Service["jenkins"],
+#  command => "/bin/sleep 20 && /usr/bin/wget --spider --tries 10 --retry-connrefused --no-check-certificate http://localhost:8080",
+#}
+
+#jenkins::user {'johndoe':
+#  email    => 'jdoe@example.com',
+#  password => 'changeme',
+#  full_name => "John Doe Test User",
+#  require => [Exec['wait for service'],
+#              File["/etc/default/jenkins"],
+#              ]
+#}
+
+
+# Old work for trying to work around #2
+#class {'jenkins::security':
+#  security_model => "full_control",
+#  require => [Exec['wait for service'], Jenkins::User['johndoe'] ],
+#  notify => Exec['safe_restart'],
+#}
+
+#exec {"safe_restart":
+#  command => "/bin/sleep 10 && /usr/bin/java -jar /usr/share/jenkins/jenkins-cli.jar -s http://localhost:8080 safe-restart --username johndoe --password changeme && sleep 30",
+#}
