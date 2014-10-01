@@ -2,6 +2,8 @@ include jenkins
 
 include jenkins_files
 
+
+## Jenkins Plugins
 jenkins::plugin {
   "analysis-core" : ;
 }
@@ -48,6 +50,11 @@ jenkins::plugin {
   "mercurial" : ;
 }
 
+package {"mercurial":
+  ensure => "installed",
+}
+
+
 jenkins::plugin {
   "PrioritySorter" : ;
 }
@@ -85,6 +92,7 @@ jenkins::plugin {
 package {"python3-yaml":
   ensure => "installed",
 }
+
 
 
 # Add Chunking override to avoid cli errors
