@@ -89,6 +89,14 @@ jenkins::plugin {
 
 
 ### Dependencies for Scripting
+package {"python3-empy":
+  ensure => "installed",
+}
+
+package {"python3-pip":
+  ensure => "installed",
+}
+
 package {"python3-yaml":
   ensure => "installed",
 }
