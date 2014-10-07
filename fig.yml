@@ -1,0 +1,11 @@
+slave1:
+  build: slave
+  links:
+    - master:master
+  command: bash -c '/etc/init.d/jenkins-slave start && while true; do sleep 1; done'
+
+master:
+  build: jenkins
+  ports:
+    - "0.0.0.0:8080:8080"
+  command: bash -c 'service jenkins start && while true; do sleep 1; done'
