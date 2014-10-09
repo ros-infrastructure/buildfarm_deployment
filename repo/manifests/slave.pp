@@ -6,6 +6,6 @@ class { 'jenkins::slave':
   slave_mode => "exclusive",
   slave_name => 'building_repository',
   slave_user => 'jenkins-slave',
-  manage_slave_user => "1",
+  manage_slave_user => '0',
   executors => "1",
 }
