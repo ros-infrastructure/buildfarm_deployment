@@ -41,6 +41,7 @@ apache::vhost { 'repos':
 
 
 class { 'reprepro':
+  homedir => '/home/reprepro',
 }
 
 # Set up a repository
