@@ -15,11 +15,22 @@ RUN apt-get install -y git wget openjdk-7-jdk ca-certificates
 
 RUN gem install puppet --no-rdoc --no-ri
 RUN puppet module install rtyler/jenkins
-RUN puppet module install jtopjian-reprepro
+#RUN puppet module install jtopjian-reprepro
+#RUN puppet module install tfoote-reprepro
 RUN puppet module install puppetlabs-apache
 
 ADD manifests /tmp/manifests
 
 RUN puppet apply -v /tmp/manifests/site.pp
+
+WORKDIR /tmp
+USER jenkins-slave
+RUN git clone https://github.com/ros-infrastructure/reprepro-updater.git -b deployable
+WORKDIR /tmp/reprepro-updater
+ENV PYTHONPATH /tmp/reprepro-updater/src
+# Setup reprepro repos
+RUN python ./scripts/setup_repo.py /var/repos/ubuntu/building -c
+RUN python ./scripts/setup_repo.py /var/repos/ubuntu/testing -c
+RUN python ./scripts/setup_repo.py /var/repos/ubuntu/main -c
 
 CMD bash -c 'echo "hello world" && while true; do sleep 1; done'

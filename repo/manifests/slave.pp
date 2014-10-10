@@ -5,7 +5,6 @@ class { 'jenkins::slave':
   labels => "building_repository",
   slave_mode => "exclusive",
   slave_name => 'building_repository',
-  slave_user => 'jenkins-slave',
-  manage_slave_user => '0',
+  manage_slave_user => true,
   executors => "1",
 }

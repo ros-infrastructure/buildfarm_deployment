@@ -21,8 +21,9 @@ $repo_dirs = ['/var/repos',
 file { $repo_dirs :
   ensure => 'directory',
   mode   => 644,
-  owner  => 'reprepro',
-  group  => 'reprepro',
+  owner  => 'jenkins-slave',
+  group  => 'jenkins-slave',
+  require => User['jenkins-slave'],
 }
 
 
@@ -38,71 +39,86 @@ apache::vhost { 'repos':
 #  require    => Reprepro::Distribution['precise'],
 }
 
-
-
-class { 'reprepro':
-  homedir => '/home/reprepro',
+# Manually managing reprepro, the puppet formula is too fragile wrt to user management.
+package {"reprepro":
+  ensure => "installed",
 }
 
-# Set up a repository
-reprepro::repository { 'building':
-  ensure  => present,
-  basedir => '/var/repos/ubuntu',
-  options => ['basedir .'],
-}
 
-# Create a distribution within that repository
-reprepro::distribution { 'precise_building':
-  basedir       => '/var/repos/ubuntu',
-  repository    => 'building',
-  origin        => 'Foobar',
-  label         => 'Foobar',
-  suite         => 'precise',
-  architectures => 'amd64 i386',
-  components    => 'main contrib non-free',
-  description   => 'Package repository for local site maintenance',
-  #sign_with     => 'F4D5DAA8',
-  not_automatic => 'No',
-}
 
-# Set up a repository
-reprepro::repository { 'testing':
-  ensure  => present,
-  basedir => '/var/repos/ubuntu',
-  options => ['basedir .'],
-}
+# group {'docker':
+#
+# }
+#
+# user { 'reprepro':
+#   name => 'reprepro',
+#   groups => ['reprepro', 'docker'],
+# }
+#
+# class { 'reprepro':
+#   homedir => '/home/reprepro',
+# #  manage_user => false,
+# }
 
-# Create a distribution within that repository
-reprepro::distribution { 'precise_testing':
-  basedir       => '/var/repos/ubuntu',
-  repository    => 'testing',
-  origin        => 'Foobar',
-  label         => 'Foobar',
-  suite         => 'precise',
-  architectures => 'amd64 i386',
-  components    => 'main contrib non-free',
-  description   => 'Package repository for local site maintenance',
-  #sign_with     => 'F4D5DAA8',
-  not_automatic => 'No',
-}
+# # Set up a repository
+# reprepro::repository { 'building':
+#   ensure  => present,
+#   basedir => '/var/repos/ubuntu',
+#   options => ['basedir .'],
+# }
 
-# Set up the main repository
-reprepro::repository { 'main':
-  ensure  => present,
-  basedir => '/var/repos/ubuntu',
-  options => ['basedir .'],
-}
-
-# Create an example distribution within that repository
-reprepro::distribution { 'precise_main':
-  basedir       => '/var/repos/ubuntu',
-  repository    => 'main',
-  origin        => 'Foobar',
-  label         => 'Foobar',
-  suite         => 'precise',
-  architectures => 'amd64 i386',
-  components    => 'main contrib non-free',
-  description   => 'Package repository for local site maintenance',
-  #sign_with     => 'F4D5DAA8',
-  not_automatic => 'No',
-}
+# # Create a distribution within that repository
+# reprepro::distribution { 'precise_building':
+#   basedir       => '/var/repos/ubuntu',
+#   repository    => 'building',
+#   origin        => 'Foobar',
+#   label         => 'Foobar',
+#   suite         => 'precise',
+#   architectures => 'amd64 i386',
+#   components    => 'main contrib non-free',
+#   description   => 'Package repository for local site maintenance',
+#   #sign_with     => 'F4D5DAA8',
+#   not_automatic => 'No',
+# }
+#
+# # Set up a repository
+# reprepro::repository { 'testing':
+#   ensure  => present,
+#   basedir => '/var/repos/ubuntu',
+#   options => ['basedir .'],
+# }
+#
+# # Create a distribution within that repository
+# reprepro::distribution { 'precise_testing':
+#   basedir       => '/var/repos/ubuntu',
+#   repository    => 'testing',
+#   origin        => 'Foobar',
+#   label         => 'Foobar',
+#   suite         => 'precise',
+#   architectures => 'amd64 i386',
+#   components    => 'main contrib non-free',
+#   description   => 'Package repository for local site maintenance',
+#   #sign_with     => 'F4D5DAA8',
+#   not_automatic => 'No',
+# }
+#
+# # Set up the main repository
+# reprepro::repository { 'main':
+#   ensure  => present,
+#   basedir => '/var/repos/ubuntu',
+#   options => ['basedir .'],
+# }
+#
+# # Create an example distribution within that repository
+# reprepro::distribution { 'precise_main':
+#   basedir       => '/var/repos/ubuntu',
+#   repository    => 'main',
+#   origin        => 'Foobar',
+#   label         => 'Foobar',
+#   suite         => 'precise',
+#   architectures => 'amd64 i386',
+#   components    => 'main contrib non-free',
+#   description   => 'Package repository for local site maintenance',
+#   #sign_with     => 'F4D5DAA8',
+#   not_automatic => 'No',
+# }
