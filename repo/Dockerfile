@@ -33,4 +33,5 @@ RUN python ./scripts/setup_repo.py /var/repos/ubuntu/building -c
 RUN python ./scripts/setup_repo.py /var/repos/ubuntu/testing -c
 RUN python ./scripts/setup_repo.py /var/repos/ubuntu/main -c
 
+USER root
 CMD bash -c 'echo "hello world" && while true; do sleep 1; done'
