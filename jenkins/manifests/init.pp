@@ -119,7 +119,7 @@ file { "/etc/default/jenkins":
 
 
 
-# make sure that the config.xml is present. 
+# make sure that the config.xml is present.
 # It does not get generated initially see https://github.com/ros-infrastructure/buildfarm_deployment/issues/2
 # This is too strong, if puppet is rerun it will override any changed configs
 file { "/var/lib/jenkins/config.xml":
@@ -142,7 +142,7 @@ file { $user_dirs :
   group  => jenkins,
 }
 
-# Create an admin user: 
+# Create an admin user:
 file { "/var/lib/jenkins/users/admin/config.xml":
   ensure => 'present',
   mode   => 640,
@@ -152,6 +152,18 @@ file { "/var/lib/jenkins/users/admin/config.xml":
   require => [Package['jenkins'],
               File[$user_dirs],],
   notify => Service['jenkins'],
+}
+
+class { 'python' :
+  version    => 'system',
+  pip        => true,
+  dev        => true,
+  virtualenv => true,
+  gunicorn   => true,
+}
+
+python::pip { 'jenkinsapi' :
+
 }
 
 
