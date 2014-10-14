@@ -167,6 +167,26 @@ python::pip { 'jenkinsapi' :
 }
 
 
+$buildfarm_config_dir = ["/var/lib/jenkins/.buildfarm"]
+
+file { $buildfarm_config_dir :
+  ensure => 'directory',
+  mode   => 640,
+  owner  => jenkins,
+  group  => jenkins,
+}
+
+file { "/var/lib/jenkins/.buildfarm/jenkins.ini":
+  ensure => 'present',
+  mode   => 640,
+  owner  => jenkins,
+  group  => jenkins,
+  source => "puppet:///modules/jenkins_files/var/lib/jenkins/.buildfarm/jenkins.ini",
+  require => [Package['jenkins'],
+              File[$buildfarm_config_dir],],
+  notify => Service['jenkins'],
+}
+
 #Potential way to add new users if not doing raw config file manipulation
 #exec {"wait for service":
 #  require => Service["jenkins"],
