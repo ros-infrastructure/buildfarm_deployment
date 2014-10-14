@@ -12,6 +12,10 @@ RUN gem install puppet --no-rdoc --no-ri
 RUN puppet module install rtyler/jenkins
 RUN puppet module install stankevich-python
 
+# workaround for https://github.com/ros-infrastructure/buildfarm_deployment/issues/3
+RUN apt-get install -y python3-pip
+RUN pip3 install jenkinsapi
+
 ADD . /tmp/jenkins
 
 WORKDIR /tmp/jenkins
