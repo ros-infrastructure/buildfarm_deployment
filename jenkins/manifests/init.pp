@@ -9,6 +9,10 @@ jenkins::plugin {
   "bazaar" : ;
 }
 
+package {"bzr":
+  ensure => "installed",
+}
+
 jenkins::plugin {
   "build-timeout" : ;
 }
