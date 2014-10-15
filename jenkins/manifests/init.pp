@@ -56,6 +56,16 @@ jenkins::plugin {
   "PrioritySorter" : ;
 }
 
+# config for PrioritySorter
+file { "/var/lib/jenkins/jenkins.advancedqueue.PrioritySorterConfiguration.xml":
+    mode   => 640,
+    owner  => jenkins,
+    group  => jenkins,
+    source => "puppet:///modules/jenkins_files/var/lib/jenkins/jenkins.advancedqueue.PrioritySorterConfiguration.xml",
+    require => Jenkins::Plugin['PrioritySorter'],
+    notify => Service['jenkins'],
+}
+
 # required by mercurial
 jenkins::plugin {
   "scm-api" : ;
