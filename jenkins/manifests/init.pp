@@ -3,194 +3,186 @@ include jenkins
 include jenkins_files
 
 
-## Jenkins Plugins
+### Jenkins Plugins
 
 jenkins::plugin {
-  "bazaar" : ;
+  'bazaar': ;
 }
-
-package {"bzr":
-  ensure => "installed",
-}
-
-jenkins::plugin {
-  "build-timeout" : ;
+package { 'bzr':
+  ensure => 'installed',
 }
 
 jenkins::plugin {
-  "collapsing-console-sections" : ;
+  'build-timeout': ;
 }
 
+jenkins::plugin {
+  'collapsing-console-sections': ;
+}
 # config for collapsing-console-sections
-file { "/var/lib/jenkins/org.jvnet.hudson.plugins.collapsingconsolesections.CollapsingSectionNote.xml":
-    mode   => 640,
-    owner  => jenkins,
-    group  => jenkins,
-    source => "puppet:///modules/jenkins_files/var/lib/jenkins/org.jvnet.hudson.plugins.collapsingconsolesections.CollapsingSectionNote.xml",
+file { '/var/lib/jenkins/org.jvnet.hudson.plugins.collapsingconsolesections.CollapsingSectionNote.xml':
+    mode => '0640',
+    owner => jenkins,
+    group => jenkins,
+    source => 'puppet:///modules/jenkins_files/var/lib/jenkins/org.jvnet.hudson.plugins.collapsingconsolesections.CollapsingSectionNote.xml',
     require => Jenkins::Plugin['collapsing-console-sections'],
     notify => Service['jenkins'],
 }
 
 jenkins::plugin {
-  "git" : ;
+  'git': ;
 }
 
 jenkins::plugin {
-  "git-client" : ;
+  'git-client': ;
 }
 
 jenkins::plugin {
-  "github-api" : ;
+  'github-api': ;
 }
 
 jenkins::plugin {
-  "groovy-postbuild" : ;
+  'groovy-postbuild': ;
 }
 
 jenkins::plugin {
-  "mercurial" : ;
+  'mercurial': ;
 }
-
-package {"mercurial":
-  ensure => "installed",
+package { 'mercurial':
+  ensure => 'installed',
 }
-
 
 jenkins::plugin {
-  "PrioritySorter" : ;
+  'PrioritySorter': ;
 }
-
 # config for PrioritySorter
-file { "/var/lib/jenkins/jenkins.advancedqueue.PrioritySorterConfiguration.xml":
-    mode   => 640,
-    owner  => jenkins,
-    group  => jenkins,
-    source => "puppet:///modules/jenkins_files/var/lib/jenkins/jenkins.advancedqueue.PrioritySorterConfiguration.xml",
+file { '/var/lib/jenkins/jenkins.advancedqueue.PrioritySorterConfiguration.xml':
+    mode => '0640',
+    owner => jenkins,
+    group => jenkins,
+    source => 'puppet:///modules/jenkins_files/var/lib/jenkins/jenkins.advancedqueue.PrioritySorterConfiguration.xml',
     require => Jenkins::Plugin['PrioritySorter'],
     notify => Service['jenkins'],
 }
 
 # required by mercurial
 jenkins::plugin {
-  "scm-api" : ;
+  'scm-api': ;
 }
 
 jenkins::plugin {
-  "ssh-agent" : ;
+  'ssh-agent': ;
 }
 
 jenkins::plugin {
-  "subversion" : ;
+  'subversion': ;
 }
 
 jenkins::plugin {
-  "swarm" : ;
+  'swarm': ;
 }
 
 # required by build-timeout
 jenkins::plugin {
-  "token-macro" : ;
+  'token-macro': ;
 }
 
 
 ### Dependencies for Scripting
-package {"python3-empy":
-  ensure => "installed",
+
+package { 'python3-empy':
+  ensure => 'installed',
 }
 
-package {"python3-pip":
-  ensure => "installed",
+package { 'python3-pip':
+  ensure => 'installed',
 }
 
-package {"python3-yaml":
-  ensure => "installed",
+package { 'python3-yaml':
+  ensure => 'installed',
 }
-
 
 
 # Add Chunking override to avoid cli errors
 # https://issues.jenkins-ci.org/browse/JENKINS-23223
 # from jenkins_files
-file { "/etc/default/jenkins":
-    mode   => 644,
-    owner  => root,
-    group  => root,
-    source => "puppet:///modules/jenkins_files/etc/default/jenkins",
+file { '/etc/default/jenkins':
+    mode => '0644',
+    owner => root,
+    group => root,
+    source => 'puppet:///modules/jenkins_files/etc/default/jenkins',
     require => Package['jenkins'],
     notify => Service['jenkins'],
 }
 
 
-
-
-
 # make sure that the config.xml is present.
 # It does not get generated initially see https://github.com/ros-infrastructure/buildfarm_deployment/issues/2
 # This is too strong, if puppet is rerun it will override any changed configs
-file { "/var/lib/jenkins/config.xml":
+file { '/var/lib/jenkins/config.xml':
   ensure => 'present',
-  mode   => 640,
-  owner  => jenkins,
-  group  => jenkins,
-  source => "puppet:///modules/jenkins_files/var/lib/jenkins/config.xml",
+  mode => '0640',
+  owner => jenkins,
+  group => jenkins,
+  source => 'puppet:///modules/jenkins_files/var/lib/jenkins/config.xml',
   require => Package['jenkins'],
   notify => Service['jenkins'],
 }
 
-$user_dirs = ["/var/lib/jenkins/users",
-              "/var/lib/jenkins/users/admin"]
+$user_dirs = ['/var/lib/jenkins/users',
+              '/var/lib/jenkins/users/admin']
 
-file { $user_dirs :
+file { $user_dirs:
   ensure => 'directory',
-  mode   => 640,
-  owner  => jenkins,
-  group  => jenkins,
+  mode => '0640',
+  owner => jenkins,
+  group => jenkins,
 }
 
+
 # Create an admin user:
-file { "/var/lib/jenkins/users/admin/config.xml":
+file { '/var/lib/jenkins/users/admin/config.xml':
   ensure => 'present',
-  mode   => 640,
-  owner  => jenkins,
-  group  => jenkins,
-  source => "puppet:///modules/jenkins_files/var/lib/jenkins/users/admin/config.xml",
+  mode => '0640',
+  owner => jenkins,
+  group => jenkins,
+  source => 'puppet:///modules/jenkins_files/var/lib/jenkins/users/admin/config.xml',
   require => [Package['jenkins'],
               File[$user_dirs],],
   notify => Service['jenkins'],
 }
 
-class { 'python' :
-  version    => 'system',
-  pip        => true,
-  dev        => true,
+class { 'python':
+  version => 'system',
+  pip => true,
+  dev => true,
   virtualenv => true,
-  gunicorn   => true,
+  gunicorn => true,
 }
 
-python::pip { 'jenkinsapi' :
+python::pip { 'jenkinsapi':
 
 }
 
 
-$buildfarm_config_dir = ["/var/lib/jenkins/.buildfarm"]
-
-file { $buildfarm_config_dir :
+$buildfarm_config_dir = ['/var/lib/jenkins/.buildfarm']
+file { $buildfarm_config_dir:
   ensure => 'directory',
-  mode   => 640,
-  owner  => jenkins,
-  group  => jenkins,
+  mode => '0640',
+  owner => jenkins,
+  group => jenkins,
 }
-
-file { "/var/lib/jenkins/.buildfarm/jenkins.ini":
+file { '/var/lib/jenkins/.buildfarm/jenkins.ini':
   ensure => 'present',
-  mode   => 640,
-  owner  => jenkins,
-  group  => jenkins,
-  source => "puppet:///modules/jenkins_files/var/lib/jenkins/.buildfarm/jenkins.ini",
+  mode => '0640',
+  owner => jenkins,
+  group => jenkins,
+  source => 'puppet:///modules/jenkins_files/var/lib/jenkins/.buildfarm/jenkins.ini',
   require => [Package['jenkins'],
               File[$buildfarm_config_dir],],
   notify => Service['jenkins'],
 }
+
 
 #Potential way to add new users if not doing raw config file manipulation
 #exec {"wait for service":
@@ -199,7 +191,7 @@ file { "/var/lib/jenkins/.buildfarm/jenkins.ini":
 #}
 
 #jenkins::user {'johndoe':
-#  email    => 'jdoe@example.com',
+#  email => 'jdoe@example.com',
 #  password => 'changeme',
 #  full_name => "John Doe Test User",
 #  require => [Exec['wait for service'],
