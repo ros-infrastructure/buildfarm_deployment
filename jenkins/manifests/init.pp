@@ -94,10 +94,6 @@ package { 'python3-empy':
   ensure => 'installed',
 }
 
-package { 'python3-pip':
-  ensure => 'installed',
-}
-
 package { 'python3-yaml':
   ensure => 'installed',
 }
@@ -151,19 +147,6 @@ file { '/var/lib/jenkins/users/admin/config.xml':
               File[$user_dirs],],
   notify => Service['jenkins'],
 }
-
-class { 'python':
-  version => 'system',
-  pip => true,
-  dev => true,
-  virtualenv => true,
-  gunicorn => true,
-}
-
-python::pip { 'jenkinsapi':
-
-}
-
 
 $buildfarm_config_dir = ['/var/lib/jenkins/.buildfarm']
 file { $buildfarm_config_dir:
