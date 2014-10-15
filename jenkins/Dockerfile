@@ -21,4 +21,4 @@ ADD . /tmp/jenkins
 WORKDIR /tmp/jenkins
 RUN puppet apply -v /tmp/jenkins/manifests/init.pp --modulepath=/etc/puppet/modules:/usr/share/puppet/modules:/tmp/jenkins
 EXPOSE 8080
-CMD bash -c 'service jenkins start && while true; do sleep 1; done'
+CMD bash -c 'service docker.io start && service jenkins start && while true; do sleep 1; done'

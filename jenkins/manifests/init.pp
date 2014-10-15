@@ -90,10 +90,20 @@ jenkins::plugin {
 
 ### Dependencies for Scripting
 
+package {'docker.io':
+  ensure => 'installed',
+}
+user { 'jenkins':
+  name   => 'jenkins',
+  groups => ['jenkins', 'docker'],
+}
+
+# required by jobs to generate Dockerfiles
 package { 'python3-empy':
   ensure => 'installed',
 }
 
+# required by management jobs to read rosdistro yaml files
 package { 'python3-yaml':
   ensure => 'installed',
 }

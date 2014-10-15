@@ -15,4 +15,6 @@ ADD manifests /tmp/manifests
 
 RUN puppet apply -v /tmp/manifests/site.pp
 
-CMD bash -c '/etc/init.d/jenkins-slave start && while true; do sleep 1; done'
+RUN adduser jenkins-slave docker
+
+CMD bash -c 'service docker.io start && /etc/init.d/jenkins-slave start && while true; do sleep 1; done'

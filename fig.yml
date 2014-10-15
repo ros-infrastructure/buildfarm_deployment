@@ -3,11 +3,13 @@ slave:
   links:
     - master:master
     - repo:repo
+  privileged: true
 
 master:
   build: jenkins
   ports:
     - "0.0.0.0:8080:8080"
+  privileged: true
 
 repo:
   build: repo
