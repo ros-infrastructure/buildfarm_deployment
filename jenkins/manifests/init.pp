@@ -4,9 +4,6 @@ include jenkins_files
 
 
 ## Jenkins Plugins
-jenkins::plugin {
-  "analysis-core" : ;
-}
 
 jenkins::plugin {
   "bazaar" : ;
@@ -20,7 +17,7 @@ jenkins::plugin {
   "collapsing-console-sections" : ;
 }
 
-# Config for collapsing console sections
+# config for collapsing-console-sections
 file { "/var/lib/jenkins/org.jvnet.hudson.plugins.collapsingconsolesections.CollapsingSectionNote.xml":
     mode   => 640,
     owner  => jenkins,
@@ -59,12 +56,9 @@ jenkins::plugin {
   "PrioritySorter" : ;
 }
 
+# required by mercurial
 jenkins::plugin {
   "scm-api" : ;
-}
-
-jenkins::plugin {
-  "script-security" : ;
 }
 
 jenkins::plugin {
@@ -79,12 +73,9 @@ jenkins::plugin {
   "swarm" : ;
 }
 
+# required by build-timeout
 jenkins::plugin {
   "token-macro" : ;
-}
-
-jenkins::plugin {
-  "warnings" : ;
 }
 
 
