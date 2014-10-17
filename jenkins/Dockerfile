@@ -10,11 +10,7 @@ RUN apt-get install -y ruby
 RUN apt-get install -y git wget openjdk-7-jdk ca-certificates
 RUN gem install puppet --no-rdoc --no-ri
 RUN puppet module install rtyler/jenkins
-RUN puppet module install stankevich-python
-
-# workaround for https://github.com/ros-infrastructure/buildfarm_deployment/issues/3
-RUN apt-get install -y python3-pip
-RUN pip3 install jenkinsapi
+RUN puppet module install tracywebtech-pip
 
 ADD . /tmp/jenkins
 

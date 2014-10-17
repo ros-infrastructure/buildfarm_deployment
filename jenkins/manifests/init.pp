@@ -4,6 +4,8 @@ include jenkins
 
 include jenkins_files
 
+include pip
+
 
 ### Jenkins Plugins
 
@@ -100,6 +102,18 @@ package { 'python3-empy':
 # required by management jobs to read rosdistro yaml files
 package { 'python3-yaml':
   ensure => 'installed',
+}
+
+# required by management jobs to manipulate Jenkins jobs
+package { 'python3-pip':
+  ensure => 'installed',
+}
+pip::install { 'jenkinsapi':
+  #package => 'jenkinsapi', # defaults to $title
+  #version => '1.6',    # if undef installs latest version
+  python_version => '3',    # defaults to 2.7
+  #ensure => present,  # defaults to present
+  require => Package['python3-pip'],
 }
 
 
