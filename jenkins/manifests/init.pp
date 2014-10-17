@@ -1,3 +1,5 @@
+include apt
+
 include jenkins
 
 include jenkins_files
@@ -90,14 +92,6 @@ jenkins::plugin {
 
 ### Dependencies for Scripting
 
-package {'docker.io':
-  ensure => 'installed',
-}
-user { 'jenkins':
-  name   => 'jenkins',
-  groups => ['jenkins', 'docker'],
-}
-
 # required by jobs to generate Dockerfiles
 package { 'python3-empy':
   ensure => 'installed',
@@ -174,6 +168,33 @@ file { '/var/lib/jenkins/.buildfarm/jenkins.ini':
   require => [Package['jenkins'],
               File[$buildfarm_config_dir],],
   notify => Service['jenkins'],
+}
+
+
+### install latest docker
+
+package { 'apt-transport-https':
+  ensure => 'installed',
+}
+
+apt::source { 'docker':
+  location => 'https://get.docker.com/ubuntu',
+  release => 'docker',
+  repos => 'main',
+  key => 'A88D21E9',
+  key_server => 'keyserver.ubuntu.com',
+  include_src => false,
+  require => Package['apt-transport-https'],
+}
+
+package { 'lxc-docker':
+  ensure => 'installed',
+  require => Apt::Source['docker'],
+}
+user { 'jenkins':
+  name => 'jenkins',
+  groups => ['jenkins', 'docker'],
+  require => Package['lxc-docker'],
 }
 
 
