@@ -1,6 +1,13 @@
 buildfarm_deployment
 ====================
 
+Change docker storage driver
+----------------------------
+
+Edit `/etc/default/docker` and add the following line:
+
+    DOCKER_OPTS="--storage-driver=devicemapper"
+
 
 Deploy test jenkins master:
 ---------------------------
