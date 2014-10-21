@@ -12,6 +12,9 @@ RUN gem install puppet --no-rdoc --no-ri
 RUN puppet module install rtyler/jenkins
 
 ADD manifests /tmp/manifests
+ADD hiera.yaml /etc/puppet/hiera.yaml
+RUN mkdir -p /etc/puppet/hieradata
+ADD common.yaml /etc/puppet/hieradata/common.yaml
 
 RUN puppet apply -v /tmp/manifests/site.pp
 
