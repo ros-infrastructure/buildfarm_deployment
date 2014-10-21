@@ -12,7 +12,16 @@ RUN gem install puppet --no-rdoc --no-ri
 RUN puppet module install rtyler/jenkins
 RUN puppet module install tracywebtech-pip
 
-ADD . /tmp/jenkins
+# installing here to leverage docker caching (will be enforced by puppet)
+RUN apt-get install -y curl python3-pip python3-yaml python3-empy apt-transport-https bzr mercurial
+
+RUN mkdir -p /tmp/jenkins
+ADD manifests /tmp/jenkins/manifests
+ADD jenkins_files /tmp/jenkins/jenkins_files
+
+ADD hiera.yaml /etc/puppet/hiera.yaml
+RUN mkdir -p /etc/puppet/hieradata
+ADD common.yaml /etc/puppet/hieradata/common.yaml
 
 WORKDIR /tmp/jenkins
 RUN puppet apply -v /tmp/jenkins/manifests/init.pp --modulepath=/etc/puppet/modules:/usr/share/puppet/modules:/tmp/jenkins

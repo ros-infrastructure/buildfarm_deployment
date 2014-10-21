@@ -1,0 +1,4 @@
+jenkins::slave::ui_user: 'admin'
+jenkins::slave::ui_pass: 'changeme'
+jenkins::slave::masterurl: 'http://master:8080'
+jenkins_slave_password_hash: '#jbcrypt:$2a$10$vmmqzRmcDHj1t9Ajgq5edekPD8cbpD./pBSGcYzia.OsIroOKjghm'
