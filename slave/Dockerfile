@@ -12,12 +12,14 @@ RUN gem install puppet --no-rdoc --no-ri
 RUN puppet module install rtyler/jenkins
 
 ADD manifests /tmp/manifests
+ADD slave_files /tmp/manifests/slave_files
+
 ADD hiera.yaml /etc/puppet/hiera.yaml
 RUN mkdir -p /etc/puppet/hieradata
 ADD common.yaml /etc/puppet/hieradata/common.yaml
 
-RUN puppet apply -v /tmp/manifests/site.pp
+RUN puppet apply -v /tmp/manifests/site.pp --modulepath=/etc/puppet/modules:/usr/share/puppet/modules:/tmp/manifests
 
 RUN adduser jenkins-slave docker
 
-CMD bash -c 'service docker.io start && /etc/init.d/jenkins-slave start && while true; do sleep 1; done'
+CMD bash -c 'service docker start && /etc/init.d/jenkins-slave start && while true; do sleep 1; done'

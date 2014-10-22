@@ -109,10 +109,7 @@ package { 'python3-pip':
   ensure => 'installed',
 }
 pip::install { 'jenkinsapi':
-  #package => 'jenkinsapi', # defaults to $title
-  #version => '1.6',    # if undef installs latest version
   python_version => '3',    # defaults to 2.7
-  #ensure => present,  # defaults to present
   require => Package['python3-pip'],
 }
 
