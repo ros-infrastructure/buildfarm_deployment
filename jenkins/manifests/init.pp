@@ -10,10 +10,6 @@ include pip
 ### Jenkins Plugins
 
 jenkins::plugin {
-  'copyartifact': ;
-}
-
-jenkins::plugin {
   'bazaar': ;
 }
 
@@ -36,6 +32,10 @@ file { '/var/lib/jenkins/org.jvnet.hudson.plugins.collapsingconsolesections.Coll
     source => 'puppet:///modules/jenkins_files/var/lib/jenkins/org.jvnet.hudson.plugins.collapsingconsolesections.CollapsingSectionNote.xml',
     require => Jenkins::Plugin['collapsing-console-sections'],
     notify => Service['jenkins'],
+}
+
+jenkins::plugin {
+  'copyartifact': ;
 }
 
 jenkins::plugin {
@@ -77,6 +77,11 @@ file { '/var/lib/jenkins/jenkins.advancedqueue.PrioritySorterConfiguration.xml':
 # required by mercurial
 jenkins::plugin {
   'scm-api': ;
+}
+
+# required by groovy-postbuild
+jenkins::plugin {
+  'script-security': ;
 }
 
 jenkins::plugin {
