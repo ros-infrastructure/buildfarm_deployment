@@ -10,8 +10,13 @@ include pip
 ### Jenkins Plugins
 
 jenkins::plugin {
+  'copyartifact': ;
+}
+
+jenkins::plugin {
   'bazaar': ;
 }
+
 package { 'bzr':
   ensure => 'installed',
 }
