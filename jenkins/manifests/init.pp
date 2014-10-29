@@ -39,6 +39,10 @@ jenkins::plugin {
 }
 
 jenkins::plugin {
+  'description-setter': ;
+}
+
+jenkins::plugin {
   'git': ;
 }
 
@@ -48,6 +52,10 @@ jenkins::plugin {
 
 jenkins::plugin {
   'github-api': ;
+}
+
+jenkins::plugin {
+  'greenballs': ;
 }
 
 jenkins::plugin {
