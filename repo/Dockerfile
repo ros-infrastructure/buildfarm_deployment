@@ -29,7 +29,7 @@ WORKDIR /tmp
 USER jenkins-slave
 RUN git clone https://github.com/ros-infrastructure/reprepro-updater.git -b deployable
 WORKDIR /tmp/reprepro-updater
-ENV PYTHONPATH /tmp/reprepro-updater/src
+ENV PYTHONPATH /tmp/reprepro-updater/src:$PYTHONPATH
 # Setup reprepro repos
 RUN python ./scripts/setup_repo.py /var/repos/ubuntu/building -c
 RUN python ./scripts/setup_repo.py /var/repos/ubuntu/testing -c
