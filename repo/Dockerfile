@@ -18,6 +18,7 @@ RUN puppet module install rtyler/jenkins
 #RUN puppet module install jtopjian-reprepro
 #RUN puppet module install tfoote-reprepro
 RUN puppet module install puppetlabs-apache
+RUN puppet module install puppetlabs-vcsrepo
 
 ADD manifests /tmp/manifests
 ADD hiera.yaml /etc/puppet/hiera.yaml
@@ -27,7 +28,6 @@ RUN puppet apply -v /tmp/manifests/site.pp
 
 WORKDIR /tmp
 USER jenkins-slave
-RUN git clone https://github.com/ros-infrastructure/reprepro-updater.git -b deployable
 WORKDIR /tmp/reprepro-updater
 ENV PYTHONPATH /tmp/reprepro-updater/src:$PYTHONPATH
 # Setup reprepro repos

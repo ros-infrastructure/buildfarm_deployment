@@ -13,7 +13,14 @@ package {"python-yaml":
   ensure => "installed",
 }
 
-
+vcsrepo { "/tmp/reprepro-updater":
+  ensure   => latest,
+  provider => git,
+  source   => 'https://github.com/ros-infrastructure/reprepro-updater.git',
+  revision => 'deployable',
+  user     => 'jenkins-slave',
+  require => User['jenkins-slave'],
+}
 
 $repo_dirs = ['/var/repos',
               '/var/repos/ubuntu',]
