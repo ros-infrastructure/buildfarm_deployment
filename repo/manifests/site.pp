@@ -13,11 +13,15 @@ package {"python-yaml":
   ensure => "installed",
 }
 
+package {"python-debian":
+  ensure => "installed",
+}
+
 vcsrepo { "/tmp/reprepro-updater":
   ensure   => latest,
   provider => git,
   source   => 'https://github.com/ros-infrastructure/reprepro-updater.git',
-  revision => 'deployable',
+  revision => 'refactor',
   user     => 'jenkins-slave',
   require => User['jenkins-slave'],
 }

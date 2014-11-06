@@ -35,6 +35,10 @@ RUN python ./scripts/setup_repo.py /var/repos/ubuntu/building -c
 RUN python ./scripts/setup_repo.py /var/repos/ubuntu/testing -c
 RUN python ./scripts/setup_repo.py /var/repos/ubuntu/main -c
 
+RUN python ./scripts/import_upstream.py /var/repos/ubuntu/building /tmp/reprepro-updater/config/bootstrap.yaml -c
+RUN python ./scripts/import_upstream.py /var/repos/ubuntu/testing /tmp/reprepro-updater/config/bootstrap.yaml -c
+RUN python ./scripts/import_upstream.py /var/repos/ubuntu/main /tmp/reprepro-updater/config/bootstrap.yaml -c
+
 USER root
 
 CMD bash -c 'service apache2 start && /etc/init.d/jenkins-slave start && while true; do sleep 1; done'
