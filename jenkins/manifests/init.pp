@@ -236,6 +236,41 @@ file { '/etc/default/docker':
     require => Package['lxc-docker'],
 }
 
+file { '/var/lib/jenkins/.ssh':
+    ensure => 'directory',
+    owner  => 'jenkins',
+    group  => 'jenkins',
+    mode   => '700',
+    require => User['jenkins'],
+}
+
+# TODO make this parameterized. This is a hack to get up and running on
+# the local development machines only!!!!!!
+# add ssh key
+file { '/var/lib/jenkins/.ssh/id_rsa':
+    mode => '0700',
+    owner => 'jenkins',
+    group => 'jenkins',
+    source => 'puppet:///modules/jenkins_files/var/lib/jenkins/.ssh/id_rsa',
+    require => File['/var/lib/jenkins/.ssh'],
+}
+file { '/var/lib/jenkins/.ssh/id_rsa.pub':
+    mode => '0700',
+    owner => 'jenkins',
+    group => 'jenkins',
+    source => 'puppet:///modules/jenkins_files/var/lib/jenkins/.ssh/id_rsa.pub',
+    require => File['/var/lib/jenkins/.ssh'],
+}
+
+# Reference above credientials
+file { '/var/lib/jenkins/credentials.xml':
+    mode => '0700',
+    owner => 'jenkins',
+    group => 'jenkins',
+    source => 'puppet:///modules/jenkins_files/var/lib/jenkins/credentials.xml',
+    require => File['/var/lib/jenkins/.ssh'],
+}
+
 
 #Potential way to add new users if not doing raw config file manipulation
 #exec {"wait for service":

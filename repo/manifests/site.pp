@@ -1,7 +1,29 @@
 import 'slave.pp'
 
+file { '/home/jenkins-slave/.ssh':
+    ensure => 'directory',
+    owner  => 'jenkins-slave',
+    group  => 'jenkins-slave',
+    mode   => '700',
+    require => User['jenkins-slave'],
+}
+
+# TODO make this parameterized. This is a hack to get up and running on
+# the local development machines only!!!!!!
+# add ssh key
+file { '/home/jenkins-slave/.ssh/authorized_keys':
+    mode => '0700',
+    owner => 'jenkins-slave',
+    group => 'jenkins-slave',
+    source => 'puppet:///modules/repo_files/home/jenkins-slave/.ssh/id_rsa.pub',
+    require => File['/home/jenkins-slave/.ssh'],
+}
 
 package {"git":
+  ensure => "installed",
+}
+
+package {"openssh-server":
   ensure => "installed",
 }
 

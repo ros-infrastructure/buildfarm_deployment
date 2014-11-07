@@ -19,12 +19,15 @@ RUN puppet module install rtyler/jenkins
 #RUN puppet module install tfoote-reprepro
 RUN puppet module install puppetlabs-apache
 RUN puppet module install puppetlabs-vcsrepo
+#RUN puppet module install saz-ssh
+RUN puppet module install erwbgy-ssh
 
 ADD manifests /tmp/manifests
+ADD repo_files /tmp/jenkins/repo_files
 ADD hiera.yaml /etc/puppet/hiera.yaml
 RUN mkdir -p /etc/puppet/hieradata
 ADD common.yaml /etc/puppet/hieradata/common.yaml
-RUN puppet apply -v /tmp/manifests/site.pp
+RUN puppet apply -v /tmp/manifests/site.pp --modulepath=/etc/puppet/modules:/usr/share/puppet/modules:/tmp/jenkins
 
 WORKDIR /tmp
 USER jenkins-slave
@@ -40,5 +43,7 @@ RUN python ./scripts/import_upstream.py /var/repos/ubuntu/testing /tmp/reprepro-
 RUN python ./scripts/import_upstream.py /var/repos/ubuntu/main /tmp/reprepro-updater/config/bootstrap.yaml -c
 
 USER root
+# SSH login fix. Otherwise user is kicked off after login
+RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
 
-CMD bash -c 'service apache2 start && /etc/init.d/jenkins-slave start && while true; do sleep 1; done'
+CMD bash -c 'service ssh start && service apache2 start && /etc/init.d/jenkins-slave start && while true; do sleep 1; done'
