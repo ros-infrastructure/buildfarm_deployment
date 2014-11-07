@@ -173,6 +173,18 @@ file { $user_dirs:
 }
 
 
+# enable slave -> master access control
+file { '/var/lib/jenkins/secrets/slave-to-master-security-kill-switch':
+  ensure => 'present',
+  mode => '0640',
+  owner => jenkins,
+  group => jenkins,
+  source => 'puppet:///modules/jenkins_files/var/lib/jenkins/secrets/slave-to-master-security-kill-switch',
+  require => Package['jenkins'],
+  notify => Service['jenkins'],
+}
+
+
 # Create an admin user:
 file { '/var/lib/jenkins/users/admin/config.xml':
   ensure => 'present',
