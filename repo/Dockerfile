@@ -15,12 +15,8 @@ RUN apt-get install -y git wget openjdk-7-jdk ca-certificates
 
 RUN gem install puppet --no-rdoc --no-ri
 RUN puppet module install rtyler/jenkins
-#RUN puppet module install jtopjian-reprepro
-#RUN puppet module install tfoote-reprepro
 RUN puppet module install puppetlabs-apache
 RUN puppet module install puppetlabs-vcsrepo
-#RUN puppet module install saz-ssh
-RUN puppet module install erwbgy-ssh
 
 ADD manifests /tmp/manifests
 ADD repo_files /tmp/jenkins/repo_files
