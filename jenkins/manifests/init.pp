@@ -59,6 +59,10 @@ jenkins::plugin {
 }
 
 jenkins::plugin {
+  'groovy': ;
+}
+
+jenkins::plugin {
   'groovy-postbuild': ;
 }
 
@@ -117,11 +121,6 @@ package { 'python3-empy':
   ensure => 'installed',
 }
 
-# required by management jobs to read rosdistro yaml files
-package { 'python3-yaml':
-  ensure => 'installed',
-}
-
 # required by management jobs to manipulate Jenkins jobs
 package { 'python3-pip':
   ensure => 'installed',
@@ -129,6 +128,11 @@ package { 'python3-pip':
 pip::install { 'jenkinsapi':
   python_version => '3',    # defaults to 2.7
   require => Package['python3-pip'],
+}
+
+# required by management jobs to read rosdistro yaml files
+package { 'python3-yaml':
+  ensure => 'installed',
 }
 
 
