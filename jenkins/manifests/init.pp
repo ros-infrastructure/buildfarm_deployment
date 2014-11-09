@@ -86,6 +86,19 @@ file { '/var/lib/jenkins/jenkins.advancedqueue.PrioritySorterConfiguration.xml':
     notify => Service['jenkins'],
 }
 
+jenkins::plugin {
+  'publish-over-ssh': ;
+}
+# config for publish-over-ssh
+file { '/var/lib/jenkins/jenkins.plugins.publish_over_ssh.BapSshPublisherPlugin.xml':
+    mode => '0640',
+    owner => jenkins,
+    group => jenkins,
+    source => 'puppet:///modules/jenkins_files/var/lib/jenkins/jenkins.plugins.publish_over_ssh.BapSshPublisherPlugin.xml',
+    require => Jenkins::Plugin['publish-over-ssh'],
+    notify => Service['jenkins'],
+}
+
 # required by mercurial
 jenkins::plugin {
   'scm-api': ;
