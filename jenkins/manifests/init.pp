@@ -74,6 +74,10 @@ package { 'mercurial':
 }
 
 jenkins::plugin {
+  'parameterized-trigger': ;
+}
+
+jenkins::plugin {
   'PrioritySorter': ;
 }
 # config for PrioritySorter
