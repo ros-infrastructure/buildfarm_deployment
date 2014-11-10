@@ -269,7 +269,7 @@ file { '/var/lib/jenkins/.ssh':
     ensure => 'directory',
     owner  => 'jenkins',
     group  => 'jenkins',
-    mode   => '700',
+    mode   => '0700',
     require => User['jenkins'],
 }
 
@@ -277,14 +277,14 @@ file { '/var/lib/jenkins/.ssh':
 # the local development machines only!!!!!!
 # add ssh key
 file { '/var/lib/jenkins/.ssh/id_rsa':
-    mode => '0700',
+    mode => '0600',
     owner => 'jenkins',
     group => 'jenkins',
     source => 'puppet:///modules/jenkins_files/var/lib/jenkins/.ssh/id_rsa',
     require => File['/var/lib/jenkins/.ssh'],
 }
 file { '/var/lib/jenkins/.ssh/id_rsa.pub':
-    mode => '0700',
+    mode => '0600',
     owner => 'jenkins',
     group => 'jenkins',
     source => 'puppet:///modules/jenkins_files/var/lib/jenkins/.ssh/id_rsa.pub',
@@ -293,7 +293,7 @@ file { '/var/lib/jenkins/.ssh/id_rsa.pub':
 
 # Reference above credientials
 file { '/var/lib/jenkins/credentials.xml':
-    mode => '0700',
+    mode => '0600',
     owner => 'jenkins',
     group => 'jenkins',
     source => 'puppet:///modules/jenkins_files/var/lib/jenkins/credentials.xml',
