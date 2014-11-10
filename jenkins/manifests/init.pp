@@ -261,15 +261,6 @@ user { 'jenkins':
   require => Package['lxc-docker'],
 }
 
-# change docker storage driver
-file { '/etc/default/docker':
-    mode => '0644',
-    owner => root,
-    group => root,
-    source => 'puppet:///modules/jenkins_files/etc/default/docker',
-    require => Package['lxc-docker'],
-}
-
 file { '/var/lib/jenkins/.ssh':
     ensure => 'directory',
     owner  => 'jenkins',
