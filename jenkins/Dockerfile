@@ -26,4 +26,8 @@ ADD common.yaml /etc/puppet/hieradata/common.yaml
 WORKDIR /tmp/jenkins
 RUN puppet apply -v /tmp/jenkins/manifests/init.pp --modulepath=/etc/puppet/modules:/usr/share/puppet/modules:/tmp/jenkins
 EXPOSE 8080
-CMD bash -c 'service docker start && service jenkins start && while true; do sleep 1; done'
+
+VOLUME /var/lib/docker
+ENV DOCKER_DAEMON_ARGS --storage-driver=devicemapper
+# dmsetup needed to initialize devicemapper
+CMD bash -c 'service jenkins start && dmsetup mknodes && /var/lib/jenkins/wrapdocker && while true; do sleep 1; done'

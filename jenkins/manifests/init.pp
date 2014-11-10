@@ -180,7 +180,8 @@ file { '/var/lib/jenkins/config.xml':
 }
 
 $user_dirs = ['/var/lib/jenkins/users',
-              '/var/lib/jenkins/users/admin']
+              '/var/lib/jenkins/users/admin',
+              '/var/lib/jenkins/secrets',]
 
 file { $user_dirs:
   ensure => 'directory',
@@ -304,6 +305,21 @@ file { '/var/lib/jenkins/credentials.xml':
     require => File['/var/lib/jenkins/.ssh'],
 }
 
+# use wrapdocker from dind
+file { '/var/lib/jenkins/wrapdocker':
+    mode => '0770',
+    owner => 'jenkins',
+    group => 'jenkins',
+    source => 'puppet:///modules/jenkins_files/var/lib/jenkins/wrapdocker',
+    require => User['jenkins'],
+}
+
+## wrapdocker requires apparmor to avoid this error:
+# Error loading docker apparmor profile: fork/exec /sbin/apparmor_parser: no such file or directory ()
+# https://github.com/docker/docker/issues/4734
+package { 'apparmor':
+  ensure => 'installed',
+}
 
 #Potential way to add new users if not doing raw config file manipulation
 #exec {"wait for service":

@@ -36,3 +36,19 @@ file { '/etc/default/docker':
     source => 'puppet:///modules/slave_files/etc/default/docker',
     require => Package['lxc-docker'],
 }
+
+# use wrapdocker from dind
+file { '/home/jenkins-slave/wrapdocker':
+    mode => '0774',
+    owner => 'jenkins-slave',
+    group => 'jenkins-slave',
+    source => 'puppet:///modules/slave_files/home/jenkins-slave/wrapdocker',
+    require => User['jenkins-slave'],
+}
+
+## wrapdocker requires apparmor to avoid this error:
+# Error loading docker apparmor profile: fork/exec /sbin/apparmor_parser: no such file or directory ()
+# https://github.com/docker/docker/issues/4734
+package { 'apparmor':
+  ensure => 'installed',
+}

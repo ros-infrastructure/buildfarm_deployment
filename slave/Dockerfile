@@ -21,5 +21,7 @@ ADD common.yaml /etc/puppet/hieradata/common.yaml
 RUN puppet apply -v /tmp/manifests/site.pp --modulepath=/etc/puppet/modules:/usr/share/puppet/modules:/tmp/manifests
 
 RUN adduser jenkins-slave docker
-
-CMD bash -c 'service docker start && /etc/init.d/jenkins-slave start && while true; do sleep 1; done'
+VOLUME /var/lib/docker
+ENV DOCKER_DAEMON_ARGS --storage-driver=devicemapper
+# dmsetup needed to initialize devicemapper
+CMD bash -c '/etc/init.d/jenkins-slave start && dmsetup mknodes && /home/jenkins-slave/wrapdocker && while true; do sleep 1; done'
