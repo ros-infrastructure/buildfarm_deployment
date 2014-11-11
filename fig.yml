@@ -1,19 +1,41 @@
 slave:
   build: slave
-  links:
-    - master:master
-    - repo:repo
   privileged: true
+  links:
+  - skydock
+  - master
 
 master:
   build: jenkins
   ports:
     - "0.0.0.0:8080:8080"
   privileged: true
+  hostname: master
+  links:
+  - skydock
 
 repo:
   build: repo
-  links:
-    - master:master
   ports:
   - "0.0.0.0:8081:80"
+  hostname: repo
+  name: r1
+  links:
+  - skydock
+  - master
+
+skydns:
+  image: crosbymichael/skydns
+  ports:
+  - "172.17.42.1:53:53/udp"
+  name: skydns
+  command: -nameserver 8.8.8.8:53 -domain docker
+
+skydock:
+  image: crosbymichael/skydock
+  name: skydock
+  command: -ttl 30 -environment dev -s /docker.sock -domain docker -name buildfarmdeployment_skydns_1
+  volumes:
+  - /var/run/docker.sock:/docker.sock
+  links:
+  - skydns
