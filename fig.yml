@@ -1,12 +1,13 @@
 slave:
-  build: slave
+  image: slave
+#  build: slave
   privileged: true
   links:
   - skydock
-  - master
 
 master:
-  build: jenkins
+  image: master
+# build: jenkins
   ports:
     - "0.0.0.0:8080:8080"
   privileged: true
@@ -15,14 +16,17 @@ master:
   - skydock
 
 repo:
-  build: repo
+#  build: repo
+  image: repo
   ports:
   - "0.0.0.0:8081:80"
   hostname: repo
   name: r1
   links:
   - skydock
-  - master
+
+# With skydock/skydns hosts are reachable via IMAGENAME.dev.docker host
+# assuming you have setup your DNS for your
 
 skydns:
   image: crosbymichael/skydns
