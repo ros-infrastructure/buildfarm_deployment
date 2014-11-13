@@ -12,10 +12,10 @@ file { '/home/jenkins-slave/.ssh':
 # the local development machines only!!!!!!
 # add ssh key
 file { '/home/jenkins-slave/.ssh/authorized_keys':
-    mode => '0700',
+    mode => '0600',
     owner => 'jenkins-slave',
     group => 'jenkins-slave',
-    source => 'puppet:///modules/repo_files/home/jenkins-slave/.ssh/id_rsa.pub',
+    content => hiera("jenkins-slave::authorized_keys"),
     require => File['/home/jenkins-slave/.ssh'],
 }
 
@@ -77,81 +77,42 @@ package {"reprepro":
   ensure => "installed",
 }
 
+# GPG key management
 
+file { '/home/jenkins-slave/.ssh/gpg_private_key.sec':
+    mode => '0600',
+    owner => 'jenkins-slave',
+    group => 'jenkins-slave',
+    content => template('repo_files/gpg_private_key.sec.erb'),
+    require => File['/home/jenkins-slave/.ssh'],
+}
+file { '/home/jenkins-slave/.ssh/gpg_public_key.pub':
+    mode => '0600',
+    owner => 'jenkins-slave',
+    group => 'jenkins-slave',
+#    content => template('repo_files/gpg_public_key.pub.erb'),
+    content => hiera("jenkins-slave::gpg_public_key"),
+    require => File['/home/jenkins-slave/.ssh'],
+}
 
-# group {'docker':
-#
-# }
-#
-# user { 'reprepro':
-#   name => 'reprepro',
-#   groups => ['reprepro', 'docker'],
-# }
-#
-# class { 'reprepro':
-#   homedir => '/home/reprepro',
-# #  manage_user => false,
-# }
+exec { "import_public_key":
+    path        => '/bin:/usr/bin',
+    #environment => 'HOME=/root',
+    command     => "gpg --import /home/jenkins-slave/.ssh/gpg_public_key.pub",
+    user        => 'jenkins-slave',
+    group       => 'jenkins-slave',
+    #unless      => "apt-key list | grep $keyid",
+    logoutput   => on_failure,
+    require    => File['/home/jenkins-slave/.ssh/gpg_public_key.pub']
+}
 
-# # Set up a repository
-# reprepro::repository { 'building':
-#   ensure  => present,
-#   basedir => '/var/repos/ubuntu',
-#   options => ['basedir .'],
-# }
-
-# # Create a distribution within that repository
-# reprepro::distribution { 'precise_building':
-#   basedir       => '/var/repos/ubuntu',
-#   repository    => 'building',
-#   origin        => 'Foobar',
-#   label         => 'Foobar',
-#   suite         => 'precise',
-#   architectures => 'amd64 i386',
-#   components    => 'main contrib non-free',
-#   description   => 'Package repository for local site maintenance',
-#   #sign_with     => 'F4D5DAA8',
-#   not_automatic => 'No',
-# }
-#
-# # Set up a repository
-# reprepro::repository { 'testing':
-#   ensure  => present,
-#   basedir => '/var/repos/ubuntu',
-#   options => ['basedir .'],
-# }
-#
-# # Create a distribution within that repository
-# reprepro::distribution { 'precise_testing':
-#   basedir       => '/var/repos/ubuntu',
-#   repository    => 'testing',
-#   origin        => 'Foobar',
-#   label         => 'Foobar',
-#   suite         => 'precise',
-#   architectures => 'amd64 i386',
-#   components    => 'main contrib non-free',
-#   description   => 'Package repository for local site maintenance',
-#   #sign_with     => 'F4D5DAA8',
-#   not_automatic => 'No',
-# }
-#
-# # Set up the main repository
-# reprepro::repository { 'main':
-#   ensure  => present,
-#   basedir => '/var/repos/ubuntu',
-#   options => ['basedir .'],
-# }
-#
-# # Create an example distribution within that repository
-# reprepro::distribution { 'precise_main':
-#   basedir       => '/var/repos/ubuntu',
-#   repository    => 'main',
-#   origin        => 'Foobar',
-#   label         => 'Foobar',
-#   suite         => 'precise',
-#   architectures => 'amd64 i386',
-#   components    => 'main contrib non-free',
-#   description   => 'Package repository for local site maintenance',
-#   #sign_with     => 'F4D5DAA8',
-#   not_automatic => 'No',
-# }
+exec { "import_private_key":
+    path        => '/bin:/usr/bin',
+    #environment => 'HOME=/root',
+    command     => "gpg --import /home/jenkins-slave/.ssh/gpg_private_key.sec",
+    user        => 'jenkins-slave',
+    group       => 'jenkins-slave',
+    #unless      => "apt-key list | grep $keyid",
+    logoutput   => on_failure,
+    require    => File['/home/jenkins-slave/.ssh/gpg_private_key.sec']
+}
