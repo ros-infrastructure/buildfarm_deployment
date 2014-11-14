@@ -43,7 +43,7 @@ vcsrepo { "/home/jenkins-slave/reprepro-updater":
   ensure   => latest,
   provider => git,
   source   => 'https://github.com/ros-infrastructure/reprepro-updater.git',
-  revision => 'refactor_test',
+  revision => 'refactor',
   user     => 'jenkins-slave',
   require => User['jenkins-slave'],
 }
