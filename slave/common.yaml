@@ -1,5 +1,3 @@
-# jenkins::slave::labels: 'hieradata'
 jenkins::slave::ui_user: 'admin'
 jenkins::slave::ui_pass: 'changeme'
-#jenkins::slave::masterurl: 'http://buildfarmdeployment_master.dev.docker:8080'
 jenkins::slave::masterurl: 'http://master:8080'

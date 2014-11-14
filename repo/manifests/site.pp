@@ -126,22 +126,20 @@ file { '/var/repos/repos.key':
 
 exec { "import_public_key":
     path        => '/bin:/usr/bin',
-    #environment => 'HOME=/root',
-    command     => "gpg --import /home/jenkins-slave/.ssh/gpg_public_key.pub",
+    command     => 'gpg --import /home/jenkins-slave/.ssh/gpg_public_key.pub',
     user        => 'jenkins-slave',
     group       => 'jenkins-slave',
-    #unless      => "apt-key list | grep $keyid",
+    #unless      => "apt-key list | grep $keyid", TODO IMPLEMENT THIS CHECK
     logoutput   => on_failure,
     require    => File['/home/jenkins-slave/.ssh/gpg_public_key.pub']
 }
 
 exec { "import_private_key":
     path        => '/bin:/usr/bin',
-    #environment => 'HOME=/root',
-    command     => "gpg --import /home/jenkins-slave/.ssh/gpg_private_key.sec",
+    command     => 'gpg --import /home/jenkins-slave/.ssh/gpg_private_key.sec',
     user        => 'jenkins-slave',
     group       => 'jenkins-slave',
-    #unless      => "apt-key list | grep $keyid",
+    # unless      => "apt-key list | grep $keyid", TODO IMPLEMENT THIS CHECK
     logoutput   => on_failure,
     require    => File['/home/jenkins-slave/.ssh/gpg_private_key.sec']
 }

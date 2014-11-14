@@ -12,7 +12,7 @@ RUN gem install puppet --no-rdoc --no-ri
 RUN puppet module install rtyler/jenkins
 RUN puppet module install tracywebtech-pip
 
-# installing here to leverage docker caching (will be enforced by puppet)
+# installing here to leverage docker caching (will be enforced by puppet later)
 RUN apt-get install -y curl python3-pip python3-yaml python3-empy apt-transport-https bzr mercurial
 
 RUN mkdir -p /tmp/jenkins
