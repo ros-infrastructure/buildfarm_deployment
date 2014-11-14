@@ -98,19 +98,19 @@ jenkins-slave::authorized_keys: |
 
 jenkins-slave::reprepro_updater_config: |
     [ubuntu_building]
-    architectures: amd64 armhf i386
-    distros: lucid, maverick, natty, oneiric, precise, quantal, raring, saucy, trusty
+    architectures: amd64 armhf i386 source
+    distros: lucid maverick natty oneiric precise quantal raring saucy trusty
     repository_path: /var/repos/ubuntu/building
     signing_key: E5944336
 
     [ubuntu_testing]
-    architectures: amd64 armhf i386
-    distros: lucid, maverick, natty, oneiric, precise, quantal, raring, saucy, trusty
+    architectures: amd64 armhf i386 source
+    distros: lucid maverick natty oneiric precise quantal raring saucy trusty
     repository_path: /var/repos/ubuntu/testing
     signing_key: E5944336
 
     [ubuntu_main]
-    architectures: amd64 armhf i386
-    distros: lucid, maverick, natty, oneiric, precise, quantal, raring, saucy, trusty
+    architectures: amd64 armhf i386 source
+    distros: lucid maverick natty oneiric precise quantal raring saucy trusty
     repository_path: /var/repos/ubuntu/main
     signing_key: E5944336
