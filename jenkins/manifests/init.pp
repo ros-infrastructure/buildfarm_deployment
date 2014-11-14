@@ -275,14 +275,14 @@ file { '/var/lib/jenkins/.ssh/id_rsa':
     mode => '0600',
     owner => 'jenkins',
     group => 'jenkins',
-    source => 'puppet:///modules/jenkins_files/var/lib/jenkins/.ssh/id_rsa',
+    content => hiera("jenkins::private_ssh_key"),
     require => File['/var/lib/jenkins/.ssh'],
 }
 file { '/var/lib/jenkins/.ssh/id_rsa.pub':
     mode => '0600',
     owner => 'jenkins',
     group => 'jenkins',
-    source => 'puppet:///modules/jenkins_files/var/lib/jenkins/.ssh/id_rsa.pub',
+    content => hiera('jenkins::authorized_keys'),
     require => File['/var/lib/jenkins/.ssh'],
 }
 
