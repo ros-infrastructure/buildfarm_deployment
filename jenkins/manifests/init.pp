@@ -209,7 +209,6 @@ file { '/var/lib/jenkins/users/admin/config.xml':
   mode => '0640',
   owner => jenkins,
   group => jenkins,
-  #source => 'puppet:///modules/jenkins_files/var/lib/jenkins/users/admin/config.xml',
   content => template('jenkins_files/user_config.xml.erb'),
   require => [Package['jenkins'],
               File[$user_dirs],],
@@ -228,7 +227,7 @@ file { '/var/lib/jenkins/.buildfarm/jenkins.ini':
   mode => '0640',
   owner => jenkins,
   group => jenkins,
-  source => 'puppet:///modules/jenkins_files/var/lib/jenkins/.buildfarm/jenkins.ini',
+  content => template('jenkins_files/jenkins.ini.erb'),
   require => [Package['jenkins'],
               File[$buildfarm_config_dir],],
   notify => Service['jenkins'],
@@ -276,14 +275,14 @@ file { '/var/lib/jenkins/.ssh/id_rsa':
     mode => '0600',
     owner => 'jenkins',
     group => 'jenkins',
-    source => 'puppet:///modules/jenkins_files/var/lib/jenkins/.ssh/id_rsa',
+    content => hiera("jenkins::private_ssh_key"),
     require => File['/var/lib/jenkins/.ssh'],
 }
 file { '/var/lib/jenkins/.ssh/id_rsa.pub':
     mode => '0600',
     owner => 'jenkins',
     group => 'jenkins',
-    source => 'puppet:///modules/jenkins_files/var/lib/jenkins/.ssh/id_rsa.pub',
+    content => hiera('jenkins::authorized_keys'),
     require => File['/var/lib/jenkins/.ssh'],
 }
 
@@ -292,7 +291,7 @@ file { '/var/lib/jenkins/credentials.xml':
     mode => '0600',
     owner => 'jenkins',
     group => 'jenkins',
-    source => 'puppet:///modules/jenkins_files/var/lib/jenkins/credentials.xml',
+    content => template('jenkins_files/credentials.xml.erb'),
     require => File['/var/lib/jenkins/.ssh'],
 }
 
@@ -311,30 +310,3 @@ file { '/var/lib/jenkins/wrapdocker':
 package { 'apparmor':
   ensure => 'installed',
 }
-
-#Potential way to add new users if not doing raw config file manipulation
-#exec {"wait for service":
-#  require => Service["jenkins"],
-#  command => "/bin/sleep 20 && /usr/bin/wget --spider --tries 10 --retry-connrefused --no-check-certificate http://localhost:8080",
-#}
-
-#jenkins::user {'johndoe':
-#  email => 'jdoe@example.com',
-#  password => 'changeme',
-#  full_name => "John Doe Test User",
-#  require => [Exec['wait for service'],
-#              File["/etc/default/jenkins"],
-#              ]
-#}
-
-
-# Old work for trying to work around #2
-#class {'jenkins::security':
-#  security_model => "full_control",
-#  require => [Exec['wait for service'], Jenkins::User['johndoe'] ],
-#  notify => Exec['safe_restart'],
-#}
-
-#exec {"safe_restart":
-#  command => "/bin/sleep 10 && /usr/bin/java -jar /usr/share/jenkins/jenkins-cli.jar -s http://localhost:8080 safe-restart --username johndoe --password changeme && sleep 30",
-#}

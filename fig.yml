@@ -1,19 +1,45 @@
 slave:
-  build: slave
-  links:
-    - master:master
-    - repo:repo
+  image: slave
+#  build: slave
   privileged: true
+  links:
+  - skydock
 
 master:
-  build: jenkins
+  image: master
+# build: jenkins
   ports:
     - "0.0.0.0:8080:8080"
   privileged: true
+  hostname: master
+  links:
+  - skydock
 
 repo:
-  build: repo
-  links:
-    - master:master
+#  build: repo
+  image: repo
   ports:
   - "0.0.0.0:8081:80"
+  hostname: repo
+  name: r1
+  links:
+  - skydock
+
+# With skydock/skydns hosts are reachable via IMAGENAME.dev.docker host
+# assuming you have setup your DNS for your
+
+skydns:
+  image: crosbymichael/skydns
+  ports:
+  - "172.17.42.1:53:53/udp"
+  name: skydns
+  command: -nameserver 8.8.8.8:53 -domain docker
+
+skydock:
+  image: crosbymichael/skydock
+  name: skydock
+  command: -ttl 30 -environment dev -s /docker.sock -domain docker -name buildfarmdeployment_skydns_1
+  volumes:
+  - /var/run/docker.sock:/docker.sock
+  links:
+  - skydns

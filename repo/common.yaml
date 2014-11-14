@@ -1,4 +1,114 @@
-# jenkins::slave::labels: 'hieradata'
 jenkins::slave::ui_user: 'admin'
 jenkins::slave::ui_pass: 'changeme'
 jenkins::slave::masterurl: 'http://master:8080'
+
+jenkins-slave::gpg_private_key: |
+    -----BEGIN PGP PRIVATE KEY BLOCK-----
+    Version: GnuPG v1
+
+    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
+    =Q44B
+    -----END PGP PRIVATE KEY BLOCK-----
+jenkins-slave::gpg_public_key: |
+    -----BEGIN PGP PUBLIC KEY BLOCK-----
+    Version: GnuPG v1
+
+    mQENBFRj9wABCADBxfCOCydUqsXS4JlhytBZroc7129AGHTn62xanKYXN1ihB5Ay
+    pLGJcz22MHnCegcCUA6HXOaOdLJTg8PZp/ncOGcLjRsmy+tkQzC0aX0yKhH1bKxe
+    TKe2/Kdk7y8SwW3Uw2r+R/d36DUoCTCRmibScIM4clD4eOOz/FZEVbnZuGmEKw1z
+    O5oMDgerEm8ou4s45RwIfTyt2UodxhLpjBWvuMKhKvc8JlpiZD/TMj+/uMhDe/eL
+    ijG+tMi9vUdo1B4xsDlLW7GFCmYXMBzhuO30TaC9PSE2e2cQS1jWX4113l32oXdg
+    IP8Nl1yxFGDPAKLQe+HNt7gyhoEkPP6tUKARABEBAAG0H1JPUyBSZWxlYXNlIDxu
+    b29uZUBleGFtcGxlLmNvbT6JATgEEwECACIFAlRj9wACGwMGCwkIBwMCBhUIAgkK
+    CwQWAgMBAh4BAheAAAoJEIsjFZ/llEM2cx8H/Ru8upiYAhwphPxOPEvkLfqZDEjI
+    LrFg4A5WhUvhMFpRzdOUovVCM9D73rtZEsaQgmtPIs1Mdp8M44E5G7sV9Zjp/4zf
+    T/vgopfBjG9M3foWkhWyupFlHm7AC9tv+3+vmzW5uzvrk/tRqirpU/5lm+wEE+Xq
+    Jy2UlkGj8o1WZDJXd0SoJF/MRXBwOa9kkpxNMLrOGSSra9GzBsIO9570QAUOD8pA
+    OKD+5pjDIdnySDpfBNIhv029dBhSKZg5sTzZr3dxise759l0W+8i1H6GUvxWe4km
+    8v7YDPyajsHs43ImbZQrMcr5l1TAVk8OBSLqGmtiLasRFnHQUxQyJNyo3gS5AQ0E
+    VGP3AAEIAM+qLZEg9qagVbm/FvS1wGlQVFgokjWGIZCxbzC2mNNAmyNXvOeCD899
+    N0xnprYd131Ocg53tllkYeSyUNBfO0f/CI0Msh+hzDivT0HqJxmxZGWHrm35to4e
+    LSIAOmoxDNXQwpC4ZNTUPZNNFdCfU0tGGXnA66BYpilfEv20eBgk1x+pu1vJxne1
+    /SPUwZAiiWb2ydRHvLJErUTcXGKn5UG4PlUAOCCoBC3195TIevlO9hlvtLkW9olu
+    hnWNtJJHfbjtwoQC+z5Kn4miFl/FkXAp8YfYSCF3glXAXY08dLIJkFCyi07J3jj6
+    I6xX0An+i8P/k/DyldjaMoutARLswuMAEQEAAYkBHwQYAQIACQUCVGP3AAIbDAAK
+    CRCLIxWf5ZRDNpN5CACdKoLcjJIIPQuCPyLdba5z6prRRo21Yud5dtyGGhOmDAt/
+    cjlmdwlta/ZkArkTB9is4iIDvo2D4PmRA756VHEBfhqwknt5DANMm3p9A5/z+sgX
+    n/punYuskxDjOU2+NwbBXRHgXz1vQpIEVtS3bQvjmyPn/yl31NM5zZ9Lwat/ynKj
+    iAvRflohugScLVSA0VCvn4gKlxCHBvtNS22rvsPW2zbOz38pp5gU+fNRUaLRmHna
+    b97l/64k31UzIQHeAHHbGODQfJ0PpKyS9UM4vvcMldUrBL4O4fLVaeqMjAhKSfcY
+    xaePFwP+okKW1h9qvwFhNF0JSCtdJrexdCf8jGE7
+    =E8ot
+    -----END PGP PUBLIC KEY BLOCK-----
+jenkins-slave::authorized_keys: |
+    ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC2NOaRsdZqqTrCwNR77AQIqwAPYkDfiL1Ou7Pi/qaW9S7UU0Y1KAQ6kWhgJc9RtOhbZKGHbFTqSLT4235TkmPvlZbV2bK8ZViBmqQ3r8vDMhC/+p9Ec9SP8sjv6JcIEWOy5zXPnB3OnHHWXmvZP47rjJY0l76F71fZt3vlvyjz7IrikULmuKcyrE+zulmbSTtfGZhxQRPxZDO/RiOemCPsYo5u/rUMjWH+CkEI0swQlM6QIvjWdfYtNwQT9yo53MXFy5jodhW4YOOncKE4RMOI9Lmu6jE0GmdmSEv486R4ot6iWanx2hk/46zlmX1kSKGWObRdH57H/xIAxvw+PiTd tfoote@yeti
+
+jenkins-slave::reprepro_updater_config: |
+    [ubuntu_building]
+    architectures: amd64 armhf i386 source
+    distros: lucid maverick natty oneiric precise quantal raring saucy trusty
+    repository_path: /var/repos/ubuntu/building
+    signing_key: E5944336
+
+    [ubuntu_testing]
+    architectures: amd64 armhf i386 source
+    distros: lucid maverick natty oneiric precise quantal raring saucy trusty
+    repository_path: /var/repos/ubuntu/testing
+    signing_key: E5944336
+
+    [ubuntu_main]
+    architectures: amd64 armhf i386 source
+    distros: lucid maverick natty oneiric precise quantal raring saucy trusty
+    repository_path: /var/repos/ubuntu/main
+    signing_key: E5944336
