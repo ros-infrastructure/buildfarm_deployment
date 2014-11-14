@@ -90,7 +90,6 @@ file { '/home/jenkins-slave/.ssh/gpg_public_key.pub':
     mode => '0644',
     owner => 'jenkins-slave',
     group => 'jenkins-slave',
-#    content => template('repo_files/gpg_public_key.pub.erb'),
     content => hiera("jenkins-slave::gpg_public_key"),
     require => File['/home/jenkins-slave/.ssh'],
 }
@@ -99,7 +98,6 @@ file { '/var/repos/repos.key':
     mode => '0644',
     owner => 'jenkins-slave',
     group => 'jenkins-slave',
-#    content => template('repo_files/gpg_public_key.pub.erb'),
     content => hiera("jenkins-slave::gpg_public_key"),
     require => File['/var/repos'],
 }
