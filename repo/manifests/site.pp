@@ -39,11 +39,11 @@ package {"python-debian":
   ensure => "installed",
 }
 
-vcsrepo { "/tmp/reprepro-updater":
+vcsrepo { "/home/jenkins-slave/reprepro-updater":
   ensure   => latest,
   provider => git,
   source   => 'https://github.com/ros-infrastructure/reprepro-updater.git',
-  revision => 'refactor',
+  revision => 'refactor_test',
   user     => 'jenkins-slave',
   require => User['jenkins-slave'],
 }
@@ -59,6 +59,24 @@ file { $repo_dirs :
   require => User['jenkins-slave'],
 }
 
+$config_dirs = ['/home/jenkins-slave/.buildfarm',
+              ]
+
+file { $config_dirs :
+  ensure => 'directory',
+  mode   => 644,
+  owner  => 'jenkins-slave',
+  group  => 'jenkins-slave',
+  require => User['jenkins-slave'],
+}
+
+file { '/home/jenkins-slave/.buildfarm/reprepro-updater.ini':
+    mode => '0600',
+    owner => 'jenkins-slave',
+    group => 'jenkins-slave',
+    content => hiera('jenkins-slave::reprepro_updater_config'),
+    require => File['/home/jenkins-slave/.buildfarm'],
+}
 
 # Set up apache
 class { 'apache': }
@@ -77,6 +95,10 @@ package {"reprepro":
   ensure => "installed",
 }
 
+#needed by reprepro-updater
+package {"python-configparser":
+  ensure => "installed",
+}
 # GPG key management
 
 file { '/home/jenkins-slave/.ssh/gpg_private_key.sec':
