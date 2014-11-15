@@ -1,0 +1,2 @@
+This file is to hold the directory in git.
+This folder will be mounted inside the docker instance as /var/lib/docker for persistence.
