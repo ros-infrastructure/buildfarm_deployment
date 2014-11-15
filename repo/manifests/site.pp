@@ -105,7 +105,7 @@ file { '/home/jenkins-slave/.ssh/gpg_private_key.sec':
     mode => '0600',
     owner => 'jenkins-slave',
     group => 'jenkins-slave',
-    content => template('repo_files/gpg_private_key.sec.erb'),
+    content => hiera("jenkins-slave::gpg_private_key"),
     require => File['/home/jenkins-slave/.ssh'],
 }
 file { '/home/jenkins-slave/.ssh/gpg_public_key.pub':
