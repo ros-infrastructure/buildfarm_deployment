@@ -125,6 +125,10 @@ jenkins::plugin {
   'swarm': ;
 }
 
+jenkins::plugin {
+  'timestamper': ;
+}
+
 # required by build-timeout
 jenkins::plugin {
   'token-macro': ;
@@ -268,14 +272,12 @@ file { '/var/lib/jenkins/.ssh':
     require => User['jenkins'],
 }
 
-# TODO make this parameterized. This is a hack to get up and running on
-# the local development machines only!!!!!!
 # add ssh key
 file { '/var/lib/jenkins/.ssh/id_rsa':
     mode => '0600',
     owner => 'jenkins',
     group => 'jenkins',
-    content => hiera("jenkins::private_ssh_key"),
+    content => hiera('jenkins::private_ssh_key'),
     require => File['/var/lib/jenkins/.ssh'],
 }
 file { '/var/lib/jenkins/.ssh/id_rsa.pub':
