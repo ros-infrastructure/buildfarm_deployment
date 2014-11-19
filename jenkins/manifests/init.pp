@@ -134,6 +134,10 @@ jenkins::plugin {
   'token-macro': ;
 }
 
+jenkins::plugin {
+  'xunit': ;
+}
+
 
 ### Dependencies for Scripting
 
