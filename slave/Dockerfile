@@ -21,7 +21,6 @@ ADD common.yaml /etc/puppet/hieradata/common.yaml
 
 RUN puppet apply -v /tmp/manifests/site.pp --modulepath=/etc/puppet/modules:/usr/share/puppet/modules:/tmp/manifests
 
-RUN adduser jenkins-slave docker
 VOLUME /var/lib/docker
 ENV DOCKER_DAEMON_ARGS --storage-driver=devicemapper
 # dmsetup needed to initialize devicemapper

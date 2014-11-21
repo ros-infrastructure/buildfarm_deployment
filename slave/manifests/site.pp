@@ -7,6 +7,13 @@ class { 'jenkins::slave':
 }
 
 
+exec {"jenkins-slave docker membership":
+  path    => '/usr/sbin:/usr/bin:/sbin:/bin',
+  unless => "grep -q 'docker\\S*jenkins-slave' /etc/group",
+  command => "usermod -aG docker jenkins-slave",
+  require => User['jenkins-slave'],
+}
+
 ## required by jobs to generate Dockerfiles
 package { 'python3-empy':
   ensure => 'installed',
