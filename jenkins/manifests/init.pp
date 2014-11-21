@@ -67,8 +67,13 @@ jenkins::plugin {
 }
 
 jenkins::plugin {
+  'jobrequeue': ;
+}
+
+jenkins::plugin {
   'mercurial': ;
 }
+
 package { 'mercurial':
   ensure => 'installed',
 }
@@ -119,6 +124,10 @@ jenkins::plugin {
 
 jenkins::plugin {
   'subversion': ;
+}
+
+jenkins::plugin {
+  'systemloadaverage-monitor': ;
 }
 
 jenkins::plugin {
