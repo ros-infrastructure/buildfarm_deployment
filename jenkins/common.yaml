@@ -11,6 +11,8 @@ credentials::jenkins-slave::username: jenkins-slave
 credentials::jenkins-slave::id: 1e7d4696-7fd4-4bc6-8c87-ebc7b6ce16e5
 credentials::jenkins-slave::passphrase: 4lRsx/NwfEndwUlcWOOnYg==
 
+jenkins::nodeMonitor::minimum_disk_space: 5G
+
 jenkins::authorized_keys: |
     ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC2NOaRsdZqqTrCwNR77AQIqwAPYkDfiL1Ou7Pi/qaW9S7UU0Y1KAQ6kWhgJc9RtOhbZKGHbFTqSLT4235TkmPvlZbV2bK8ZViBmqQ3r8vDMhC/+p9Ec9SP8sjv6JcIEWOy5zXPnB3OnHHWXmvZP47rjJY0l76F71fZt3vlvyjz7IrikULmuKcyrE+zulmbSTtfGZhxQRPxZDO/RiOemCPsYo5u/rUMjWH+CkEI0swQlM6QIvjWdfYtNwQT9yo53MXFy5jodhW4YOOncKE4RMOI9Lmu6jE0GmdmSEv486R4ot6iWanx2hk/46zlmX1kSKGWObRdH57H/xIAxvw+PiTd tfoote@yeti
 

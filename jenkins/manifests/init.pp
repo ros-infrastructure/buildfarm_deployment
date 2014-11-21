@@ -198,6 +198,16 @@ file { '/var/lib/jenkins/config.xml':
   notify => Service['jenkins'],
 }
 
+file { '/var/lib/jenkins/nodeMonitors.xml':
+  ensure => 'present',
+  mode => '0640',
+  owner => jenkins,
+  group => jenkins,
+  content => template('jenkins_files/nodeMonitors.xml.erb'),
+  require => Package['jenkins'],
+  notify => Service['jenkins'],
+}
+
 $user_dirs = ['/var/lib/jenkins/users',
               '/var/lib/jenkins/users/admin',
               '/var/lib/jenkins/secrets',]
