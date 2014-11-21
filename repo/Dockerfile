@@ -18,6 +18,7 @@ RUN gem install puppet --no-rdoc --no-ri
 RUN puppet module install rtyler/jenkins
 RUN puppet module install puppetlabs-apache
 RUN puppet module install puppetlabs-vcsrepo
+RUN puppet module install puppetlabs-ntp
 
 ADD hiera.yaml /etc/puppet/hiera.yaml
 RUN mkdir -p /etc/puppet/hieradata
@@ -43,6 +44,6 @@ USER root
 # SSH login fix. Otherwise user is kicked off after login
 RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
 
-VOLUME /var/lib/dockerls
+VOLUME /var/lib/docker
 
-CMD bash -c 'service ssh start && service apache2 start && /etc/init.d/jenkins-slave start && while true; do sleep 1; done'
+CMD bash -c 'service ntp start && service ssh start && service apache2 start && /etc/init.d/jenkins-slave start && while true; do sleep 1; done'

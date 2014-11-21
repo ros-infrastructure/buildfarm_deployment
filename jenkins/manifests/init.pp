@@ -6,6 +6,8 @@ include jenkins_files
 
 include pip
 
+# setup ntp with defaults
+include '::ntp'
 
 ### Jenkins Plugins
 

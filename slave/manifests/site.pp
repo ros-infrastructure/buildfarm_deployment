@@ -7,6 +7,9 @@ package { 'python3-empy':
 }
 
 
+# setup ntp with defaults
+include '::ntp'
+
 ### install latest docker
 
 package { 'apt-transport-https':

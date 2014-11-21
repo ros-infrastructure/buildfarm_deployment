@@ -1,5 +1,9 @@
 import 'slave.pp'
 
+# setup ntp with defaults
+include '::ntp'
+
+
 file { '/home/jenkins-slave/.ssh':
     ensure => 'directory',
     owner  => 'jenkins-slave',
