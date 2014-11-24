@@ -36,10 +36,6 @@ RUN python ./scripts/setup_repo.py ubuntu_building -c
 RUN python ./scripts/setup_repo.py ubuntu_testing -c
 RUN python ./scripts/setup_repo.py ubuntu_main -c
 
-RUN python ./scripts/import_upstream.py ubuntu_building ./config/bootstrap.yaml -c
-RUN python ./scripts/import_upstream.py ubuntu_testing ./config/bootstrap.yaml -c
-RUN python ./scripts/import_upstream.py ubuntu_main ./config/bootstrap.yaml -c
-
 USER root
 # SSH login fix. Otherwise user is kicked off after login
 RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
