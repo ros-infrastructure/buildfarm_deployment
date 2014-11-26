@@ -17,11 +17,11 @@ RUN gem install puppet --no-rdoc --no-ri
 RUN puppet module install rtyler/jenkins
 RUN puppet module install puppetlabs-ntp
 
-ADD . /tmp/buildfarm_deployment/slave
+ADD . /root/buildfarm_deployment/slave
 
-WORKDIR /tmp/buildfarm_deployment/slave
-RUN /tmp/buildfarm_deployment/slave/install_prerequisites.bash
-RUN /tmp/buildfarm_deployment/slave/deploy.bash
+WORKDIR /root/buildfarm_deployment/slave
+RUN /root/buildfarm_deployment/slave/install_prerequisites.bash
+RUN /root/buildfarm_deployment/slave/deploy.bash
 
 VOLUME /var/lib/docker
 ENV DOCKER_DAEMON_ARGS --storage-driver=devicemapper

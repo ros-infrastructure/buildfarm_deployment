@@ -20,11 +20,11 @@ RUN puppet module install puppetlabs-apache
 RUN puppet module install puppetlabs-vcsrepo
 RUN puppet module install puppetlabs-ntp
 
-ADD . /tmp/buildfarm_deployment/repo
+ADD . /root/buildfarm_deployment/repo
 
-WORKDIR /tmp/buildfarm_deployment/repo
-RUN /tmp/buildfarm_deployment/repo/install_prerequisites.bash
-RUN /tmp/buildfarm_deployment/repo/deploy.bash
+WORKDIR /root/buildfarm_deployment/repo
+RUN /root/buildfarm_deployment/repo/install_prerequisites.bash
+RUN /root/buildfarm_deployment/repo/deploy.bash
 
 USER jenkins-slave
 WORKDIR /home/jenkins-slave/reprepro-updater
