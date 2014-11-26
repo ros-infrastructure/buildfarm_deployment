@@ -17,14 +17,10 @@ RUN gem install puppet --no-rdoc --no-ri
 RUN puppet module install rtyler/jenkins
 RUN puppet module install puppetlabs-ntp
 
-ADD manifests /tmp/manifests
-ADD slave_files /tmp/manifests/slave_files
+ADD . /tmp/buildfarm_deployment/slave
 
-ADD hiera.yaml /etc/puppet/hiera.yaml
-RUN mkdir -p /etc/puppet/hieradata
-ADD common.yaml /etc/puppet/hieradata/common.yaml
-
-RUN puppet apply -v /tmp/manifests/site.pp --modulepath=/etc/puppet/modules:/usr/share/puppet/modules:/tmp/manifests
+WORKDIR /tmp/buildfarm_deployment/slave
+RUN /tmp/buildfarm_deployment/slave/deploy.bash
 
 VOLUME /var/lib/docker
 ENV DOCKER_DAEMON_ARGS --storage-driver=devicemapper
