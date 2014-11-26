@@ -20,6 +20,7 @@ RUN puppet module install puppetlabs-ntp
 ADD . /tmp/buildfarm_deployment/master
 
 WORKDIR /tmp/buildfarm_deployment/master
+RUN /tmp/buildfarm_deployment/master/install_prerequisites.bash
 RUN /tmp/buildfarm_deployment/master/deploy.bash
 
 EXPOSE 8080

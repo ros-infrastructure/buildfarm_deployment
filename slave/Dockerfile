@@ -20,6 +20,7 @@ RUN puppet module install puppetlabs-ntp
 ADD . /tmp/buildfarm_deployment/slave
 
 WORKDIR /tmp/buildfarm_deployment/slave
+RUN /tmp/buildfarm_deployment/slave/install_prerequisites.bash
 RUN /tmp/buildfarm_deployment/slave/deploy.bash
 
 VOLUME /var/lib/docker
