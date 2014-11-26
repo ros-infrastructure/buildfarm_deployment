@@ -17,7 +17,7 @@ The hostname format is IMAGE.dev.docker or IMAGENAME.IMAGE.dev.docker if there a
 To launch:
 
 cd slave && docker build -t slave .
-cd jenkins && docker build -t master .
+cd master && docker build -t master .
 cd repo && docker build -t repo .
 
 fig up
