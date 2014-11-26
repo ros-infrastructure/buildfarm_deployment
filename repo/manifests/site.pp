@@ -10,6 +10,10 @@ class { 'jenkins::slave':
 # setup ntp with defaults
 include '::ntp'
 
+# Find the other instances
+host {'master':
+  ip => hiera('master::ip'),
+}
 
 file { '/home/jenkins-slave/.ssh':
     ensure => 'directory',

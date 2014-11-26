@@ -2,6 +2,8 @@ jenkins::slave::ui_user: 'admin'
 jenkins::slave::ui_pass: 'changeme'
 jenkins::slave::masterurl: 'http://master:8080'
 
+repo::ip: 172.31.0.76
+
 user::admin::name: admin
 
 user::admin::password_hash: '#jbcrypt:$2a$10$vmmqzRmcDHj1t9Ajgq5edekPD8cbpD./pBSGcYzia.OsIroOKjghm'

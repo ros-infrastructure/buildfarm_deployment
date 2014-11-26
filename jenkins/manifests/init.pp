@@ -9,6 +9,11 @@ include pip
 # setup ntp with defaults
 include '::ntp'
 
+# Find the other instances
+host {'repo':
+  ip => hiera('repo::ip'),
+}
+
 ### Jenkins Plugins
 
 jenkins::plugin {

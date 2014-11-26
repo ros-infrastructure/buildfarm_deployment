@@ -1,3 +1,11 @@
+# Find the other instances
+host {'repo':
+  ip => hiera('repo::ip'),
+}
+host {'master':
+  ip => hiera('master::ip'),
+}
+
 class { 'jenkins::slave':
   labels => 'buildslave',
   slave_mode => 'exclusive',
