@@ -34,6 +34,17 @@ file { '/var/repos/rosdistro_cache':
     ]
 }
 
+file { '/var/repos/status_page':
+    ensure => 'directory',
+    mode   => '0755',
+    owner  => 'jenkins-slave',
+    group  => 'jenkins-slave',
+    require => [
+      User['jenkins-slave'],
+      File['/var/repos'],
+    ]
+}
+
 # TODO make this parameterized. This is a hack to get up and running on
 # the local development machines only!!!!!!
 # add ssh key
