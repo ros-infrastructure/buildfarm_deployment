@@ -20,14 +20,11 @@ RUN puppet module install puppetlabs-apache
 RUN puppet module install puppetlabs-vcsrepo
 RUN puppet module install puppetlabs-ntp
 
-ADD hiera.yaml /etc/puppet/hiera.yaml
-RUN mkdir -p /etc/puppet/hieradata
-ADD common.yaml /etc/puppet/hieradata/common.yaml
-ADD manifests /tmp/manifests
-ADD repo_files /tmp/jenkins/repo_files
-RUN puppet apply -v /tmp/manifests/site.pp --modulepath=/etc/puppet/modules:/usr/share/puppet/modules:/tmp/jenkins
+ADD . /tmp/buildfarm_deployment/repo
 
-WORKDIR /tmp
+WORKDIR /tmp/buildfarm_deployment/repo
+RUN /tmp/buildfarm_deployment/repo/deploy.bash
+
 USER jenkins-slave
 WORKDIR /home/jenkins-slave/reprepro-updater
 ENV PYTHONPATH /home/jenkins-slave/reprepro-updater/src:$PYTHONPATH
