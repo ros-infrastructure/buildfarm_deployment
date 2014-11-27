@@ -117,3 +117,7 @@ jenkins-slave::reprepro_updater_config: |
     repository_path: /var/repos/ubuntu/main
     signing_key: E5944336
     upstream_config: /home/jenkins-slave/reprepro-updater/config
+
+
+autoreconfigure: true
+autoreconfigure::branch: 'origin/master'

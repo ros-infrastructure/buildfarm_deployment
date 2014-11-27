@@ -46,3 +46,7 @@ jenkins::private_ssh_key: |
     SRbOij6xH8URigzwKGV+KubshUC5P3TQxc6AkUpIRM6iWBpz1yzb8o5PdrTQ4VVp
     QhbS+sZ+JcyNMAHEOkHkEN/eS930FnCyeLQwYEwJAkiYl7vkVuXXzAA=
     -----END RSA PRIVATE KEY-----
+
+
+autoreconfigure: true
+autoreconfigure::branch: 'origin/master'

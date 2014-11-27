@@ -180,3 +180,26 @@ exec { "import_private_key":
     logoutput   => on_failure,
     require    => File['/home/jenkins-slave/.ssh/gpg_private_key.sec']
 }
+
+if hiera('autoreconfigure') {
+  $autoreconf_key = 'AUTORECONFIGURE_UPSTREAM_BRANCH='
+  $branch_str = hiera('autoreconfigure::branch')
+  $env_str = "$autoreconf_key$branch_str"
+  cron {'autoreconfigure':
+    environment => [$env_str,
+                    'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games
+'],
+    command => 'bash -c "cd /root/buildfarm_deployment && git fetch origin && git reset --hard $AUTORECONFIGURE_UPSTREAM_BRANCH && cd repo && ./deploy.bash"',
+    user    => root,
+    month   => absent,
+    monthday => absent,
+    hour    => absent,
+    minute  => '*/15',
+    weekday => absent,
+  }
+}
+else {
+  cron {'autoreconfigure':
+    ensure => absent,
+  }
+}
