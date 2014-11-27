@@ -1,1 +1,0 @@
-*/15 * * * * root bash -c "cd /root/buildfarm_deployment && git fetch origin && git reset --hard origin/master && puppet apply -v slave/manifests/site.pp --modulepath=/etc/puppet/modules:/usr/share/puppet/modules:/root/buildfarm_deployment/slave -l /var/log/puppet.log"

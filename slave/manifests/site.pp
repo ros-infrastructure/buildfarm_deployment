@@ -104,7 +104,7 @@ if hiera('autoreconfigure') {
     month   => absent,
     monthday => absent,
     hour    => absent,
-    minute  => '*',
+    minute  => '*/15',
     weekday => absent,
   }
 }
