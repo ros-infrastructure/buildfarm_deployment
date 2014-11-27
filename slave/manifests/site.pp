@@ -92,3 +92,24 @@ file { '/home/jenkins-slave/wrapdocker':
 package { 'apparmor':
   ensure => 'installed',
 }
+
+if hiera('autoreconfigure') {
+  $autoreconf_key = 'AUTORECONFIGURE_UPSTREAM_BRANCH='
+  $branch_str = hiera('autoreconfigure::branch')
+  $env_str = "$autoreconf_key$branch_str"
+  cron {'autoreconfigure':
+    environment => [$env_str],
+    command => 'bash -c "cd /root/buildfarm_deployment && git fetch origin && git reset --hard $AUTORECONFIGURE_UPSTREAM_BRANCH && cd slave && ./deploy.bash"',
+    user    => root,
+    month   => absent,
+    monthday => absent,
+    hour    => absent,
+    minute  => '*',
+    weekday => absent,
+  }
+}
+else {
+  cron {'autoreconfigure':
+    ensure => absent,
+  }
+}

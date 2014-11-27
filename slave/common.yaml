@@ -5,3 +5,6 @@ jenkins::slave::masterurl: 'http://master:8080'
 
 master::ip: 172.31.6.118
 repo::ip: 172.31.0.76
+
+autoreconfigure: true
+autoreconfigure::branch: 'origin/master'
