@@ -11,8 +11,16 @@ class { 'jenkins::slave':
 include '::ntp'
 
 # Find the other instances
-host {'master':
-  ip => hiera('master::ip'),
+if hiera('master::ip', false) {
+  host {'master':
+    ip => hiera('master::ip'),
+    notify => Service['jenkins-slave'],
+  }
+}
+else {
+  host {'master':
+    ensure => absent,
+  }
 }
 
 file { '/home/jenkins-slave/.ssh':

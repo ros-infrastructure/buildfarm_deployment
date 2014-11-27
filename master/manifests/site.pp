@@ -10,8 +10,15 @@ include pip
 include '::ntp'
 
 # Find the other instances
-host {'repo':
-  ip => hiera('repo::ip'),
+if hiera('repo::ip', false) {
+  host {'repo':
+    ip => hiera('repo::ip'),
+  }
+}
+else {
+  host {'repo':
+    ensure => absent,
+  }
 }
 
 ### Jenkins Plugins

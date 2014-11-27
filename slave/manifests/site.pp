@@ -1,9 +1,25 @@
 # Find the other instances
-host {'repo':
-  ip => hiera('repo::ip'),
+if hiera('repo::ip', false) {
+  host {'repo':
+    ip => hiera('repo::ip'),
+  }
 }
-host {'master':
-  ip => hiera('master::ip'),
+else {
+  host {'repo':
+    ensure => absent,
+  }
+}
+
+if hiera('master::ip', false) {
+  host {'master':
+    ip => hiera('master::ip'),
+    notify => Service['jenkins-slave'],
+  }
+}
+else {
+  host {'master':
+    ensure => absent,
+  }
 }
 
 class { 'jenkins::slave':
