@@ -1,26 +1,6 @@
 buildfarm_deployment
 ====================
 
-Change docker storage driver
-----------------------------
-
-Edit `/etc/default/docker` and add the following line:
-
-    DOCKER_OPTS="--bip=172.17.42.1/16 --dns=172.17.42.1 --dns 8.8.8.8 --dns-search dev.docker --storage-driver=devicemapper"
-
-DNS via skydns
---------------
-
-DNS lookup will be made avaialable from the default dns above by skydock in the dev.docker domain.
-The hostname format is IMAGE.dev.docker or IMAGENAME.IMAGE.dev.docker if there are more than one.
-
-To launch:
-
-cd slave && docker build -t slave .
-cd master && docker build -t master .
-cd repo && docker build -t repo .
-
-fig up
 
 
 
@@ -146,3 +126,34 @@ How to use the new machines
 
 Now that you have a running system you will need to add jobs for one or more rosdistros.
 See the [ros_buildfarm repo](https://github.com/ros-infrastructure/ros_buildfarm) for more info.
+
+
+
+Local testing in Docker
+=======================
+
+For development a quick way to test is to run a local docker instance of each type of machine.
+The following are instructions for setting these elements.
+
+Change docker storage driver
+----------------------------
+
+Edit `/etc/default/docker` and add the following line:
+
+    DOCKER_OPTS="--bip=172.17.42.1/16 --dns=172.17.42.1 --dns 8.8.8.8 --dns-search dev.docker --storage-driver=devicemapper"
+
+DNS via skydns
+--------------
+
+DNS lookup will be made avaialable from the default dns above by skydock in the dev.docker domain.
+The hostname format is IMAGE.dev.docker or IMAGENAME.IMAGE.dev.docker if there are more than one.
+
+To launch:
+
+```
+docker build -t slave slave/
+docker build -t master master/
+docker build -t repo repo/
+
+fig up
+```
