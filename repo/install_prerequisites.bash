@@ -1,7 +1,7 @@
 #!/bin/bash
 
 apt-get update
-apt-get install ruby
+apt-get install -y ruby
 
 gem install puppet --no-rdoc --no-ri
 puppet module install rtyler/jenkins
