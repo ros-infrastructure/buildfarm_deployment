@@ -120,6 +120,27 @@ For a deployment you will need to change all of them and make your repo private.
 The above documentation does not cover changing any of the credentials, or authorizing access to a private repository.
 More information will be made available in future drafts.
 
+You should change:
+
+The admin password
+
+On all three:
+ * `jenkins::slave::ui_pass`
+on the master this should be the hashed password from above
+ * `user::admin::password_hash` (on the master should match)
+
+If you don't use the master branch on all machines change:
+ * `autoreconfigure::branch`
+
+ On repo:
+ * `jenkins-slave::authorized_keys`
+ * `jenkins-slave::gpg_public_key`
+ * `jenkins-slave::gpg_private_key`
+
+ On the master:
+  * `jenkins::authorized_keys`
+  * `jenkins::private_ssh_key`
+
 
 How to use the new machines
 ---------------------------
