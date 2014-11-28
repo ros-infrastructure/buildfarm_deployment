@@ -126,16 +126,15 @@ The admin password
 
 On all three:
  * `jenkins::slave::ui_pass`
-on the master this should be the hashed password from above
- * `user::admin::password_hash` (on the master should match)
+ * on the master this should be the hashed password from above `user::admin::password_hash`
+ * If you don't use the master branch on all machines change: `autoreconfigure::branch`
 
-If you don't use the master branch on all machines change:
- * `autoreconfigure::branch`
 
  On repo:
  * `jenkins-slave::authorized_keys`
  * `jenkins-slave::gpg_public_key`
  * `jenkins-slave::gpg_private_key`
+
 
  On the master:
   * `jenkins::authorized_keys`
