@@ -84,6 +84,15 @@ git clone https://github.com/ros-infrastructure/buildfarm_deployment.git
 cd buildfarm_deployment/repo/
 ./install_prerequisites.bash
 ./deploy.bash
+
+sudo su jenkins-slave
+cd
+cd reprepro-updater/
+export PYTHONPATH=/home/jenkins-slave/reprepro-updater/src:$PYTHONPATH
+./scripts/setup_repo.py ubuntu_building -c
+./scripts/setup_repo.py ubuntu_testing -c
+./scripts/setup_repo.py ubuntu_main -c
+
 ```
 
 Slave Setup
