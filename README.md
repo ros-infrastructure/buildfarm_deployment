@@ -1,12 +1,11 @@
-buildfarm_deployment
-====================
+# buildfarm_deployment
 
 
 
 
 
-Manual Deployment
-=================
+
+# Manual Deployment
 
 You will need a fork of this repo where you will customize the contents of */common.yaml
 
@@ -16,29 +15,25 @@ repo::ip
 master
 
 
-Master
-------
+## Master
 
 Memory 30Gb
 200GB disk space
 
 recommend r3.xlarge
 
-Slave
------
+## Slave
 
 Provision a machine with 200+ GB hard disk
 recommend c3.large or faster
 
-Repo
-----
+## Repo
 
 Provision 100Gb disk space
 
 recommend t2.medium
 
-Setup
------
+## Setup
 
 Record all their IPs set it up
 
@@ -50,8 +45,7 @@ If you're on ec2 these can be the internal IPs to save bandwidth consumption.
 
 
 
-Master Setup
-------------
+## Master Setup
 
 Log in:
 
@@ -68,8 +62,7 @@ cd buildfarm_deployment/master/
 ./deploy.bash
 ```
 
-Repo Setup
-----------
+## Repo Setup
 
 Log in:
 
@@ -95,8 +88,7 @@ export PYTHONPATH=/home/jenkins-slave/reprepro-updater/src:$PYTHONPATH
 
 ```
 
-Slave Setup
------------
+## Slave Setup
 
 Log in:
 
@@ -113,14 +105,12 @@ cd buildfarm_deployment/slave/
 ./deploy.bash
 ```
 
-Multiple Slaves
-,,,,,,,,,,,,,,,
+### Multiple Slaves
 
 You can add as many slaves as you want to a running master.
 They will automatically contact the master and add themselves.
 
-Security Notes
---------------
+## Security Notes
 
 This repo comes with credentials they are publicly available and not secure!
 
@@ -150,29 +140,25 @@ On all three:
   * `jenkins::private_ssh_key`
 
 
-How to use the new machines
----------------------------
+## How to use the new machines
 
 Now that you have a running system you will need to add jobs for one or more rosdistros.
 See the [ros_buildfarm repo](https://github.com/ros-infrastructure/ros_buildfarm) for more info.
 
 
 
-Local testing in Docker
-=======================
+# Local testing in Docker
 
 For development a quick way to test is to run a local docker instance of each type of machine.
 The following are instructions for setting these elements.
 
-Change docker storage driver
-----------------------------
+## Change docker storage driver
 
 Edit `/etc/default/docker` and add the following line:
 
     DOCKER_OPTS="--bip=172.17.42.1/16 --dns=172.17.42.1 --dns 8.8.8.8 --dns-search dev.docker --storage-driver=devicemapper"
 
-DNS via skydns
---------------
+## DNS via skydns
 
 DNS lookup will be made avaialable from the default dns above by skydock in the dev.docker domain.
 The hostname format is IMAGE.dev.docker or IMAGENAME.IMAGE.dev.docker if there are more than one.
