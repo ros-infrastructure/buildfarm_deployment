@@ -155,7 +155,7 @@ See the [ros_buildfarm repo](https://github.com/ros-infrastructure/ros_buildfarm
 # Local testing in Docker
 
 For development a quick way to test is to run a local docker instance of each type of machine.
-The following are instructions for setting these elements.
+The following are instructions for setting up these elements.
 
 ## Change docker storage driver
 
@@ -165,15 +165,13 @@ Edit `/etc/default/docker` and add the following line:
 
 ## DNS via skydns
 
-DNS lookup will be made avaialable from the default dns above by skydock in the dev.docker domain.
-The hostname format is IMAGE.dev.docker or IMAGENAME.IMAGE.dev.docker if there are more than one.
+DNS lookup will be made available from the default dns above through [skydock](https://github.com/crosbymichael/skydock) in the `dev.docker` domain.
+The hostname format is `IMAGE.dev.docker` or `CONTAINER.IMAGE.dev.docker` if there are multiple containers with the same image.
 
 To launch:
 
-```
-docker build -t slave slave/
-docker build -t master master/
-docker build -t repo repo/
+```bash
+./build_all.bash
 
 fig up
 ```
