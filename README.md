@@ -46,15 +46,15 @@ Fork buildfarm_deployment set the IPs in common.yaml and commit
   * `master::ip:`
   * `repo::ip:`
 
-If you're on ec2 these can be the internal IPs to save bandwidth consumption.
+If you're on EC2 these can be the internal IPs to save bandwidth consumption.
 
 
 
-## Master Setup
+### Master Setup
 
 Log in:
 
-```
+```bash
 sudo su root
 cd
 apt-get update
@@ -67,11 +67,11 @@ cd buildfarm_deployment/master/
 ./deploy.bash
 ```
 
-## Repo Setup
+### Repo Setup
 
 Log in:
 
-```
+```bash
 sudo su root
 cd
 apt-get update
@@ -93,11 +93,11 @@ export PYTHONPATH=/home/jenkins-slave/reprepro-updater/src:$PYTHONPATH
 
 ```
 
-## Slave Setup
+### Slave Setup
 
 Log in:
 
-```
+```bash
 sudo su root
 cd
 apt-get update
@@ -110,7 +110,7 @@ cd buildfarm_deployment/slave/
 ./deploy.bash
 ```
 
-### Multiple Slaves
+#### Multiple Slaves
 
 You can add as many slaves as you want to a running master.
 They will automatically contact the master and add themselves.
