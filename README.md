@@ -5,33 +5,38 @@
 
 
 
-# Manual Deployment
+# Deploying to Amazon EC2
 
-You will need a fork of this repo where you will customize the contents of */common.yaml
+You will need a fork of this repo where you will customize the contents of `*/common.yaml`.
 
 Specifically you will need to update:
-master::ip
-repo::ip
-master
+  * `master::ip`
+  * `repo::ip`
+  * `master`
 
+## Recommended EC2 Instance Types
 
-## Master
+### Master
 
-Memory 30Gb
-200GB disk space
+<table>
+<tr><td>Memory</td><td>30Gb</td></tr>
+<tr><td>Disk space</td><td>200Gb</td></tr>
+<tr><td><strong>Recommended</strong></td><td>r3.xlarge</td></tr>
+</table>
 
-recommend r3.xlarge
+### Slave
 
-## Slave
+<table>
+<tr><td>Disk space</td><td>200Gb+</td></tr>
+<tr><td><strong>Recommended</strong></td><td>c3.large or faster</td></tr>
+</table>
 
-Provision a machine with 200+ GB hard disk
-recommend c3.large or faster
+### Repo
 
-## Repo
-
-Provision 100Gb disk space
-
-recommend t2.medium
+<table>
+<tr><td>Disk space</td><td>100Gb</td></tr>
+<tr><td><strong>Recommended</strong></td><td>t2.medium</td></tr>
+</table>
 
 ## Setup
 
