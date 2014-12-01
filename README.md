@@ -2,10 +2,16 @@
 
 
 
+# Deployment Guide
 
+This project supports two modes of deployment by default (see following sections for details):
 
+* Deployment to **multiple separate (virtual or physical) machines**<br/>
+  (e.g. on Amazon EC2 or your preferred virtual machine environment).
 
-# Deploying to Amazon EC2
+* Deployment as **multiple Docker containers**.
+
+# Deploying to virtual machines
 
 You will need a fork of this repo where you will customize the contents of `*/common.yaml`.
 
@@ -14,28 +20,31 @@ Specifically you will need to update:
   * `repo::ip`
   * `master`
 
-## Recommended EC2 Instance Types
+## Recommended System Requirements for Production
+
+The following EC2 instance types are recommended when deploying to Amazon EC2.<br/>
+They are intended as a guideline for choosing the appropriate parameters when deploying to other platforms.
 
 ### Master
 
 <table>
 <tr><td>Memory</td><td>30Gb</td></tr>
 <tr><td>Disk space</td><td>200Gb</td></tr>
-<tr><td><strong>Recommended</strong></td><td>r3.xlarge</td></tr>
+<tr><td><strong>Recommendation</strong></td><td>r3.xlarge</td></tr>
 </table>
 
 ### Slave
 
 <table>
 <tr><td>Disk space</td><td>200Gb+</td></tr>
-<tr><td><strong>Recommended</strong></td><td>c3.large or faster</td></tr>
+<tr><td><strong>Recommendation</strong></td><td>c3.large or faster</td></tr>
 </table>
 
 ### Repo
 
 <table>
 <tr><td>Disk space</td><td>100Gb</td></tr>
-<tr><td><strong>Recommended</strong></td><td>t2.medium</td></tr>
+<tr><td><strong>Recommendation</strong></td><td>t2.medium</td></tr>
 </table>
 
 ## Setup
