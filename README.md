@@ -149,6 +149,16 @@ On all three:
   * `jenkins::authorized_keys`
   * `jenkins::private_ssh_key`
 
+Performance notes
+-----------------
+
+The disk performance for /var/lib/docker/devicemapper is important. If you can use non-networked storage it is highly recommended. 
+
+The following is an example of leveraging ephemeral instance storage to speed up builds on EC2. It is a snippet from /etc/fstab:
+
+    /dev/xvdc	/var/lib/docker/devicemapper	auto	defaults,nobootwait,comment=cloudconfig	0	2
+
+
 
 How to use the new machines
 ---------------------------
