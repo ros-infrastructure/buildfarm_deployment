@@ -1,44 +1,53 @@
-buildfarm_deployment
-====================
+# buildfarm_deployment
 
 
 
+# Deployment Guide
 
+This project supports two modes of deployment by default (see following sections for details):
 
-Manual Deployment
-=================
+* Deployment to **multiple separate (virtual or physical) machines**<br/>
+  (e.g. on Amazon EC2 or your preferred virtual machine environment).
 
-You will need a fork of this repo where you will customize the contents of */common.yaml
+* Deployment as **multiple Docker containers**.
+
+# Deploying to virtual machines
+
+You will need a fork of this repo where you will customize the contents of `*/common.yaml`.
 
 Specifically you will need to update:
-master::ip
-repo::ip
-master
+  * `master::ip`
+  * `repo::ip`
+  * `master`
 
+## Recommended System Requirements for Production
 
-Master
-------
+The following EC2 instance types are recommended when deploying to Amazon EC2.<br/>
+They are intended as a guideline for choosing the appropriate parameters when deploying to other platforms.
 
-Memory 30Gb
-200GB disk space
+### Master
 
-recommend r3.xlarge
+<table>
+<tr><td>Memory</td><td>30Gb</td></tr>
+<tr><td>Disk space</td><td>200Gb</td></tr>
+<tr><td><strong>Recommendation</strong></td><td>r3.xlarge</td></tr>
+</table>
 
-Slave
------
+### Slave
 
-Provision a machine with 200+ GB hard disk
-recommend c3.large or faster
+<table>
+<tr><td>Disk space</td><td>200Gb+</td></tr>
+<tr><td><strong>Recommendation</strong></td><td>c3.large or faster</td></tr>
+</table>
 
-Repo
-----
+### Repo
 
-Provision 100Gb disk space
+<table>
+<tr><td>Disk space</td><td>100Gb</td></tr>
+<tr><td><strong>Recommendation</strong></td><td>t2.medium</td></tr>
+</table>
 
-recommend t2.medium
-
-Setup
------
+## Setup
 
 Record all their IPs set it up
 
@@ -46,16 +55,15 @@ Fork buildfarm_deployment set the IPs in common.yaml and commit
   * `master::ip:`
   * `repo::ip:`
 
-If you're on ec2 these can be the internal IPs to save bandwidth consumption.
+If you're on EC2 these can be the internal IPs to save bandwidth consumption.
 
 
 
-Master Setup
-------------
+### Master Setup
 
 Log in:
 
-```
+```bash
 sudo su root
 cd
 apt-get update
@@ -68,12 +76,11 @@ cd buildfarm_deployment/master/
 ./deploy.bash
 ```
 
-Repo Setup
-----------
+### Repo Setup
 
 Log in:
 
-```
+```bash
 sudo su root
 cd
 apt-get update
@@ -95,12 +102,11 @@ export PYTHONPATH=/home/jenkins-slave/reprepro-updater/src:$PYTHONPATH
 
 ```
 
-Slave Setup
------------
+### Slave Setup
 
 Log in:
 
-```
+```bash
 sudo su root
 cd
 apt-get update
@@ -113,14 +119,12 @@ cd buildfarm_deployment/slave/
 ./deploy.bash
 ```
 
-Multiple Slaves
-,,,,,,,,,,,,,,,
+#### Multiple Slaves
 
 You can add as many slaves as you want to a running master.
 They will automatically contact the master and add themselves.
 
-Security Notes
---------------
+## Security Notes
 
 This repo comes with credentials they are publicly available and not secure!
 
@@ -160,39 +164,33 @@ The following is an example of leveraging ephemeral instance storage to speed up
 
 
 
-How to use the new machines
----------------------------
+## How to use the new machines
 
 Now that you have a running system you will need to add jobs for one or more rosdistros.
 See the [ros_buildfarm repo](https://github.com/ros-infrastructure/ros_buildfarm) for more info.
 
 
 
-Local testing in Docker
-=======================
+# Local testing in Docker
 
 For development a quick way to test is to run a local docker instance of each type of machine.
-The following are instructions for setting these elements.
+The following are instructions for setting up these elements.
 
-Change docker storage driver
-----------------------------
+## Change docker storage driver
 
 Edit `/etc/default/docker` and add the following line:
 
     DOCKER_OPTS="--bip=172.17.42.1/16 --dns=172.17.42.1 --dns 8.8.8.8 --dns-search dev.docker --storage-driver=devicemapper"
 
-DNS via skydns
---------------
+## DNS via skydns
 
-DNS lookup will be made avaialable from the default dns above by skydock in the dev.docker domain.
-The hostname format is IMAGE.dev.docker or IMAGENAME.IMAGE.dev.docker if there are more than one.
+DNS lookup will be made available from the default dns above through [skydock](https://github.com/crosbymichael/skydock) in the `dev.docker` domain.
+The hostname format is `IMAGE.dev.docker` or `CONTAINER.IMAGE.dev.docker` if there are multiple containers with the same image.
 
 To launch:
 
-```
-docker build -t slave slave/
-docker build -t master master/
-docker build -t repo repo/
+```bash
+./build_all.bash
 
 fig up
 ```
