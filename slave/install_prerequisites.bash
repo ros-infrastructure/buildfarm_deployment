@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -o errexit
+
 apt-get update
 
 # needed for installing puppet via gem
