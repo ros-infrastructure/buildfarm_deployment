@@ -169,22 +169,24 @@ file { '/var/repos/repos.key':
     require => File['/var/repos'],
 }
 
+$gpg_key_id = hiera('jenkins-slave::gpg_key_id')
+
 exec { "import_public_key":
     path        => '/bin:/usr/bin',
     command     => 'gpg --import /home/jenkins-slave/.ssh/gpg_public_key.pub',
     user        => 'jenkins-slave',
     group       => 'jenkins-slave',
-    #unless      => "apt-key list | grep $keyid", TODO IMPLEMENT THIS CHECK
+    unless      => "gpg --list-keys | grep ${gpg_key_id}",
     logoutput   => on_failure,
     require    => File['/home/jenkins-slave/.ssh/gpg_public_key.pub']
 }
 
 exec { "import_private_key":
-    path        => '/bin:/usr/bin',
+    path        => '/bin:/usr/bin:',
     command     => 'gpg --import /home/jenkins-slave/.ssh/gpg_private_key.sec',
     user        => 'jenkins-slave',
     group       => 'jenkins-slave',
-    # unless      => "apt-key list | grep $keyid", TODO IMPLEMENT THIS CHECK
+    unless      => "gpg -K | grep ${gpg_key_id}",
     logoutput   => on_failure,
     require    => File['/home/jenkins-slave/.ssh/gpg_private_key.sec']
 }
@@ -210,4 +212,47 @@ else {
   cron {'autoreconfigure':
     ensure => absent,
   }
+}
+
+
+exec {"init_building_repo":
+  path        => '/bin:/usr/bin',
+  command     => '/home/jenkins-slave/reprepro-updater/scripts/setup_repo.py ubuntu_building -c',
+  environment => ['PYTHONPATH=/home/jenkins-slave/reprepro-updater/src:$PYTHONPATH'],
+  user        => 'jenkins-slave',
+  group       => 'jenkins-slave',
+  unless      => '/home/jenkins-slave/reprepro-updater/scripts/setup_repo.py ubuntu_building -q',
+  logoutput   => on_failure,
+  require     => [
+                  Vcsrepo ["/home/jenkins-slave/reprepro-updater"],
+                  File['/home/jenkins-slave/.buildfarm/reprepro-updater.ini'],
+                 ]
+}
+
+exec {"init_testing_repo":
+  path        => '/bin:/usr/bin',
+  command     => '/home/jenkins-slave/reprepro-updater/scripts/setup_repo.py ubuntu_testing -c',
+  environment => ['PYTHONPATH=/home/jenkins-slave/reprepro-updater/src:$PYTHONPATH'],
+  user        => 'jenkins-slave',
+  group       => 'jenkins-slave',
+  unless      => '/home/jenkins-slave/reprepro-updater/scripts/setup_repo.py ubuntu_testing -q',
+  logoutput   => on_failure,
+  require     => [
+                  Vcsrepo ["/home/jenkins-slave/reprepro-updater"],
+                  File['/home/jenkins-slave/.buildfarm/reprepro-updater.ini'],
+                 ]
+}
+
+exec {"init_main_repo":
+  path        => '/bin:/usr/bin',
+  command     => '/home/jenkins-slave/reprepro-updater/scripts/setup_repo.py ubuntu_testing -c',
+  environment => ['PYTHONPATH=/home/jenkins-slave/reprepro-updater/src:$PYTHONPATH'],
+  user        => 'jenkins-slave',
+  group       => 'jenkins-slave',
+  unless      => '/home/jenkins-slave/reprepro-updater/scripts/setup_repo.py ubuntu_testing -q',
+  logoutput   => on_failure,
+  require     => [
+                  Vcsrepo ["/home/jenkins-slave/reprepro-updater"],
+                  File['/home/jenkins-slave/.buildfarm/reprepro-updater.ini'],
+                 ]
 }
