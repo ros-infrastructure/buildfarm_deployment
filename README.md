@@ -101,7 +101,15 @@ Log in:
 sudo su root
 cd
 apt-get update
-apt-get install -y git
+apt-get install -y git btrfs-tools
+
+#assuming two disk drives /dev/xvdb and /dev/xvdc
+mkfs.btrfs /dev/xvdb -f
+mount /dev/xvdb /var/lib/docker
+btrfs device add /dev/xvdc /var/lib/docker -f
+
+## Edit fstab to mount this device on boot 
+# /dev/xvdb	/var/lib/docker	auto	defaults,nobootwait,comment=cloudconfig	0	2
 
 # Customize this URL for your fork
 git clone https://github.com/ros-infrastructure/buildfarm_deployment.git
