@@ -84,6 +84,11 @@ package {"python-debian":
   ensure => "installed",
 }
 
+# required by jobs to generate Dockerfiles
+package { 'python3-empy':
+  ensure => 'installed',
+}
+
 vcsrepo { "/home/jenkins-slave/reprepro-updater":
   ensure   => latest,
   provider => git,
