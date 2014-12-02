@@ -30,5 +30,6 @@ RUN /root/buildfarm_deployment/repo/deploy.bash
 RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
 
 VOLUME /var/lib/docker
-
-CMD bash -c 'service ntp start && service ssh start && service apache2 start && /etc/init.d/jenkins-slave start && while true; do sleep 1; done'
+ENV DOCKER_DAEMON_ARGS --storage-driver=devicemapper
+# dmsetup needed to initialize devicemapper
+CMD bash -c 'service ntp start && service ssh start && service apache2 start && /etc/init.d/jenkins-slave start && dmsetup mknodes && /home/jenkins-slave/wrapdocker && while true; do sleep 1; done'
