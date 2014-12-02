@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -o errexit
+
 cp hiera.yaml /etc/puppet
 mkdir -p /etc/puppet/hieradata
 cp common.yaml /etc/puppet/hieradata

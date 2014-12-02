@@ -131,3 +131,23 @@ else {
     ensure => absent,
   }
 }
+
+# clean up containers and dangling images https://github.com/docker/docker/issues/928#issuecomment-58619854
+cron {'docker_cleanup_containers':
+  command => 'bash -c "docker rm `docker ps -aq`"',
+  user    => 'jenkins-slave',
+  month   => absent,
+  monthday => absent,
+  hour    => '*/6',
+  minute  => absent,
+  weekday => absent,
+}
+cron {'docker_cleanup_images':
+  command => 'bash -c "docker rmi `docker images --filter dangling=true --quiet`"',
+  user    => 'jenkins-slave',
+  month   => absent,
+  monthday => absent,
+  hour    => '*/6',
+  minute  => absent,
+  weekday => absent,
+}
