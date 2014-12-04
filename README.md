@@ -103,16 +103,14 @@ cd
 apt-get update
 apt-get install -y git btrfs-tools
 
-#assuming two disk drives /dev/xvdb and /dev/xvdc
-mkfs.btrfs /dev/xvdb -f
-mount /dev/xvdb /var/lib/docker
-btrfs device add /dev/xvdc /var/lib/docker -f
+#Assuming a large device is available at /dev/vdb
+mkfs.btrfs /dev/vdb -f
+echo "/dev/vdb /var/lib/docker auto    defaults,nobootwait,comment=cloudconfig 0   2">> /etc/fstab
+mkdir /var/lib/docker
+mount /var/lib/docker
 
-## Edit fstab to mount this device on boot 
-# /dev/xvdb	/var/lib/docker	auto	defaults,nobootwait,comment=cloudconfig	0	2
 
-# Customize this URL for your fork
-git clone https://github.com/ros-infrastructure/buildfarm_deployment.git
+git clone https://github.com/ros-infrastructure/buildfarm_deployment.git -b ec2test_btrfs
 cd buildfarm_deployment/slave/
 ./install_prerequisites.bash
 ./deploy.bash
