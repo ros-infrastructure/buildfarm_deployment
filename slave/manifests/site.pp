@@ -97,8 +97,13 @@ if hiera('run_squid', false) {
 
   class { 'iptables':
     config => 'file', # This is needed to activate file mode
-    source => [ "puppet:///modules/slave_files/etc/iptables.rules"], 
+    source => [ "puppet:///modules/slave_files/etc/iptables.rules"],
   }
+}
+else {
+  class { 'iptables':
+  }
+
 }
 if hiera('autoreconfigure') {
   $autoreconf_key = 'AUTORECONFIGURE_UPSTREAM_BRANCH='
