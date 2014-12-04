@@ -98,8 +98,8 @@ if hiera('run_squid', false) {
   docker::run {'squid-in-a-can':
     image   => 'jpetazzo/squid-in-a-can',
     command => '/tmp/deploy_squid.py',
-    env     => ['DISK_CACHE_SIZE=5000', 'MAX_CACHE_OBJECT=1000']
-    volumes => ['/var/cache/squid-in-a-can:/var/cache/squid3']
+    env     => ['DISK_CACHE_SIZE=5000', 'MAX_CACHE_OBJECT=1000'],
+    volumes => ['/var/cache/squid-in-a-can:/var/cache/squid3'],
     net     => 'host',
     require => [Docker::Image['jpetazzo/squid-in-a-can'],
                 File['/var/cache/squid-in-a-can'],
