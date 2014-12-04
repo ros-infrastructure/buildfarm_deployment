@@ -82,6 +82,24 @@ file { '/home/jenkins-slave/wrapdocker':
     require => User['jenkins-slave'],
 }
 
+
+if hiera('run_squid', false) {
+  docker::image {'jpetazzo/squid-in-a-can':
+    require => Package['docker'],
+  }
+
+  docker::run {'squid-in-a-can':
+    image   => 'jpetazzo/squid-in-a-can',
+    command => '/tmp/deploy_squid.py',
+    net     => 'host',
+    require => Docker::Image['jpetazzo/squid-in-a-can'],
+  }
+
+  class { 'iptables':
+    config => 'file', # This is needed to activate file mode
+    source => [ "puppet:///modules/slave_files/etc/iptables.rules"], 
+  }
+}
 if hiera('autoreconfigure') {
   $autoreconf_key = 'AUTORECONFIGURE_UPSTREAM_BRANCH='
   $branch_str = hiera('autoreconfigure::branch')
