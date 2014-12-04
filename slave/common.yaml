@@ -8,3 +8,5 @@ repo::ip: 54.67.51.1
 
 autoreconfigure: true
 autoreconfigure::branch: 'origin/ec2test_btrfs'
+
+run_squid: false
