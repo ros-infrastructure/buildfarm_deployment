@@ -88,23 +88,22 @@ if hiera('run_squid', false) {
     require => Package['docker'],
   }
 
-  file { $'/var/cache/squid-in-a-can' :
+  file { '/var/cache/squid-in-a-can' :
     ensure => 'directory',
     mode   => 644,
-    #owner  => 'proxy',
-    #group  => 'proxy',
-    #require => Package['squid3'],
+    owner  => 'proxy',
+    group  => 'proxy',
   }
 
   docker::run {'squid-in-a-can':
     image   => 'jpetazzo/squid-in-a-can',
     command => '/tmp/deploy_squid.py',
     env     => ['DISK_CACHE_SIZE=5000', 'MAX_CACHE_OBJECT=1000']
-    volumes => ['/var/cache/squid-in-a-can']
+    volumes => ['/var/cache/squid-in-a-can:/var/cache/squid3']
     net     => 'host',
     require => [Docker::Image['jpetazzo/squid-in-a-can'],
                 File['/var/cache/squid-in-a-can'],
-               }
+               ],
   }
 
   class { 'iptables':
