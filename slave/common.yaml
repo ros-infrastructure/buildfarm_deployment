@@ -8,3 +8,5 @@ jenkins::slave::masterurl: 'http://master:8080'
 
 autoreconfigure: true
 autoreconfigure::branch: 'origin/master'
+
+run_squid: false
