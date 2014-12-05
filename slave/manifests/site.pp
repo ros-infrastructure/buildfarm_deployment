@@ -108,11 +108,13 @@ if hiera('run_squid', false) {
 
   class { 'iptables':
     config => 'file', # This is needed to activate file mode
-    source => [ "puppet:///modules/slave_files/etc/iptables.rules"],
+    source => [ "puppet:///modules/slave_files/etc/iptables.docker_squid"],
   }
 }
 else {
   class { 'iptables':
+    config => 'file', # This is needed to activate file mode
+    source => [ "puppet:///modules/slave_files/etc/iptables.docker"],
   }
 
 }
