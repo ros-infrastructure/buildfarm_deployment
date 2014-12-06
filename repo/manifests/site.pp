@@ -316,7 +316,7 @@ exec {"init_testing_repo":
 
 exec {"init_main_repo":
   path        => '/bin:/usr/bin',
-  command     => '/home/jenkins-slave/reprepro-updater/scripts/setup_repo.py ubuntu_testing -c',
+  command     => '/home/jenkins-slave/reprepro-updater/scripts/setup_repo.py ubuntu_main -c',
   environment => ['PYTHONPATH=/home/jenkins-slave/reprepro-updater/src:$PYTHONPATH'],
   user        => 'jenkins-slave',
   group       => 'jenkins-slave',
