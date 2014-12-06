@@ -24,6 +24,7 @@ repo:
   name: r1
   links:
   - skydock
+  privileged: true
 
 # With skydock/skydns hosts are reachable via IMAGENAME.dev.docker host
 # assuming you have setup your DNS for your
