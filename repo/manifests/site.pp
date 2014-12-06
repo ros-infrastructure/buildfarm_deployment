@@ -6,6 +6,16 @@ class { 'jenkins::slave':
   executors => "1",
 }
 
+exec {"jenkins-slave docker membership":
+  path    => '/usr/sbin:/usr/bin:/sbin:/bin',
+  unless => "grep -q 'docker\\S*jenkins-slave' /etc/group",
+  command => "usermod -aG docker jenkins-slave",
+  require => [User['jenkins-slave'],
+              Package['lxc-docker'],
+             ],
+}
+
+
 
 # setup ntp with defaults
 include '::ntp'
