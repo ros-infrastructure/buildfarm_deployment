@@ -103,8 +103,7 @@ cd
 apt-get update
 apt-get install -y git
 
-# Customize this URL for your fork
-git clone https://github.com/ros-infrastructure/buildfarm_deployment.git
+git clone https://github.com/ros-infrastructure/buildfarm_deployment.git -b ec2test
 cd buildfarm_deployment/slave/
 ./install_prerequisites.bash
 ./deploy.bash
@@ -143,16 +142,6 @@ On all three:
  On the master:
   * `jenkins::authorized_keys`
   * `jenkins::private_ssh_key`
-
-Performance notes
------------------
-
-The disk performance for /var/lib/docker/devicemapper is important. If you can use non-networked storage it is highly recommended. 
-
-The following is an example of leveraging ephemeral instance storage to speed up builds on EC2. It is a snippet from /etc/fstab:
-
-    /dev/xvdc	/var/lib/docker/devicemapper	auto	defaults,nobootwait,comment=cloudconfig	0	2
-
 
 
 ## How to use the new machines

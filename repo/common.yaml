@@ -119,5 +119,7 @@ jenkins-slave::reprepro_updater_config: |
     upstream_config: /home/jenkins-slave/reprepro-updater/config
 
 
+master::ip: 54.67.30.249
+
 autoreconfigure: true
-autoreconfigure::branch: 'origin/master'
+autoreconfigure::branch: 'origin/ec2test'
