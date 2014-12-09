@@ -48,5 +48,5 @@ jenkins::private_ssh_key: |
     -----END RSA PRIVATE KEY-----
 
 
-autoreconfigure: true
+autoreconfigure: false
 autoreconfigure::branch: 'origin/ec2test'
