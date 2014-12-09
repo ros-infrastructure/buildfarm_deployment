@@ -21,6 +21,19 @@ else {
   }
 }
 
+
+### Jenkins Slave
+## Allow execution on the master w/o the master tag
+
+class { 'jenkins::slave':
+  labels => 'master_buildslave',
+  slave_mode => 'exclusive',
+  slave_user => 'jenkins-slave',
+  manage_slave_user => '1',
+  executors => '1',
+}
+
+
 ### Jenkins Plugins
 
 jenkins::plugin {
