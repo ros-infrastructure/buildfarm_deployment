@@ -101,10 +101,16 @@ Log in:
 sudo su root
 cd
 apt-get update
-apt-get install -y git
+apt-get install -y git btrfs-tools
 
-# Customize this URL for your fork
-git clone https://github.com/ros-infrastructure/buildfarm_deployment.git
+#Assuming a large device is available at /dev/vdb
+mkfs.btrfs /dev/vdb -f
+echo "/dev/vdb /var/lib/docker auto    defaults,nobootwait,comment=cloudconfig 0   2">> /etc/fstab
+mkdir /var/lib/docker
+mount /var/lib/docker
+
+
+git clone https://github.com/ros-infrastructure/buildfarm_deployment.git -b ec2test_btrfs
 cd buildfarm_deployment/slave/
 ./install_prerequisites.bash
 ./deploy.bash
@@ -143,16 +149,6 @@ On all three:
  On the master:
   * `jenkins::authorized_keys`
   * `jenkins::private_ssh_key`
-
-Performance notes
------------------
-
-The disk performance for /var/lib/docker/devicemapper is important. If you can use non-networked storage it is highly recommended. 
-
-The following is an example of leveraging ephemeral instance storage to speed up builds on EC2. It is a snippet from /etc/fstab:
-
-    /dev/xvdc	/var/lib/docker/devicemapper	auto	defaults,nobootwait,comment=cloudconfig	0	2
-
 
 
 ## How to use the new machines

@@ -10,3 +10,5 @@ apt-get install -y ruby
 gem install puppet --no-rdoc --no-ri
 puppet module install rtyler/jenkins
 puppet module install puppetlabs-ntp
+puppet module install garethr-docker
+puppet module install example42-iptables

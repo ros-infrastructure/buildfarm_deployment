@@ -35,7 +35,9 @@ exec {"jenkins-slave docker membership":
   path    => '/usr/sbin:/usr/bin:/sbin:/bin',
   unless => "grep -q 'docker\\S*jenkins-slave' /etc/group",
   command => "usermod -aG docker jenkins-slave",
-  require => User['jenkins-slave'],
+  require => [User['jenkins-slave'],
+              Package['docker'],
+             ],
 }
 
 ## required by jobs to generate Dockerfiles
@@ -65,32 +67,10 @@ include '::ntp'
 
 ### install latest docker
 
-package { 'apt-transport-https':
-  ensure => 'installed',
-}
-
-apt::source { 'docker':
-  location => 'https://get.docker.com/ubuntu',
-  release => 'docker',
-  repos => 'main',
-  key => 'A88D21E9',
-  key_server => 'keyserver.ubuntu.com',
-  include_src => false,
-  require => Package['apt-transport-https'],
-}
-
-package { 'lxc-docker':
-  ensure => 'installed',
-  require => Apt::Source['docker'],
-}
-
-# change docker storage driver
-file { '/etc/default/docker':
-    mode => '0644',
-    owner => root,
-    group => root,
-    source => 'puppet:///modules/slave_files/etc/default/docker',
-    require => Package['lxc-docker'],
+class {'docker':
+  manage_kernel => false,
+  #storage_driver => 'btrfs',
+  #version => 'latest',
 }
 
 # use wrapdocker from dind
@@ -102,13 +82,42 @@ file { '/home/jenkins-slave/wrapdocker':
     require => User['jenkins-slave'],
 }
 
-## wrapdocker requires apparmor to avoid this error:
-# Error loading docker apparmor profile: fork/exec /sbin/apparmor_parser: no such file or directory ()
-# https://github.com/docker/docker/issues/4734
-package { 'apparmor':
-  ensure => 'installed',
-}
 
+if hiera('run_squid', false) {
+  docker::image {'jpetazzo/squid-in-a-can':
+    require => Package['docker'],
+  }
+
+  file { '/var/cache/squid-in-a-can' :
+    ensure => 'directory',
+    mode   => 644,
+    owner  => 'proxy',
+    group  => 'proxy',
+  }
+
+  docker::run {'squid-in-a-can':
+    image   => 'jpetazzo/squid-in-a-can',
+    command => '/tmp/deploy_squid.py',
+    env     => ['DISK_CACHE_SIZE=5000', 'MAX_CACHE_OBJECT=1000'],
+    volumes => ['/var/cache/squid-in-a-can:/var/cache/squid3'],
+    net     => 'host',
+    require => [Docker::Image['jpetazzo/squid-in-a-can'],
+                File['/var/cache/squid-in-a-can'],
+               ],
+  }
+
+  class { 'iptables':
+    config => 'file', # This is needed to activate file mode
+    source => [ "puppet:///modules/slave_files/etc/iptables.docker_squid"],
+  }
+}
+else {
+  class { 'iptables':
+    config => 'file', # This is needed to activate file mode
+    source => [ "puppet:///modules/slave_files/etc/iptables.docker"],
+  }
+
+}
 if hiera('autoreconfigure') {
   $autoreconf_key = 'AUTORECONFIGURE_UPSTREAM_BRANCH='
   $branch_str = hiera('autoreconfigure::branch')
