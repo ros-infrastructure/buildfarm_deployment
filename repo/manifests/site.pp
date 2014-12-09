@@ -6,6 +6,16 @@ class { 'jenkins::slave':
   executors => "1",
 }
 
+exec {"jenkins-slave docker membership":
+  path    => '/usr/sbin:/usr/bin:/sbin:/bin',
+  unless => "grep -q 'docker\\S*jenkins-slave' /etc/group",
+  command => "usermod -aG docker jenkins-slave",
+  require => [User['jenkins-slave'],
+              Package['lxc-docker'],
+             ],
+}
+
+
 
 # setup ntp with defaults
 include '::ntp'
@@ -307,7 +317,7 @@ exec {"init_testing_repo":
 
 exec {"init_main_repo":
   path        => '/bin:/usr/bin',
-  command     => '/home/jenkins-slave/reprepro-updater/scripts/setup_repo.py ubuntu_testing -c',
+  command     => '/home/jenkins-slave/reprepro-updater/scripts/setup_repo.py ubuntu_main -c',
   environment => ['PYTHONPATH=/home/jenkins-slave/reprepro-updater/src:$PYTHONPATH'],
   user        => 'jenkins-slave',
   group       => 'jenkins-slave',
