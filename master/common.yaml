@@ -49,4 +49,4 @@ jenkins::private_ssh_key: |
 
 
 autoreconfigure: true
-autoreconfigure::branch: 'origin/master'
+autoreconfigure::branch: 'origin/ec2test
