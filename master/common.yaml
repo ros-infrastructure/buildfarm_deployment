@@ -2,7 +2,7 @@ jenkins::slave::ui_user: 'admin'
 jenkins::slave::ui_pass: 'changeme'
 jenkins::slave::masterurl: 'http://master:8080'
 
-#repo::ip: 172.31.0.76
+repo::ip: 54.67.51.1
 
 user::admin::name: admin
 
