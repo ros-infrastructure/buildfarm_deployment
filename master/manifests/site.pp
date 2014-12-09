@@ -93,6 +93,10 @@ package { 'mercurial':
 }
 
 jenkins::plugin {
+  'monitoring': ;
+}
+
+jenkins::plugin {
   'parameterized-trigger': ;
 }
 
@@ -155,6 +159,10 @@ jenkins::plugin {
 # required by build-timeout
 jenkins::plugin {
   'token-macro': ;
+}
+
+jenkins::plugin {
+  'writable-filesystem-monitor': ;
 }
 
 jenkins::plugin {
