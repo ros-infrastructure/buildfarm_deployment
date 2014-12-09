@@ -31,15 +31,6 @@ package { 'lxc-docker':
   require => Apt::Source['docker'],
 }
 
-# change docker storage driver
-file { '/etc/default/docker':
-    mode => '0644',
-    owner => root,
-    group => root,
-    source => 'puppet:///modules/repo_files/etc/default/docker',
-    require => Package['lxc-docker'],
-}
-
 # use wrapdocker from dind
 file { '/home/jenkins-slave/wrapdocker':
     mode => '0774',

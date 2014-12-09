@@ -101,16 +101,9 @@ Log in:
 sudo su root
 cd
 apt-get update
-apt-get install -y git btrfs-tools
+apt-get install -y git
 
-#Assuming a large device is available at /dev/vdb
-mkfs.btrfs /dev/vdb -f
-echo "/dev/vdb /var/lib/docker auto    defaults,nobootwait,comment=cloudconfig 0   2">> /etc/fstab
-mkdir /var/lib/docker
-mount /var/lib/docker
-
-
-git clone https://github.com/ros-infrastructure/buildfarm_deployment.git -b ec2test_btrfs
+git clone https://github.com/ros-infrastructure/buildfarm_deployment.git -b ec2test
 cd buildfarm_deployment/slave/
 ./install_prerequisites.bash
 ./deploy.bash

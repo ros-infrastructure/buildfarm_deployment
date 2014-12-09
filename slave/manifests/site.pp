@@ -69,8 +69,6 @@ include '::ntp'
 
 class {'docker':
   manage_kernel => false,
-  #storage_driver => 'btrfs',
-  #version => 'latest',
 }
 
 # use wrapdocker from dind
