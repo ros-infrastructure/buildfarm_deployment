@@ -4,6 +4,8 @@ slave:
   privileged: true
   links:
   - skydock
+  volumes:
+  - slave/mount:/var/lib/docker
 
 master:
   image: master
@@ -14,6 +16,8 @@ master:
   hostname: master
   links:
   - skydock
+  volumes:
+  - jenkins/mount:/var/lib/docker
 
 repo:
 #  build: repo
