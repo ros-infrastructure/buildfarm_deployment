@@ -2,7 +2,8 @@ jenkins::slave::ui_user: 'admin'
 jenkins::slave::ui_pass: 'changeme'
 jenkins::slave::masterurl: 'http://master:8080'
 
-#master::ip: 172.31.6.118
+# master::ip: 54.67.30.249
+
 jenkins-slave::gpg_key_id: 'E5944336'
 jenkins-slave::gpg_private_key: |
     -----BEGIN PGP PRIVATE KEY BLOCK-----
@@ -119,7 +120,7 @@ jenkins-slave::reprepro_updater_config: |
     upstream_config: /home/jenkins-slave/reprepro-updater/config
 
 
-master::ip: 54.67.30.249
+
 
 autoreconfigure: true
 autoreconfigure::branch: 'origin/ec2test'

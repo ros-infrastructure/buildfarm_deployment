@@ -3,8 +3,8 @@ jenkins::slave::ui_pass: 'changeme'
 jenkins::slave::masterurl: 'http://master:8080'
 
 
-master::ip: 54.67.30.249
-repo::ip: 54.67.51.1
+# master::ip: 54.67.30.249
+# repo::ip: 54.67.51.1
 
 autoreconfigure: true
 autoreconfigure::branch: 'origin/master'
