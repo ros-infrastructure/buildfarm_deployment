@@ -117,14 +117,10 @@ else {
 
 }
 if hiera('autoreconfigure') {
-  $autoreconf_key = 'AUTORECONFIGURE_UPSTREAM_BRANCH='
-  $branch_str = hiera('autoreconfigure::branch')
-  $env_str = "$autoreconf_key$branch_str"
   cron {'autoreconfigure':
-    environment => [$env_str,
-                    'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games
-'],
-    command => 'bash -c "cd /root/buildfarm_deployment && git fetch origin && git reset --hard $AUTORECONFIGURE_UPSTREAM_BRANCH && cd slave && ./deploy.bash"',
+    environment => ['PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games
+  '],
+    command => hiera('autoreconfigure::command'),
     user    => root,
     month   => absent,
     monthday => absent,
