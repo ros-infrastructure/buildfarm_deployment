@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<org.jenkinsci.plugins.ghprb.GhprbTrigger_-DescriptorImpl plugin="ghprb@1.16-5">
+  <serverAPIUrl><%= scope.function_hiera(["jenkins::github::api_url"], 'https://api.github.com') %></serverAPIUrl>
+  <whitelistPhrase></whitelistPhrase>
+  <okToTestPhrase></okToTestPhrase>
+  <retestPhrase></retestPhrase>
+  <skipBuildPhrase>.*\[skip\W+ci\].*</skipBuildPhrase>
+  <cron></cron>
+  <useComments>false</useComments>
+  <useDetailedComments>false</useDetailedComments>
+  <logExcerptLines>0</logExcerptLines>
+  <unstableAs>FAILURE</unstableAs>
+  <msgSuccess></msgSuccess>
+  <msgFailure></msgFailure>
+  <autoCloseFailedPullRequests>false</autoCloseFailedPullRequests>
+  <displayBuildErrorsOnDownstreamBuilds>false</displayBuildErrorsOnDownstreamBuilds>
+  <username></username>
+  <password></password>
+  <accessToken><%= scope.function_hiera(["jenkins::github::token"]) %></accessToken>
+  <adminlist></adminlist>
+  <publishedURL></publishedURL>
+  <requestForTestingPhrase>Can one of the admins verify this patch?</requestForTestingPhrase>
+  <jobs/>
+</org.jenkinsci.plugins.ghprb.GhprbTrigger_-DescriptorImpl>
