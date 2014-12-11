@@ -57,6 +57,31 @@ jenkins::plugin {
 }
 
 jenkins::plugin {
+  'ghprb': ;
+}
+# config for auto-managing github web hooks
+file { '/var/lib/jenkins/com.cloudbees.jenkins.GitHubPushTrigger.xml':
+    ensure => 'present',
+    mode => '0600',
+    owner => 'jenkins',
+    group => 'jenkins',
+    content => template('jenkins_files/com.cloudbees.jenkins.GitHubPushTrigger.xml.erb'),
+    require => Package['jenkins'],
+    notify => Service['jenkins'],
+}
+# config for ghprb
+file { '/var/lib/jenkins/org.jenkinsci.plugins.ghprb.GhprbTrigger.xml':
+    ensure => 'present',
+    mode => '0600',
+    owner => 'jenkins',
+    group => 'jenkins',
+    content => template('jenkins_files/org.jenkinsci.plugins.ghprb.GhprbTrigger.xml.erb'),
+    require => Package['jenkins'],
+    notify => Service['jenkins'],
+}
+
+# required by ghprb
+jenkins::plugin {
   'git': ;
 }
 

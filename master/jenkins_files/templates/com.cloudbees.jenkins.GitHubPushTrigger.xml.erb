@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<com.cloudbees.jenkins.GitHubPushTrigger_-DescriptorImpl plugin="github@1.10">
+  <manageHook>true</manageHook>
+  <credentials>
+    <com.cloudbees.jenkins.Credential>
+      <username><%= scope.function_hiera(["jenkins::github::username"]) %></username>
+      <apiUrl><%= scope.function_hiera(["jenkins::github::api_url"], 'https://api.github.com') %></apiUrl>
+      <oauthAccessToken><%= scope.function_hiera(["jenkins::github::token"]) %></oauthAccessToken>
+    </com.cloudbees.jenkins.Credential>
+  </credentials>
+</com.cloudbees.jenkins.GitHubPushTrigger_-DescriptorImpl>
