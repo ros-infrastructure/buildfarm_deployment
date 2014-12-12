@@ -13,12 +13,6 @@
       <sectionEndPattern>^\# END SUBSECTION$</sectionEndPattern>
       <collapseOnlyOneLevel>false</collapseOnlyOneLevel>
     </org.jvnet.hudson.plugins.collapsingconsolesections.CollapsingSectionNote>
-    <org.jvnet.hudson.plugins.collapsingconsolesections.CollapsingSectionNote>
-      <sectionDisplayName>Docker step {1}</sectionDisplayName>
-      <sectionStartPattern>^Step (\d+ : \w+) .+$</sectionStartPattern>
-      <sectionEndPattern>^ ?---> [0-9a-f]{12}+$</sectionEndPattern>
-      <collapseOnlyOneLevel>false</collapseOnlyOneLevel>
-    </org.jvnet.hudson.plugins.collapsingconsolesections.CollapsingSectionNote>
   </sections>
   <numberingEnabled>true</numberingEnabled>
 </org.jvnet.hudson.plugins.collapsingconsolesections.CollapsingSectionNote_-DescriptorImpl>
