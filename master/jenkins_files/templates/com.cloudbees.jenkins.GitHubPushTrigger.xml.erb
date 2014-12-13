@@ -4,7 +4,7 @@
   <credentials>
     <com.cloudbees.jenkins.Credential>
       <username><%= scope.function_hiera(["jenkins::github::username"]) %></username>
-      <apiUrl><%= scope.function_hiera(["jenkins::github::api_url"], 'https://api.github.com') %></apiUrl>
+      <apiUrl><%= scope.function_hiera(["jenkins::github::api_url", 'https://api.github.com']) %></apiUrl>
       <oauthAccessToken><%= scope.function_hiera(["jenkins::github::token"]) %></oauthAccessToken>
     </com.cloudbees.jenkins.Credential>
   </credentials>

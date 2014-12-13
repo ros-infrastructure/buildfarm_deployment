@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <org.jenkinsci.plugins.ghprb.GhprbTrigger_-DescriptorImpl plugin="ghprb@1.16-5">
-  <serverAPIUrl><%= scope.function_hiera(["jenkins::github::api_url"], 'https://api.github.com') %></serverAPIUrl>
+  <serverAPIUrl><%= scope.function_hiera(["jenkins::github::api_url", 'https://api.github.com']) %></serverAPIUrl>
   <whitelistPhrase></whitelistPhrase>
   <okToTestPhrase></okToTestPhrase>
   <retestPhrase></retestPhrase>
