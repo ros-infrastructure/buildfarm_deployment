@@ -307,6 +307,12 @@ file { '/var/lib/jenkins/.buildfarm/jenkins.ini':
   notify => Service['jenkins'],
 }
 
+# For our convenience reading the logs
+class { 'timezone':
+  timezone => 'America/Los_Angeles',
+}
+
+
 
 ### install latest docker
 
