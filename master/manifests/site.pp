@@ -310,28 +310,14 @@ file { '/var/lib/jenkins/.buildfarm/jenkins.ini':
 
 ### install latest docker
 
-package { 'apt-transport-https':
-  ensure => 'installed',
+class {'docker':
+  manage_kernel => false,
 }
 
-apt::source { 'docker':
-  location => 'https://get.docker.com/ubuntu',
-  release => 'docker',
-  repos => 'main',
-  key => 'A88D21E9',
-  key_server => 'keyserver.ubuntu.com',
-  include_src => false,
-  require => Package['apt-transport-https'],
-}
-
-package { 'lxc-docker':
-  ensure => 'installed',
-  require => Apt::Source['docker'],
-}
 user { 'jenkins':
   name => 'jenkins',
   groups => ['jenkins', 'docker'],
-  require => Package['lxc-docker'],
+  require => Package['docker'],
 }
 
 file { '/var/lib/jenkins/.ssh':
@@ -374,13 +360,6 @@ file { '/var/lib/jenkins/wrapdocker':
     group => 'jenkins',
     source => 'puppet:///modules/jenkins_files/var/lib/jenkins/wrapdocker',
     require => User['jenkins'],
-}
-
-## wrapdocker requires apparmor to avoid this error:
-# Error loading docker apparmor profile: fork/exec /sbin/apparmor_parser: no such file or directory ()
-# https://github.com/docker/docker/issues/4734
-package { 'apparmor':
-  ensure => 'installed',
 }
 
 if hiera('autoreconfigure') {
