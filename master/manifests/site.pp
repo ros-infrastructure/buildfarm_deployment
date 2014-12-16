@@ -27,7 +27,7 @@ else {
 class { 'jenkins::slave':
   #labels => 'on_master',
   slave_mode => 'exclusive',
-  slave_name => 'on_master',
+  slave_name => 'slave_on_master',
   slave_user => 'jenkins-slave',
   manage_slave_user => '1',
   executors => '1',
