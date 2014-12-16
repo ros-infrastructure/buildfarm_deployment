@@ -309,7 +309,7 @@ file { '/var/lib/jenkins/.buildfarm/jenkins.ini':
 
 # For our convenience reading the logs
 class { 'timezone':
-  timezone => 'America/Los_Angeles',
+  timezone => hiera('timezone', 'America/Los_Angeles'),
 }
 
 
