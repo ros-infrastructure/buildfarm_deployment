@@ -34,6 +34,37 @@ class { 'jenkins::slave':
   install_java => false,
 }
 
+exec {"jenkins-slave docker membership":
+  path    => '/usr/sbin:/usr/bin:/sbin:/bin',
+  unless => "grep -q 'docker\\S*jenkins-slave' /etc/group",
+  command => "usermod -aG docker jenkins-slave",
+  require => [User['jenkins-slave'],
+              Package['docker'],
+             ],
+}
+
+## required by jobs to generate Dockerfiles
+package { 'python3-empy':
+  ensure => 'installed',
+}
+
+# For jenkins-slave instance checkouts
+package { 'bzr':
+  ensure => 'installed',
+}
+
+package { 'git':
+  ensure => 'installed',
+}
+
+package { 'mercurial':
+  ensure => 'installed',
+}
+
+package { 'subversion':
+  ensure => 'installed',
+}
+
 ### Jenkins Plugins
 
 jenkins::plugin {
