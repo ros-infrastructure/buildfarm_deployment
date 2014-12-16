@@ -83,7 +83,15 @@ jenkins::plugin {
 }
 
 jenkins::plugin {
+  'dashboard-view': ;
+}
+
+jenkins::plugin {
   'description-setter': ;
+}
+
+jenkins::plugin {
+  'extra-columns': ;
 }
 
 jenkins::plugin {
@@ -156,6 +164,10 @@ jenkins::plugin {
 }
 
 jenkins::plugin {
+  'pollscm': ;
+}
+
+jenkins::plugin {
   'PrioritySorter': ;
 }
 # config for PrioritySorter
@@ -179,6 +191,10 @@ file { '/var/lib/jenkins/jenkins.plugins.publish_over_ssh.BapSshPublisherPlugin.
     source => 'puppet:///modules/jenkins_files/var/lib/jenkins/jenkins.plugins.publish_over_ssh.BapSshPublisherPlugin.xml',
     require => Jenkins::Plugin['publish-over-ssh'],
     notify => Service['jenkins'],
+}
+
+jenkins::plugin {
+  'purge-build-queue-plugin': ;
 }
 
 # required by mercurial
