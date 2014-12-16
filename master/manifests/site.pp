@@ -52,6 +52,26 @@ exec {"jenkins-slave docker membership":
   require => [User['jenkins-slave'],
               Package['docker'],
              ],
+  notify => Service['jenkins-slave'],
+}
+
+$slave_buildfarm_config_dir = ['/home/jenkins-slave/.buildfarm']
+file { $slave_buildfarm_config_dir:
+  ensure => 'directory',
+  mode => '0640',
+  owner => jenkins-slave,
+  group => jenkins-slave,
+}
+
+file { '/home/jenkins-slave/.buildfarm/jenkins.ini':
+  ensure => 'present',
+  mode => '0640',
+  owner => jenkins-slave,
+  group => jenkins-slave,
+  content => template('jenkins_files/jenkins.ini.erb'),
+  require => [User['jenkins-slave'],
+              File[$slave_buildfarm_config_dir],],
+  notify => Service['jenkins-slave'],
 }
 
 package { 'git':
