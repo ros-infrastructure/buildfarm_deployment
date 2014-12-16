@@ -21,6 +21,19 @@ else {
   }
 }
 
+### Jenkins Slave
+## Don't install java to avoid conflict with the master puppet formula
+## https://github.com/jenkinsci/puppet-jenkins/issues/224
+class { 'jenkins::slave':
+  #labels => 'on_master',
+  slave_mode => 'exclusive',
+  slave_name => 'on_master',
+  slave_user => 'jenkins-slave',
+  manage_slave_user => '1',
+  executors => '1',
+  install_java => false,
+}
+
 ### Jenkins Plugins
 
 jenkins::plugin {
