@@ -9,6 +9,17 @@ include pip
 # setup ntp with defaults
 include '::ntp'
 
+# Needed by jenkins-slave to connect to the local master generically
+if hiera('master::ip', false) {
+  host {'master':
+    ip => hiera('master::ip'),
+  }
+}
+else {
+  host {'master':
+    ensure => absent,
+  }
+}
 # Find the other instances
 if hiera('repo::ip', false) {
   host {'repo':
