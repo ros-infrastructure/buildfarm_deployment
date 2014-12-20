@@ -315,6 +315,7 @@ file { '/var/lib/jenkins/config.xml':
   mode => '0640',
   owner => jenkins,
   group => jenkins,
+  replace => false,
   source => 'puppet:///modules/jenkins_files/var/lib/jenkins/config.xml',
   require => Package['jenkins'],
   notify => Service['jenkins'],
