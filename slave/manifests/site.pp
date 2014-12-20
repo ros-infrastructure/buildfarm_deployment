@@ -38,7 +38,7 @@ exec {"jenkins-slave docker membership":
   require => [User['jenkins-slave'],
               Package['docker'],
              ],
-  notify => Service['jenkins'],
+  notify => Service['jenkins-slave'],
 }
 
 ## required by jobs to generate Dockerfiles
