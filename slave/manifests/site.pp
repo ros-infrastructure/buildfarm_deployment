@@ -69,7 +69,6 @@ include '::ntp'
 ### install latest docker
 
 class {'docker':
-  manage_kernel => false,
 }
 
 # use wrapdocker from dind

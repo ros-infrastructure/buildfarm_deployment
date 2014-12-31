@@ -395,7 +395,6 @@ class { 'timezone':
 ### install latest docker
 
 class {'docker':
-  manage_kernel => false,
 }
 
 user { 'jenkins':

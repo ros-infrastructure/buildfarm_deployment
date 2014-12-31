@@ -22,23 +22,7 @@ include '::ntp'
 
 ### install latest docker
 
-package { 'apt-transport-https':
-  ensure => 'installed',
-}
-
-apt::source { 'docker':
-  location => 'https://get.docker.com/ubuntu',
-  release => 'docker',
-  repos => 'main',
-  key => 'A88D21E9',
-  key_server => 'keyserver.ubuntu.com',
-  include_src => false,
-  require => Package['apt-transport-https'],
-}
-
-package { 'lxc-docker':
-  ensure => 'installed',
-  require => Apt::Source['docker'],
+class {'docker':
 }
 
 # use wrapdocker from dind
