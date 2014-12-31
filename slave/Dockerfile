@@ -7,7 +7,7 @@ RUN apt-get dist-upgrade -y
 
 RUN apt-get install -y ruby
 # Prerequisites implicitly installed, but explicit allows docker caching
-RUN apt-get install -y git wget openjdk-7-jdk ca-certificates apparmor apt-transport-https python3-empy
+RUN apt-get install -y git wget openjdk-7-jdk ca-certificates apparmor python3-empy
 
 RUN apt-get update
 RUN apt-get install -y bzr mercurial subversion
@@ -24,6 +24,4 @@ RUN /root/buildfarm_deployment/slave/install_prerequisites.bash
 RUN /root/buildfarm_deployment/slave/deploy.bash
 
 VOLUME /var/lib/docker
-ENV DOCKER_DAEMON_ARGS --storage-driver=devicemapper
-# dmsetup needed to initialize devicemapper
-CMD bash -c 'service ntp start && /etc/init.d/jenkins-slave start && dmsetup mknodes && /home/jenkins-slave/wrapdocker && while true; do sleep 1; done'
+CMD bash -c 'service ntp start && /etc/init.d/jenkins-slave start && /home/jenkins-slave/wrapdocker && while true; do sleep 1; done'
