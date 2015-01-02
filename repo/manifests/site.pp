@@ -43,7 +43,7 @@ package { 'apparmor':
 
 # clean up containers and dangling images https://github.com/docker/docker/issues/928#issuecomment-58619854
 cron {'docker_cleanup_containers':
-  command => 'bash -c "docker rm `docker ps -aq`"',
+  command => 'bash -c "docker ps -aq | xargs -L1 docker rm "',
   user    => 'jenkins-slave',
   month   => absent,
   monthday => absent,
@@ -52,7 +52,7 @@ cron {'docker_cleanup_containers':
   weekday => absent,
 }
 cron {'docker_cleanup_images':
-  command => 'bash -c "docker rmi `docker images --filter dangling=true --quiet`"',
+  command => 'bash -c "docker images --filter dangling=true --quiet | xargs -L1 docker rmi "',
   user    => 'jenkins-slave',
   month   => absent,
   monthday => absent,
