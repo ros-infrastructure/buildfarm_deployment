@@ -122,6 +122,19 @@ jenkins::plugin {
 }
 
 jenkins::plugin {
+  'diskcheck': ;
+}
+# config for diskcheck
+file { '/var/lib/jenkins/diskcheck.xml':
+    mode => '0640',
+    owner => jenkins,
+    group => jenkins,
+    source => 'puppet:///modules/jenkins_files/var/lib/jenkins/diskcheck.xml',
+    require => Jenkins::Plugin['diskcheck'],
+    notify => Service['jenkins'],
+}
+
+jenkins::plugin {
   'extra-columns': ;
 }
 
