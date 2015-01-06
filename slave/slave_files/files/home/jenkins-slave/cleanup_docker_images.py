@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # Script to clean up docker images
 import argparse
 import psutil
@@ -20,9 +20,9 @@ def get_free_disk_percentage(path='/'):
 
 def get_image_list():
     cmd = "docker images -q".split()
-    images = subprocess.check_output(cmd).splitlines()
+    images = subprocess.check_output(cmd).decode('utf8').splitlines()
     cmd = "docker images -q --filter dangling=true".split()
-    dangling_images = subprocess.check_output(cmd).splitlines()
+    dangling_images = subprocess.check_output(cmd).decode('utf8').splitlines()
     images.extend(dangling_images)
     return reversed(images)
 
@@ -73,7 +73,7 @@ for i in images:
         processed_images.add(i)
         print("removing image %s" % i)
         remove_docker_image(i)
-    except subprocess.CalledProcessError, ex:
-        print("failed to remove image %s" % i)
+    except subprocess.CalledProcessError as ex:
+        print("failed to remove image %s Exception [%s]" % (i, ex))
 
     print_progress(args)
