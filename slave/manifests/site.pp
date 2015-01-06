@@ -154,11 +154,16 @@ cron {'docker_cleanup_containers':
   weekday => absent,
 }
 cron {'docker_cleanup_images':
-  command => 'bash -c "python /home/jenkins-slave/cleanup_docker_images.py > /tmp/cleanup_docker_images.py.log"',
+  command => 'bash -c "python /home/jenkins-slave/cleanup_docker_images.py > /tmp/cleanup_docker_images.py.log 2>&1"',
   user    => 'jenkins-slave',
   month   => absent,
   monthday => absent,
   hour    => '*/2',
   minute  => 15,
   weekday => absent,
+}
+
+# needed for cleanup_images to run
+package { 'python-psutil':
+  ensure => 'installed',
 }
