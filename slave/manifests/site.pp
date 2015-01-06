@@ -80,6 +80,14 @@ file { '/home/jenkins-slave/wrapdocker':
     require => User['jenkins-slave'],
 }
 
+# script to clean up docker images from oldest
+file { '/home/jenkins-slave/cleanup_docker_images.py':
+  mode => '0774',
+  owner => 'jenkins-slave',
+  group => 'jenkins-slave',
+  source => 'puppet:///modules/slave_files/home/jenkins-slave/cleanup_docker_images.py',
+  require => User['jenkins-slave'],
+}
 
 if hiera('run_squid', false) {
   docker::image {'jpetazzo/squid-in-a-can':
@@ -141,16 +149,16 @@ cron {'docker_cleanup_containers':
   user    => 'jenkins-slave',
   month   => absent,
   monthday => absent,
-  hour    => '*/6',
-  minute  => absent,
+  hour    => '*/2',
+  minute  => 5,
   weekday => absent,
 }
 cron {'docker_cleanup_images':
-  command => 'bash -c "docker images --filter dangling=true --quiet | xargs -L1 docker rmi "',
+  command => 'bash -c "python /home/jenkins-slave/cleanup_docker_images.py > /tmp/cleanup_docker_images.py.log"',
   user    => 'jenkins-slave',
   month   => absent,
   monthday => absent,
-  hour    => '*/6',
-  minute  => absent,
+  hour    => '*/2',
+  minute  => 15,
   weekday => absent,
 }
