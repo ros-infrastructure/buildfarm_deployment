@@ -46,6 +46,11 @@ package { 'python3-empy':
   ensure => 'installed',
 }
 
+# required by subprocess reaper script
+package { 'python3-psutil':
+  ensure => 'installed',
+}
+
 # For jenkins-slave instance checkouts
 package { 'bzr':
   ensure => 'installed',

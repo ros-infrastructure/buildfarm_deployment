@@ -301,6 +301,11 @@ pip::install { 'jenkinsapi':
   require => Package['python3-pip'],
 }
 
+# required by subprocess reaper script
+package { 'python3-psutil':
+  ensure => 'installed',
+}
+
 # required by management jobs to read rosdistro yaml files
 package { 'python3-yaml':
   ensure => 'installed',

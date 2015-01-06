@@ -140,6 +140,11 @@ package { 'python3-empy':
   ensure => 'installed',
 }
 
+# required by subprocess reaper script
+package { 'python3-psutil':
+  ensure => 'installed',
+}
+
 vcsrepo { "/home/jenkins-slave/reprepro-updater":
   ensure   => latest,
   provider => git,
