@@ -1,15 +1,29 @@
 #!/usr/bin/env python3
 # Script to clean up docker images
 import argparse
+import fcntl
 import psutil
 import subprocess
 import sys
+
+from contextlib import contextmanager
+
+
+@contextmanager
+def flocked(fd):
+    """ Locks FD before entering the context, always releasing the lock.
+    Raise BlockingIOError if already locked. """
+    try:
+        fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        yield
+    finally:
+        fcntl.flock(fd, fcntl.LOCK_UN)
 
 
 def get_free_disk_space(path='/'):
     """Return the number of GB free."""
     usage = psutil.disk_usage(path)
-    return usage.free/1024.0/1024.0/1024.0
+    return usage.free / 1024.0 / 1024.0 / 1024.0
 
 
 def get_free_disk_percentage(path='/'):
@@ -46,34 +60,50 @@ def print_progress(args):
                                                 args.minimum_free_percent))
 
 
-parser = argparse.ArgumentParser(description='Free up disk space from docker images')
-parser.add_argument('--minimum-free-space', type=int, default=50,
-                    help='Number of GB miniumum free required')
-parser.add_argument('--minimum-free-percent', type=int, default=50,
-                    help='Number of percent free required')
-parser.add_argument('--path', type=str, default='/',
-                    help='What mount point to introspect')
-args = parser.parse_args()
-if check_done(args):
-    print("Disk space satified ending")
-    sys.exit(0)
-print_progress(args)
+def run_cleanup(args):
 
-images = get_image_list()
+    images = get_image_list()
 
-#keep track of already tried images to avoid duplication
-processed_images = set()
-for i in images:
-    if i in processed_images:
-        continue
+    #keep track of already tried images to avoid duplication
+    processed_images = set()
+    for i in images:
+        if i in processed_images:
+            continue
+        if check_done(args):
+            print("Disk space satified ending")
+            break
+        try:
+            processed_images.add(i)
+            print("removing image %s" % i)
+            remove_docker_image(i)
+        except subprocess.CalledProcessError as ex:
+            print("failed to remove image %s Exception [%s]" % (i, ex))
+
+        print_progress(args)
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='Free up disk space from docker images')
+    parser.add_argument('--minimum-free-space', type=int, default=50,
+                        help='Number of GB miniumum free required')
+    parser.add_argument('--minimum-free-percent', type=int, default=50,
+                        help='Number of percent free required')
+    parser.add_argument('--path', type=str, default='/',
+                        help='What mount point to introspect')
+    args = parser.parse_args()
     if check_done(args):
         print("Disk space satified ending")
-        break
-    try:
-        processed_images.add(i)
-        print("removing image %s" % i)
-        remove_docker_image(i)
-    except subprocess.CalledProcessError as ex:
-        print("failed to remove image %s Exception [%s]" % (i, ex))
-
+        sys.exit(0)
     print_progress(args)
+
+    filename = '/tmp/cleanup_docker_images.py.marker'
+    with open(filename, 'w') as fh:
+        try:
+            with flocked(fh):
+                run_cleanup(args)
+        except BlockingIOError as ex:
+            print("Failed to get lock on %s aborting. Exception[%s]. "
+                  "This most likely means an instance of this script"
+                  " is already running." %
+                  (filename, ex))
+            sys.exit(1)
