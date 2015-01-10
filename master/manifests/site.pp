@@ -454,14 +454,6 @@ file { '/var/lib/jenkins/credentials.xml':
     require => File['/var/lib/jenkins/.ssh'],
 }
 
-# use wrapdocker from dind
-file { '/var/lib/jenkins/wrapdocker':
-    mode => '0770',
-    owner => 'jenkins',
-    group => 'jenkins',
-    source => 'puppet:///modules/jenkins_files/var/lib/jenkins/wrapdocker',
-    require => User['jenkins'],
-}
 
 if hiera('autoreconfigure') {
   cron {'autoreconfigure':
