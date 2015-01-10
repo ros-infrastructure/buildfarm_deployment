@@ -25,15 +25,6 @@ include '::ntp'
 class {'docker':
 }
 
-# use wrapdocker from dind
-file { '/home/jenkins-slave/wrapdocker':
-    mode => '0774',
-    owner => 'jenkins-slave',
-    group => 'jenkins-slave',
-    source => 'puppet:///modules/repo_files/home/jenkins-slave/wrapdocker',
-    require => User['jenkins-slave'],
-}
-
 # clean up containers and dangling images https://github.com/docker/docker/issues/928#issuecomment-58619854
 cron {'docker_cleanup_containers':
   command => 'bash -c "docker ps -aq | xargs -L1 docker rm "',

@@ -81,15 +81,6 @@ include '::ntp'
 class {'docker':
 }
 
-# use wrapdocker from dind
-file { '/home/jenkins-slave/wrapdocker':
-    mode => '0774',
-    owner => 'jenkins-slave',
-    group => 'jenkins-slave',
-    source => 'puppet:///modules/slave_files/home/jenkins-slave/wrapdocker',
-    require => User['jenkins-slave'],
-}
-
 # script to clean up docker images from oldest
 file { '/home/jenkins-slave/cleanup_docker_images.py':
   mode => '0774',
