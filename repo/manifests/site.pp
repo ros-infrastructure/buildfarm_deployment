@@ -34,13 +34,6 @@ file { '/home/jenkins-slave/wrapdocker':
     require => User['jenkins-slave'],
 }
 
-## wrapdocker requires apparmor to avoid this error:
-# Error loading docker apparmor profile: fork/exec /sbin/apparmor_parser: no such file or directory ()
-# https://github.com/docker/docker/issues/4734
-package { 'apparmor':
-  ensure => 'installed',
-}
-
 # clean up containers and dangling images https://github.com/docker/docker/issues/928#issuecomment-58619854
 cron {'docker_cleanup_containers':
   command => 'bash -c "docker ps -aq | xargs -L1 docker rm "',
