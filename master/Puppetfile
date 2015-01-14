@@ -3,7 +3,9 @@ forge "https://forgeapi.puppetlabs.com"
 mod 'example42-iptables'
 mod 'garethr-docker'
 mod 'puppetlabs-ntp'
-mod 'rtyler/jenkins'
+mod 'rtyler/jenkins', :git => "git://github.com/jenkinsci/puppet-jenkins.git"
+# jenkins we need this commit https://github.com/jenkinsci/puppet-jenkins/commit/fcd61537a39405d7f9cbbcd2ab3d82facab934dc
+# otherwise we would prefer the released version
 mod 'tracywebtech-pip'
 
 mod 'saz-timezone'

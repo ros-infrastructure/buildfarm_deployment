@@ -349,11 +349,18 @@ file { '/var/lib/jenkins/nodeMonitors.xml':
   notify => Service['jenkins'],
 }
 
-$user_dirs = ['/var/lib/jenkins/users',
-              '/var/lib/jenkins/users/admin',
-              '/var/lib/jenkins/secrets',]
+#jenkins::security{'full_control'}
 
-file { $user_dirs:
+jenkins::user {'admin':
+  email    => 'admin@example.com',
+  password => 'changeme',
+  require => [Package['jenkins']],
+}
+
+$secrets_dirs = ['/var/lib/jenkins/secrets',
+                ]
+
+file { $secrets_dirs:
   ensure => 'directory',
   mode => '0640',
   owner => jenkins,
@@ -368,22 +375,12 @@ file { '/var/lib/jenkins/secrets/slave-to-master-security-kill-switch':
   owner => jenkins,
   group => jenkins,
   source => 'puppet:///modules/jenkins_files/var/lib/jenkins/secrets/slave-to-master-security-kill-switch',
-  require => Package['jenkins'],
-  notify => Service['jenkins'],
-}
-
-
-# Create an admin user:
-file { '/var/lib/jenkins/users/admin/config.xml':
-  ensure => 'present',
-  mode => '0640',
-  owner => jenkins,
-  group => jenkins,
-  content => template('jenkins_files/user_config.xml.erb'),
   require => [Package['jenkins'],
-              File[$user_dirs],],
+              File[$secrets_dirs],
+              ],
   notify => Service['jenkins'],
 }
+
 
 $buildfarm_config_dir = ['/var/lib/jenkins/.buildfarm']
 file { $buildfarm_config_dir:

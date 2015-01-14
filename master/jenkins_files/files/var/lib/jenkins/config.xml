@@ -4,7 +4,7 @@
   <version>1.0</version>
   <numExecutors>1</numExecutors>
   <mode>EXCLUSIVE</mode>
-  <useSecurity>true</useSecurity>
+  <useSecurity>false</useSecurity>
   <authorizationStrategy class="hudson.security.FullControlOnceLoggedInAuthorizationStrategy"/>
   <securityRealm class="hudson.security.HudsonPrivateSecurityRealm">
     <disableSignup>true</disableSignup>

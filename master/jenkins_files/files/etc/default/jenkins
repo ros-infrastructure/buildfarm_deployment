@@ -50,7 +50,7 @@ HTTP_PORT=8080
 # port for AJP connector (disabled by default)
 AJP_PORT=-1
 
-# servlet context, important if you want to use apache proxying  
+# servlet context, important if you want to use apache proxying
 PREFIX=/jenkins
 
 # arguments to pass to jenkins.
@@ -63,5 +63,4 @@ PREFIX=/jenkins
 # --webroot=~/.jenkins/war
 # --prefix=$PREFIX
 
-JENKINS_ARGS="--webroot=/var/cache/jenkins/war --httpPort=$HTTP_PORT --ajp13Port=$AJP_PORT"
-
+JENKINS_ARGS="--webroot=/var/cache/jenkins/war --httpPort=$HTTP_PORT --ajp13Port=$AJP_PORT --argumentsRealm.passwd.$ADMIN_USER=changeme --argumentsRealm.roles.$ADMIN_USER=admin2"
