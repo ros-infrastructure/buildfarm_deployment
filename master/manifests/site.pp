@@ -6,6 +6,9 @@ include jenkins_files
 
 include pip
 
+# for authorized keys
+include ssh
+
 # setup ntp with defaults
 include '::ntp'
 

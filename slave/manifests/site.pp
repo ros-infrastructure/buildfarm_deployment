@@ -1,3 +1,6 @@
+# for authorized keys
+include ssh
+
 # Find the other instances
 if hiera('repo::ip', false) {
   host {'repo':

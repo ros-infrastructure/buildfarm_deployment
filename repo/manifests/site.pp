@@ -1,3 +1,10 @@
+# for authorized keys
+include ssh
+
+# setup ntp with defaults
+include '::ntp'
+
+
 class { 'jenkins::slave':
   labels => "building_repository",
   slave_mode => "exclusive",
@@ -15,10 +22,6 @@ exec {"jenkins-slave docker membership":
              ],
 }
 
-
-
-# setup ntp with defaults
-include '::ntp'
 
 ### install latest docker
 

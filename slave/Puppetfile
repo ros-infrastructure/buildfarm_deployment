@@ -1,5 +1,6 @@
 forge "https://forgeapi.puppetlabs.com"
 
+mod 'erwbgy-ssh'
 mod 'example42-iptables'
 mod 'garethr-docker'
 mod 'puppetlabs-ntp'
