@@ -4,8 +4,6 @@ include jenkins
 
 include jenkins_files
 
-include pip
-
 # setup ntp with defaults
 include '::ntp'
 
@@ -290,15 +288,6 @@ jenkins::plugin {
 # required by jobs to generate Dockerfiles
 package { 'python3-empy':
   ensure => 'installed',
-}
-
-# required by management jobs to manipulate Jenkins jobs
-package { 'python3-pip':
-  ensure => 'installed',
-}
-pip::install { 'jenkinsapi':
-  python_version => '3',    # defaults to 2.7
-  require => Package['python3-pip'],
 }
 
 # required by subprocess reaper script
