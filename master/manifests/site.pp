@@ -169,6 +169,11 @@ jenkins::plugin {
   'git-client': ;
 }
 
+# required by ghprb
+jenkins::plugin {
+  'github': ;
+}
+
 jenkins::plugin {
   'github-api': ;
 }
@@ -187,6 +192,11 @@ jenkins::plugin {
 
 jenkins::plugin {
   'jobrequeue': ;
+}
+
+# required by subversion
+jenkins::plugin {
+  'mapdb-api': ;
 }
 
 jenkins::plugin {
