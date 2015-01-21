@@ -17,11 +17,28 @@ The hostname format is `IMAGE.dev.docker` or `CONTAINER.IMAGE.dev.docker` if the
 NOTE: For this to work `master::io`, `repo::ip`, and `slave::ip` must all be commented out in all `common.yaml` files.
 And the images for the master and repo must be named `master` and `repo` for the DNS lookup to work
 
+
+
+## Checkout the [buildfarm_deployment_config example repo](https://github.com/ros-infrastructure/buildfarm_deployment_config)
+
+```bash
+git clone https://github.com/ros-infrastructure/buildfarm_deployment_config.git
+```
+
+### Enter the directory
+
+Change your working directory into the checkout
+
+```bash
+cd buildfarm_deployment_config
+```
+
 ### Building the images
 
 To build the images:
 
 ```bash
+cd buildfarm_deployment_config
 python build.py
 ```
 

@@ -1,7 +1,7 @@
 ## Overview
 
-This repository is the entry point for deploying servers for the ROS buildfarm.
-It provides the configurations for [buildfarm_deployment](https://github.com/ros-infrastructure/buildfarm_deployment).
+This repository implementation for deploying servers for the ROS buildfarm.
+It typically requires the configurations given as an example in  [buildfarm_deployment_config](https://github.com/ros-infrastructure/buildfarm_deployment_config).
 
 After the servers have been provisioned you will then want to see the [ros_buildfarm](https://github.com/ros-infrastructure/ros_buildfarm) project for how to configure Jenkins with ROS jobs.
 
@@ -43,8 +43,8 @@ They are intended as a guideline for choosing the appropriate parameters when de
 
 ## Forking (or not)
 
-This repository will contain your secrets such as private keys and access tokens.
-You should make a copy of this repository and make it private.
+The config repository will contain your secrets such as private keys and access tokens.
+You should make a copy of the config repository and make it private.
 Unfortunately you can't use the "Fork" button on GitHub and then make it private.
 
 To create a private fork.
@@ -62,7 +62,7 @@ Keep this token secret!
 
 ### Updating values
 
-It is recommended to change all the security parameters from this configuratoin.
+It is recommended to change all the security parameters from this configuration.
 In particular you should change the following:
 
 On all three:
@@ -101,11 +101,11 @@ On repo:
     * The IP address of the repository instance.
 
 
-    ## Deployment
+## Deployment
 
-    Once you have customized all the content of
+Once you have customized all the content of the config repo on each provisioned machine run the following sequence of commands.
 
-    ### Master deployment
+### Master deployment
 
     sudo su root
     cd
@@ -119,7 +119,7 @@ On repo:
     ./reconfigure.bash master
 
 
-    ### repo deployment
+### repo deployment
 
     sudo su root
     cd
@@ -132,7 +132,7 @@ On repo:
     ./install_prerequisites.bash
     ./reconfigure.bash repo
 
-    ### slave deployment
+### slave deployment
 
     sudo su root
     cd
@@ -145,11 +145,11 @@ On repo:
     ./install_prerequisites.bash
     ./reconfigure.bash slave
 
-    ## After Deployment
+## After Deployment
 
-    Now that you have a running system you will need to add jobs for one or more rosdistros.
-    See the [ros_buildfarm repo](https://github.com/ros-infrastructure/ros_buildfarm) for more info.
+Now that you have a running system you will need to add jobs for one or more rosdistros.
+See the [ros_buildfarm repo](https://github.com/ros-infrastructure/ros_buildfarm) for more info.
 
-    # For information on development and testing
+# For information on development and testing
 
-    See [doc/DevelopmentTesting.md](doc/DevelopmentTesting.md)
+See [doc/DevelopmentTesting.md](doc/DevelopmentTesting.md)
