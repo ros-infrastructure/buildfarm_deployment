@@ -1,5 +1,9 @@
 ## Overview
 
+For an overview about the ROS build farm including how to deploy the necessary
+machine see the [ROS buildfarm wiki page](http://wiki.ros.org/buildfarm).
+
+
 This repository implementation for deploying servers for the ROS buildfarm.
 It typically requires the configurations given as an example in  [buildfarm_deployment_config](https://github.com/ros-infrastructure/buildfarm_deployment_config).
 
