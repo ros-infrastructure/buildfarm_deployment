@@ -103,6 +103,9 @@ On repo:
     * The IP address of the master instance.
     * `repo::ip`
     * The IP address of the repository instance.
+    * `jenkins::slave::num_executors`
+     * The number of executors to instantiate on each slave.
+       From current testing you can do one per available core, as long as at least 2GB of memory are available for each executor.
 
 
 ## Deployment
