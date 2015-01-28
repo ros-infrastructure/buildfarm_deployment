@@ -9,6 +9,11 @@ It typically requires the configurations given as an example in  [buildfarm_depl
 
 After the servers have been provisioned you will then want to see the [ros_buildfarm](https://github.com/ros-infrastructure/ros_buildfarm) project for how to configure Jenkins with ROS jobs.
 
+If you are going to use any of the provided infrastructure please consider
+signing up for the build farm mailing list
+(https://groups.google.com/d/forum/ros-sig-buildfarm) in order to receive
+notifications e.g. about any upcoming changes.
+
 ### Process
 
 To effectively use this there will be three main steps.
