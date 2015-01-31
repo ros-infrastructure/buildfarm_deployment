@@ -92,25 +92,42 @@ On repo:
   * The GPG key with which to sign the repository.
   * `master::ip`
   * The IP address of the master instance.
+  * `jenkins-slave::reprepro_config`
+   * Fill in the correct rules for upstream imports.
+     It should be a hash/dict item with the filename as the key, ensure, and content as elements like below.
+     You can have as many elements as you want for different files. 
 
-  On the master:
-  * `jenkins::authorized_keys`
-  * This is the string contents for the authorized keys for the slaves to push into the repo. (It should match the `jenkins::private_ssh_key` on the master.
-    * `jenkins::private_ssh_key`
-    * The key which authorizes access to push content into the repository or to connect back to the master from a job.
-    * `master::ip`
-    * The IP address of the master instance.
-    * `repo::ip`
-    * The IP address of the repository instance.
 
-    On the slave:
-    * `master::ip`
-    * The IP address of the master instance.
-    * `repo::ip`
-    * The IP address of the repository instance.
-    * `jenkins::slave::num_executors`
-     * The number of executors to instantiate on each slave.
-       From current testing you can do one per available core, as long as at least 2GB of memory are available for each executor.
+    jenkins-slave::reprepro_config:
+        '/home/jenkins-slave/reprepro_config/empy_saucy.yaml':
+            ensure: 'present'
+            content: |
+                name: empy_saucy
+                method: http://packages.osrfoundation.org/gazebo/ubuntu
+                suites: [saucy]
+                component: main
+                architectures: [i386, amd64, source]
+                filter_formula: Package (% python3-empy)
+
+
+On the master:
+* `jenkins::authorized_keys`
+* This is the string contents for the authorized keys for the slaves to push into the repo. (It should match the `jenkins::private_ssh_key` on the master.
+  * `jenkins::private_ssh_key`
+  * The key which authorizes access to push content into the repository or to connect back to the master from a job.
+  * `master::ip`
+  * The IP address of the master instance.
+  * `repo::ip`
+  * The IP address of the repository instance.
+
+On the slave:
+* `master::ip`
+* The IP address of the master instance.
+* `repo::ip`
+* The IP address of the repository instance.
+* `jenkins::slave::num_executors`
+ * The number of executors to instantiate on each slave.
+   From current testing you can do one per available core, as long as at least 2GB of memory are available for each executor.
 
 
 ## Deployment

@@ -129,15 +129,6 @@ package { 'python3-psutil':
   ensure => 'installed',
 }
 
-vcsrepo { "/home/jenkins-slave/reprepro-updater":
-  ensure   => latest,
-  provider => git,
-  source   => 'https://github.com/ros-infrastructure/reprepro-updater.git',
-  revision => 'refactor',
-  user     => 'jenkins-slave',
-  require => User['jenkins-slave'],
-}
-
 $repo_dirs = ['/var/repos',
               '/var/repos/ubuntu',]
 
@@ -298,7 +289,6 @@ exec {"init_main_repo":
                  ]
 }
 
-
 # clean up containers and dangling images https://github.com/docker/docker/issues/928#issuecomment-58619854
 cron {'docker_cleanup_images':
   command => 'bash -c "python3 -u /home/jenkins-slave/cleanup_docker_images.py"',
@@ -309,4 +299,29 @@ cron {'docker_cleanup_images':
   minute  => 15,
   weekday => absent,
   require => User['jenkins-slave'],
+}
+
+# needed for boostrapping the repo
+vcsrepo { "/home/jenkins-slave/reprepro-updater":
+  ensure   => latest,
+  provider => git,
+  source   => 'https://github.com/ros-infrastructure/reprepro-updater.git',
+  revision => 'refactor',
+  user     => 'jenkins-slave',
+  require => User['jenkins-slave'],
+}
+
+
+# Create directory for reprepro_config
+file { '/home/jenkins-slave/reprepro_config':
+  ensure => 'directory',
+  owner  => 'jenkins-slave',
+  group  => 'jenkins-slave',
+  mode   => '700',
+  require => User['jenkins-slave'],
+}
+
+# Pull reprepro updater
+if hiera('jenkins-slave::reprepro_config', false){
+  create_resources(file, hiera('jenkins-slave::reprepro_config'))
 }
