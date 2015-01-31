@@ -436,13 +436,18 @@ file { '/var/lib/jenkins/.ssh/id_rsa':
     content => hiera('jenkins::private_ssh_key'),
     require => File['/var/lib/jenkins/.ssh'],
 }
-file { '/var/lib/jenkins/.ssh/id_rsa.pub':
-    mode => '0600',
-    owner => 'jenkins',
-    group => 'jenkins',
-    content => hiera('jenkins::authorized_keys'),
-    require => File['/var/lib/jenkins/.ssh'],
+
+# Setup generic ssh_keys
+if hiera('ssh_keys', false){
+  $defaults = {
+    'ensure' => 'present',
+  }
+  create_resources(ssh_authorized_key, hiera('ssh_keys'), $defaults)
 }
+else{
+  notice("No ssh_authorized_keys defined. There should probably be at least one.")
+}
+
 
 # Reference above credientials
 file { '/var/lib/jenkins/credentials.xml':

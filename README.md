@@ -77,11 +77,22 @@ In particular you should change the following:
 On all three:
 * `jenkins::slave::ui_pass`
 * This is the passworkd for the slave to access the master
-* `user::admin::password_hash`
+ * `user::admin::password_hash`
 * On the master this should be the hashed password from above
-* The easiest way to create this is to setup a jenkins instance. Change the password, then copy the string out of config file on the jenkins server.
+ * The easiest way to create this is to setup a jenkins instance. Change the password, then copy the string out of config file on the jenkins server.
 * `autoreconfigure::branch`
 * If you are forking into a repo and using a different branch name, update the autoreconfigure command to point to the right branch.
+* `ssh_keys`
+* Configure as many license keys as you want for administrators to log in.
+
+::
+
+    ssh_keys:
+        'admin_access':
+            ensure: present
+            key: AAAAB3NzaC1yc2EAAAADAQABAAABAQC2NOaRsdZqqTrCwNR77AQIqwAPYkDfiL1Ou7Pi/qaW9S7UU0Y1KAQ6kWhgJc9RtOhbZKGHbFTqSLT4235TkmPvlZbV2bK8ZViBmqQ3r8vDMhC/+p9Ec9SP8sjv6JcIEWOy5zXPnB3OnHHWXmvZP47rjJY0l76F71fZt3vlvyjz7IrikULmuKcyrE+zulmbSTtfGZhxQRPxZDO/RiOemCPsYo5u/rUMjWH+CkEI0swQlM6QIvjWdfYtNwQT9yo53MXFy5jodhW4YOOncKE4RMOI9Lmu6jE0GmdmSEv486R4ot6iWanx2hk/46zlmX1kSKGWObRdH57H/xIAxvw+PiTd
+            type: ssh-rsa
+            user: root
 
 On repo:
 * `jenkins-slave::authorized_keys`
@@ -95,7 +106,7 @@ On repo:
   * `jenkins-slave::reprepro_config`
    * Fill in the correct rules for upstream imports.
      It should be a hash/dict item with the filename as the key, ensure, and content as elements like below.
-     You can have as many elements as you want for different files. 
+     You can have as many elements as you want for different files.
 
 
     jenkins-slave::reprepro_config:

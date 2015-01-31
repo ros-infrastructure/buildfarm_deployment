@@ -22,6 +22,17 @@ else {
   }
 }
 
+# Setup generic ssh_keys
+if hiera('ssh_keys', false){
+  $defaults = {
+    'ensure' => 'present',
+  }
+  create_resources(ssh_authorized_key, hiera('ssh_keys'), $defaults)
+}
+else{
+  notice("No ssh_keys defined. You should probably have at least one.")
+}
+
 class { 'jenkins::slave':
   labels => 'buildslave',
   slave_mode => 'exclusive',

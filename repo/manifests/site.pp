@@ -2,8 +2,14 @@ class { 'jenkins::slave':
   labels => "building_repository",
   slave_mode => "exclusive",
   slave_name => 'building_repository',
-  manage_slave_user => true,
+  manage_slave_user => false,
   executors => "1",
+  require => User['jenkins-slave'],
+}
+
+user{'jenkins-slave':
+  ensure => present,
+  managehome => true,
 }
 
 exec {"jenkins-slave docker membership":
@@ -88,16 +94,18 @@ file { '/var/repos/status_page':
     ]
 }
 
-# TODO make this parameterized. This is a hack to get up and running on
-# the local development machines only!!!!!!
-# add ssh key
-file { '/home/jenkins-slave/.ssh/authorized_keys':
-    mode => '0600',
-    owner => 'jenkins-slave',
-    group => 'jenkins-slave',
-    content => hiera("jenkins-slave::authorized_keys"),
-    require => File['/home/jenkins-slave/.ssh'],
+
+# Setup generic ssh_keys
+if hiera('ssh_keys', false){
+  $defaults = {
+    'ensure' => 'present',
+  }
+  create_resources(ssh_authorized_key, hiera('ssh_keys'), $defaults)
 }
+else{
+  notice("No ssh_keys defined. You need at least one for jenkins-slave.")
+}
+
 
 package {"git":
   ensure => "installed",
