@@ -79,20 +79,27 @@ On all three:
 * This is the passworkd for the slave to access the master
  * `user::admin::password_hash`
 * On the master this should be the hashed password from above
- * The easiest way to create this is to setup a jenkins instance. Change the password, then copy the string out of config file on the jenkins server.
+ * The easiest way to create this is to setup a jenkins instance.
+   Change the password, then copy the string out of config file on the jenkins server.
 * `autoreconfigure::branch`
 * If you are forking into a repo and using a different branch name, update the autoreconfigure command to point to the right branch.
 * `ssh_keys`
-* Configure as many license keys as you want for administrators to log in.
+ * Configure as many license keys as you want for administrators to log in.
+ * Make sure there is at least one key for jenkins-slave on the repo matching the `jenkins::private_key` provisioned on the master.
 
 ::
 
     ssh_keys:
-        'admin_access':
+        'admin@foobar':
             ensure: present
             key: AAAAB3NzaC1yc2EAAAADAQABAAABAQC2NOaRsdZqqTrCwNR77AQIqwAPYkDfiL1Ou7Pi/qaW9S7UU0Y1KAQ6kWhgJc9RtOhbZKGHbFTqSLT4235TkmPvlZbV2bK8ZViBmqQ3r8vDMhC/+p9Ec9SP8sjv6JcIEWOy5zXPnB3OnHHWXmvZP47rjJY0l76F71fZt3vlvyjz7IrikULmuKcyrE+zulmbSTtfGZhxQRPxZDO/RiOemCPsYo5u/rUMjWH+CkEI0swQlM6QIvjWdfYtNwQT9yo53MXFy5jodhW4YOOncKE4RMOI9Lmu6jE0GmdmSEv486R4ot6iWanx2hk/46zlmX1kSKGWObRdH57H/xIAxvw+PiTd
             type: ssh-rsa
             user: root
+        'upload_access@buildfarm':
+            ensure: present
+            key: AAAAB3NzaC1yc2EAAAADAQABAAABAQC2NOaRsdZqqTrCwNR77AQIqwAPYkDfiL1Ou7Pi/qaW9S7UU0Y1KAQ6kWhgJc9RtOhbZKGHbFTqSLT4235TkmPvlZbV2bK8ZViBmqQ3r8vDMhC/+p9Ec9SP8sjv6JcIEWOy5zXPnB3OnHHWXmvZP47rjJY0l76F71fZt3vlvyjz7IrikULmuKcyrE+zulmbSTtfGZhxQRPxZDO/RiOemCPsYo5u/rUMjWH+CkEI0swQlM6QIvjWdfYtNwQT9yo53MXFy5jodhW4YOOncKE4RMOI9Lmu6jE0GmdmSEv486R4ot6iWanx2hk/46zlmX1kSKGWObRdH57H/xIAxvw+PiTd
+            type: ssh-rsa
+            user: jenkins-slave
 
 On repo:
 * `jenkins-slave::authorized_keys`
@@ -123,7 +130,8 @@ On repo:
 
 On the master:
 * `jenkins::authorized_keys`
-* This is the string contents for the authorized keys for the slaves to push into the repo. (It should match the `jenkins::private_ssh_key` on the master.
+* This is the string contents for the authorized keys for the slaves to push into the repo.
+  It should match the `jenkins::private_ssh_key` on the master.
   * `jenkins::private_ssh_key`
   * The key which authorizes access to push content into the repository or to connect back to the master from a job.
   * `master::ip`
