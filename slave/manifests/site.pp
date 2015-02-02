@@ -155,7 +155,7 @@ cron {'docker_cleanup_containers':
   weekday => absent,
 }
 cron {'docker_cleanup_images':
-  command => 'bash -c "python3 -u /home/jenkins-slave/cleanup_docker_images.py > /tmp/cleanup_docker_images.py.log 2>&1"',
+  command => 'bash -c "python3 -u /home/jenkins-slave/cleanup_docker_images.py"',
   user    => 'jenkins-slave',
   month   => absent,
   monthday => absent,

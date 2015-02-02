@@ -2,6 +2,7 @@
 # Script to clean up docker images
 import argparse
 import fcntl
+import logging
 import psutil
 import subprocess
 import sys
@@ -40,7 +41,6 @@ def get_image_list():
     images.extend(dangling_images)
     return reversed(images)
 
-
 def remove_docker_image(imageid):
     cmd = ("docker rmi %s" % imageid).split()
     subprocess.check_call(cmd)
@@ -54,14 +54,16 @@ def check_done(args):
 
 
 def print_progress(args):
-    print("Free space %.2fGb of %s required" % (get_free_disk_space(args.path),
-                                                args.minimum_free_space))
-    print("Free space %.2f%% of %s required" % (get_free_disk_percentage(args.path),
-                                                args.minimum_free_percent))
+    logging.info("Free space %.2fGb of %s required" %
+                 (get_free_disk_space(args.path),
+                  args.minimum_free_space))
+    logging.info("Free space %.2f%% of %s required" %
+                 (get_free_disk_percentage(args.path),
+                  args.minimum_free_percent))
 
 
 def run_cleanup(args):
-
+    logging.info("cleaning up docker images")
     images = get_image_list()
 
     #keep track of already tried images to avoid duplication
@@ -70,14 +72,15 @@ def run_cleanup(args):
         if i in processed_images:
             continue
         if check_done(args):
-            print("Disk space satified ending")
+            logging.info("Disk space satified ending")
             break
         try:
             processed_images.add(i)
-            print("removing image %s" % i)
+            logging.info("removing image %s" % i)
             remove_docker_image(i)
+            logging.info("successfully removed image: %s" % i)
         except subprocess.CalledProcessError as ex:
-            print("failed to remove image %s Exception [%s]" % (i, ex))
+            logging.info("failed to remove image %s Exception [%s]" % (i, ex))
 
         print_progress(args)
 
@@ -90,9 +93,16 @@ if __name__ == '__main__':
                         help='Number of percent free required')
     parser.add_argument('--path', type=str, default='/',
                         help='What mount point to introspect')
+    parser.add_argument('--log', type=str, default='/var/log/jenkins-slave/cleanup_docker_images.log',
+                        help='Where to log output')
     args = parser.parse_args()
+
+    #initialize logging
+    logging.basicConfig(filename=args.log, format='%(asctime)s %(message)s',
+                        level=logging.INFO)
+    logging.info("Starting run of cleanup_docker_images.py arguments %s" % args)
     if check_done(args):
-        print("Disk space satified ending")
+        logging.info("Disk space satified ending")
         sys.exit(0)
     print_progress(args)
 
@@ -102,8 +112,8 @@ if __name__ == '__main__':
             with flocked(fh):
                 run_cleanup(args)
         except BlockingIOError as ex:
-            print("Failed to get lock on %s aborting. Exception[%s]. "
-                  "This most likely means an instance of this script"
-                  " is already running." %
+            logging.error("Failed to get lock on %s aborting. Exception[%s]. "
+                          "This most likely means an instance of this script"
+                          " is already running." %
                   (filename, ex))
             sys.exit(1)
