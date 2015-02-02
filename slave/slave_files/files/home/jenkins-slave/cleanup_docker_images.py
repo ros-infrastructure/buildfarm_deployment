@@ -43,7 +43,7 @@ def get_image_list():
 
 def remove_docker_image(imageid):
     cmd = ("docker rmi %s" % imageid).split()
-    subprocess.check_call(cmd)
+    subprocess.check_output(cmd, stderr=subprocess.STDOUT)
 
 
 def check_done(args):
@@ -80,13 +80,36 @@ def run_cleanup(args):
             remove_docker_image(i)
             logging.info("successfully removed image: %s" % i)
         except subprocess.CalledProcessError as ex:
-            logging.info("failed to remove image %s Exception [%s]" % (i, ex))
+            logging.info("failed to remove image %s Exception [%s] Output: [%s]" % (i, ex, ex.output))
 
         print_progress(args)
 
 
+def get_container_list():
+    cmd = "docker ps -aq".split()
+    containers = subprocess.check_output(cmd).decode('utf8').splitlines()
+    return containers
+
+
+def remove_docker_container(containerid):
+    cmd = ("docker rm %s" % containerid).split()
+    subprocess.check_output(cmd, stderr=subprocess.STDOUT)
+
+
+def run_container_cleanup():
+    logging.info("cleaning up docker containers")
+    containers = get_container_list()
+    for c in containers:
+        try:
+            logging.info("removing container %s" % c)
+            remove_docker_container(c)
+            logging.info("successfully removed container: %s" % c)
+        except subprocess.CalledProcessError as ex:
+            logging.info("failed to remove cointainer %s Exception [%s] Output [%s]" %
+                         (c, ex, ex.output))
+
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='Free up disk space from docker images')
+    parser = argparse.ArgumentParser(description='Free up disk space from docker images and containers')
     parser.add_argument('--minimum-free-space', type=int, default=50,
                         help='Number of GB miniumum free required')
     parser.add_argument('--minimum-free-percent', type=int, default=50,
@@ -110,6 +133,7 @@ if __name__ == '__main__':
     with open(filename, 'w') as fh:
         try:
             with flocked(fh):
+                run_container_cleanup()
                 run_cleanup(args)
         except BlockingIOError as ex:
             logging.error("Failed to get lock on %s aborting. Exception[%s]. "
