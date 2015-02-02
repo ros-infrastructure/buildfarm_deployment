@@ -38,20 +38,19 @@ class { 'jenkins::slave':
   slave_mode => 'exclusive',
   slave_name => 'slave_on_master',
   slave_user => 'jenkins-slave',
-  manage_slave_user => '1',
+  manage_slave_user => false,
   executors => '1',
   install_java => false,
+  require => User['jenkins-slave'],
 }
 
-exec {"jenkins-slave docker membership":
-  path    => '/usr/sbin:/usr/bin:/sbin:/bin',
-  unless => "grep -q 'docker\\S*jenkins-slave' /etc/group",
-  command => "usermod -aG docker jenkins-slave",
-  require => [User['jenkins-slave'],
-              Package['docker'],
-             ],
-  notify => Service['jenkins-slave'],
+user{'jenkins-slave':
+  ensure => present,
+  managehome => true,
+  groups => ['docker'],
+  require => Package['lxc-docker']
 }
+
 
 $slave_buildfarm_config_dir = ['/home/jenkins-slave/.buildfarm']
 file { $slave_buildfarm_config_dir:
