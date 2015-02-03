@@ -23,26 +23,6 @@ include '::ntp'
 class {'docker':
 }
 
-# clean up containers and dangling images https://github.com/docker/docker/issues/928#issuecomment-58619854
-cron {'docker_cleanup_containers':
-  command => 'bash -c "docker ps -aq | xargs -L1 docker rm "',
-  user    => 'jenkins-slave',
-  month   => absent,
-  monthday => absent,
-  hour    => '*/6',
-  minute  => absent,
-  weekday => absent,
-}
-cron {'docker_cleanup_images':
-  command => 'bash -c "docker images --filter dangling=true --quiet | xargs -L1 docker rmi "',
-  user    => 'jenkins-slave',
-  month   => absent,
-  monthday => absent,
-  hour    => '*/6',
-  minute  => absent,
-  weekday => absent,
-}
-
 # Find the other instances
 if hiera('master::ip', false) {
   host {'master':
