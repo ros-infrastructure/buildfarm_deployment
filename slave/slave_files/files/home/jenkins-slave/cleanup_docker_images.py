@@ -41,6 +41,7 @@ def get_image_list():
     images.extend(dangling_images)
     return reversed(images)
 
+
 def remove_docker_image(imageid):
     cmd = ("docker rmi %s" % imageid).split()
     subprocess.check_output(cmd, stderr=subprocess.STDOUT)
@@ -62,7 +63,7 @@ def print_progress(args):
                   args.minimum_free_percent))
 
 
-def run_cleanup(args):
+def run_image_cleanup(args):
     logging.info("cleaning up docker images")
     images = get_image_list()
 
@@ -108,6 +109,7 @@ def run_container_cleanup():
             logging.info("failed to remove cointainer %s Exception [%s] Output [%s]" %
                          (c, ex, ex.output))
 
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Free up disk space from docker images and containers')
     parser.add_argument('--minimum-free-space', type=int, default=50,
@@ -116,12 +118,12 @@ if __name__ == '__main__':
                         help='Number of percent free required')
     parser.add_argument('--path', type=str, default='/',
                         help='What mount point to introspect')
-    parser.add_argument('--log', type=str, default='/var/log/jenkins-slave/cleanup_docker_images.log',
+    parser.add_argument('--logfile', type=str, default='/var/log/jenkins-slave/cleanup_docker_images.log',
                         help='Where to log output')
     args = parser.parse_args()
 
     #initialize logging
-    logging.basicConfig(filename=args.log, format='%(asctime)s %(message)s',
+    logging.basicConfig(filename=args.logfile, format='%(asctime)s %(message)s',
                         level=logging.INFO)
     logging.info("Starting run of cleanup_docker_images.py arguments %s" % args)
     if check_done(args):
@@ -134,10 +136,10 @@ if __name__ == '__main__':
         try:
             with flocked(fh):
                 run_container_cleanup()
-                run_cleanup(args)
+                run_image_cleanup(args)
         except BlockingIOError as ex:
             logging.error("Failed to get lock on %s aborting. Exception[%s]. "
                           "This most likely means an instance of this script"
                           " is already running." %
-                  (filename, ex))
+                           (filename, ex))
             sys.exit(1)
