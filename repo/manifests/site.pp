@@ -297,3 +297,16 @@ exec {"init_main_repo":
                   File['/home/jenkins-slave/.buildfarm/reprepro-updater.ini'],
                  ]
 }
+
+
+# clean up containers and dangling images https://github.com/docker/docker/issues/928#issuecomment-58619854
+cron {'docker_cleanup_images':
+  command => 'bash -c "python3 -u /home/jenkins-slave/cleanup_docker_images.py"',
+  user    => 'jenkins-slave',
+  month   => absent,
+  monthday => absent,
+  hour    => '*/2',
+  minute  => 15,
+  weekday => absent,
+  require => User['jenkins-slave'],
+}

@@ -144,22 +144,19 @@ else {
   }
 }
 
-# clean up containers and dangling images https://github.com/docker/docker/issues/928#issuecomment-58619854
+# leave this in to clean up autoreconfigured machines #2015-02-02
 cron {'docker_cleanup_containers':
-  command => 'bash -c "docker ps -aq | xargs -L1 docker rm "',
-  user    => 'jenkins-slave',
-  month   => absent,
-  monthday => absent,
-  hour    => '*/2',
-  minute  => 5,
-  weekday => absent,
+  ensure => absent,
 }
+
+# clean up containers and dangling images https://github.com/docker/docker/issues/928#issuecomment-58619854
 cron {'docker_cleanup_images':
-  command => 'bash -c "python3 -u /home/jenkins-slave/cleanup_docker_images.py > /tmp/cleanup_docker_images.py.log 2>&1"',
+  command => 'bash -c "python3 -u /home/jenkins-slave/cleanup_docker_images.py"',
   user    => 'jenkins-slave',
   month   => absent,
   monthday => absent,
   hour    => '*/2',
   minute  => 15,
   weekday => absent,
+  require => User['jenkins-slave'],
 }
