@@ -36,9 +36,6 @@ def get_free_disk_percentage(path='/'):
 def get_image_list():
     cmd = "docker images -q".split()
     images = subprocess.check_output(cmd).decode('utf8').splitlines()
-    cmd = "docker images -q --filter dangling=true".split()
-    dangling_images = subprocess.check_output(cmd).decode('utf8').splitlines()
-    images.extend(dangling_images)
     return reversed(images)
 
 
