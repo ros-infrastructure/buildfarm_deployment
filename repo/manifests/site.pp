@@ -66,6 +66,17 @@ file { '/home/jenkins-slave/.ssh':
     require => User['jenkins-slave'],
 }
 
+file { '/var/repos/docs':
+    ensure => 'directory',
+    mode   => '0755',
+    owner  => 'jenkins-slave',
+    group  => 'jenkins-slave',
+    require => [
+      User['jenkins-slave'],
+      File['/var/repos'],
+    ]
+}
+
 file { '/var/repos/rosdistro_cache':
     ensure => 'directory',
     mode   => '0755',

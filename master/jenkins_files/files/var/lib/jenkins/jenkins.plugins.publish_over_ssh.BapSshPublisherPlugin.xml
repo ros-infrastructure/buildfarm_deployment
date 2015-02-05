@@ -24,6 +24,23 @@
       </keyInfo>
     </jenkins.plugins.publish__over__ssh.BapSshHostConfiguration>
     <jenkins.plugins.publish__over__ssh.BapSshHostConfiguration>
+      <name>docs</name>
+      <hostname>repo</hostname>
+      <username>jenkins-slave</username>
+      <secretPassword></secretPassword>
+      <remoteRootDir>/var/repos/docs</remoteRootDir>
+      <port>22</port>
+      <commonConfig class="jenkins.plugins.publish_over_ssh.BapSshCommonConfiguration" reference="../../jenkins.plugins.publish__over__ssh.BapSshHostConfiguration/commonConfig"/>
+      <timeout>300000</timeout>
+      <overrideKey>false</overrideKey>
+      <disableExec>false</disableExec>
+      <keyInfo>
+        <secretPassphrase></secretPassphrase>
+        <key></key>
+        <keyPath></keyPath>
+      </keyInfo>
+    </jenkins.plugins.publish__over__ssh.BapSshHostConfiguration>
+    <jenkins.plugins.publish__over__ssh.BapSshHostConfiguration>
       <name>rosdistro_cache</name>
       <hostname>repo</hostname>
       <username>jenkins-slave</username>
