@@ -2,19 +2,17 @@ class { 'jenkins::slave':
   labels => "building_repository",
   slave_mode => "exclusive",
   slave_name => 'building_repository',
-  manage_slave_user => true,
+  manage_slave_user => false,
   executors => "1",
+  require => User['jenkins-slave'],
 }
 
-exec {"jenkins-slave docker membership":
-  path    => '/usr/sbin:/usr/bin:/sbin:/bin',
-  unless => "grep -q 'docker\\S*jenkins-slave' /etc/group",
-  command => "usermod -aG docker jenkins-slave",
-  require => [User['jenkins-slave'],
-              Package['lxc-docker'],
-             ],
+user{'jenkins-slave':
+  ensure => present,
+  managehome => true,
+  groups => ['docker'],
+  require => Package['lxc-docker']
 }
-
 
 
 # setup ntp with defaults
@@ -23,26 +21,6 @@ include '::ntp'
 ### install latest docker
 
 class {'docker':
-}
-
-# clean up containers and dangling images https://github.com/docker/docker/issues/928#issuecomment-58619854
-cron {'docker_cleanup_containers':
-  command => 'bash -c "docker ps -aq | xargs -L1 docker rm "',
-  user    => 'jenkins-slave',
-  month   => absent,
-  monthday => absent,
-  hour    => '*/6',
-  minute  => absent,
-  weekday => absent,
-}
-cron {'docker_cleanup_images':
-  command => 'bash -c "docker images --filter dangling=true --quiet | xargs -L1 docker rmi "',
-  user    => 'jenkins-slave',
-  month   => absent,
-  monthday => absent,
-  hour    => '*/6',
-  minute  => absent,
-  weekday => absent,
 }
 
 # Find the other instances
@@ -99,16 +77,18 @@ file { '/var/repos/status_page':
     ]
 }
 
-# TODO make this parameterized. This is a hack to get up and running on
-# the local development machines only!!!!!!
-# add ssh key
-file { '/home/jenkins-slave/.ssh/authorized_keys':
-    mode => '0600',
-    owner => 'jenkins-slave',
-    group => 'jenkins-slave',
-    content => hiera("jenkins-slave::authorized_keys"),
-    require => File['/home/jenkins-slave/.ssh'],
+
+# Setup generic ssh_keys
+if hiera('ssh_keys', false){
+  $defaults = {
+    'ensure' => 'present',
+  }
+  create_resources(ssh_authorized_key, hiera('ssh_keys'), $defaults)
 }
+else{
+  notice("No ssh_keys defined. You need at least one for jenkins-slave.")
+}
+
 
 package {"git":
   ensure => "installed",
@@ -138,15 +118,6 @@ package { 'python3-empy':
 # required by subprocess reaper script
 package { 'python3-psutil':
   ensure => 'installed',
-}
-
-vcsrepo { "/home/jenkins-slave/reprepro-updater":
-  ensure   => latest,
-  provider => git,
-  source   => 'https://github.com/ros-infrastructure/reprepro-updater.git',
-  revision => 'refactor',
-  user     => 'jenkins-slave',
-  require => User['jenkins-slave'],
 }
 
 $repo_dirs = ['/var/repos',
@@ -309,7 +280,6 @@ exec {"init_main_repo":
                  ]
 }
 
-
 # clean up containers and dangling images https://github.com/docker/docker/issues/928#issuecomment-58619854
 cron {'docker_cleanup_images':
   command => 'bash -c "python3 -u /home/jenkins-slave/cleanup_docker_images.py"',
@@ -320,4 +290,29 @@ cron {'docker_cleanup_images':
   minute  => 15,
   weekday => absent,
   require => User['jenkins-slave'],
+}
+
+# needed for boostrapping the repo
+vcsrepo { "/home/jenkins-slave/reprepro-updater":
+  ensure   => latest,
+  provider => git,
+  source   => 'https://github.com/ros-infrastructure/reprepro-updater.git',
+  revision => 'refactor',
+  user     => 'jenkins-slave',
+  require => User['jenkins-slave'],
+}
+
+
+# Create directory for reprepro_config
+file { '/home/jenkins-slave/reprepro_config':
+  ensure => 'directory',
+  owner  => 'jenkins-slave',
+  group  => 'jenkins-slave',
+  mode   => '700',
+  require => User['jenkins-slave'],
+}
+
+# Pull reprepro updater
+if hiera('jenkins-slave::reprepro_config', false){
+  create_resources(file, hiera('jenkins-slave::reprepro_config'))
 }

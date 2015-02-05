@@ -38,20 +38,19 @@ class { 'jenkins::slave':
   slave_mode => 'exclusive',
   slave_name => 'slave_on_master',
   slave_user => 'jenkins-slave',
-  manage_slave_user => '1',
+  manage_slave_user => false,
   executors => '1',
   install_java => false,
+  require => User['jenkins-slave'],
 }
 
-exec {"jenkins-slave docker membership":
-  path    => '/usr/sbin:/usr/bin:/sbin:/bin',
-  unless => "grep -q 'docker\\S*jenkins-slave' /etc/group",
-  command => "usermod -aG docker jenkins-slave",
-  require => [User['jenkins-slave'],
-              Package['docker'],
-             ],
-  notify => Service['jenkins-slave'],
+user{'jenkins-slave':
+  ensure => present,
+  managehome => true,
+  groups => ['docker'],
+  require => Package['lxc-docker']
 }
+
 
 $slave_buildfarm_config_dir = ['/home/jenkins-slave/.buildfarm']
 file { $slave_buildfarm_config_dir:
@@ -436,13 +435,18 @@ file { '/var/lib/jenkins/.ssh/id_rsa':
     content => hiera('jenkins::private_ssh_key'),
     require => File['/var/lib/jenkins/.ssh'],
 }
-file { '/var/lib/jenkins/.ssh/id_rsa.pub':
-    mode => '0600',
-    owner => 'jenkins',
-    group => 'jenkins',
-    content => hiera('jenkins::authorized_keys'),
-    require => File['/var/lib/jenkins/.ssh'],
+
+# Setup generic ssh_keys
+if hiera('ssh_keys', false){
+  $defaults = {
+    'ensure' => 'present',
+  }
+  create_resources(ssh_authorized_key, hiera('ssh_keys'), $defaults)
 }
+else{
+  notice("No ssh_authorized_keys defined. There should probably be at least one.")
+}
+
 
 # Reference above credientials
 file { '/var/lib/jenkins/credentials.xml':

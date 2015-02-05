@@ -77,11 +77,29 @@ In particular you should change the following:
 On all three:
 * `jenkins::slave::ui_pass`
 * This is the passworkd for the slave to access the master
-* `user::admin::password_hash`
+ * `user::admin::password_hash`
 * On the master this should be the hashed password from above
-* The easiest way to create this is to setup a jenkins instance. Change the password, then copy the string out of config file on the jenkins server.
+ * The easiest way to create this is to setup a jenkins instance.
+   Change the password, then copy the string out of config file on the jenkins server.
 * `autoreconfigure::branch`
 * If you are forking into a repo and using a different branch name, update the autoreconfigure command to point to the right branch.
+* `ssh_keys`
+ * Configure as many license keys as you want for administrators to log in.
+ * Make sure there is at least one key for jenkins-slave on the repo matching the `jenkins::private_key` provisioned on the master.
+
+::
+
+    ssh_keys:
+        'admin@foobar':
+            ensure: present
+            key: AAAAB3NzaC1yc2EAAAADAQABAAABAQC2NOaRsdZqqTrCwNR77AQIqwAPYkDfiL1Ou7Pi/qaW9S7UU0Y1KAQ6kWhgJc9RtOhbZKGHbFTqSLT4235TkmPvlZbV2bK8ZViBmqQ3r8vDMhC/+p9Ec9SP8sjv6JcIEWOy5zXPnB3OnHHWXmvZP47rjJY0l76F71fZt3vlvyjz7IrikULmuKcyrE+zulmbSTtfGZhxQRPxZDO/RiOemCPsYo5u/rUMjWH+CkEI0swQlM6QIvjWdfYtNwQT9yo53MXFy5jodhW4YOOncKE4RMOI9Lmu6jE0GmdmSEv486R4ot6iWanx2hk/46zlmX1kSKGWObRdH57H/xIAxvw+PiTd
+            type: ssh-rsa
+            user: root
+        'upload_access@buildfarm':
+            ensure: present
+            key: AAAAB3NzaC1yc2EAAAADAQABAAABAQC2NOaRsdZqqTrCwNR77AQIqwAPYkDfiL1Ou7Pi/qaW9S7UU0Y1KAQ6kWhgJc9RtOhbZKGHbFTqSLT4235TkmPvlZbV2bK8ZViBmqQ3r8vDMhC/+p9Ec9SP8sjv6JcIEWOy5zXPnB3OnHHWXmvZP47rjJY0l76F71fZt3vlvyjz7IrikULmuKcyrE+zulmbSTtfGZhxQRPxZDO/RiOemCPsYo5u/rUMjWH+CkEI0swQlM6QIvjWdfYtNwQT9yo53MXFy5jodhW4YOOncKE4RMOI9Lmu6jE0GmdmSEv486R4ot6iWanx2hk/46zlmX1kSKGWObRdH57H/xIAxvw+PiTd
+            type: ssh-rsa
+            user: jenkins-slave
 
 On repo:
 * `jenkins-slave::authorized_keys`
@@ -92,25 +110,43 @@ On repo:
   * The GPG key with which to sign the repository.
   * `master::ip`
   * The IP address of the master instance.
+  * `jenkins-slave::reprepro_config`
+   * Fill in the correct rules for upstream imports.
+     It should be a hash/dict item with the filename as the key, ensure, and content as elements like below.
+     You can have as many elements as you want for different files.
 
-  On the master:
-  * `jenkins::authorized_keys`
-  * This is the string contents for the authorized keys for the slaves to push into the repo. (It should match the `jenkins::private_ssh_key` on the master.
-    * `jenkins::private_ssh_key`
-    * The key which authorizes access to push content into the repository or to connect back to the master from a job.
-    * `master::ip`
-    * The IP address of the master instance.
-    * `repo::ip`
-    * The IP address of the repository instance.
 
-    On the slave:
-    * `master::ip`
-    * The IP address of the master instance.
-    * `repo::ip`
-    * The IP address of the repository instance.
-    * `jenkins::slave::num_executors`
-     * The number of executors to instantiate on each slave.
-       From current testing you can do one per available core, as long as at least 2GB of memory are available for each executor.
+    jenkins-slave::reprepro_config:
+        '/home/jenkins-slave/reprepro_config/empy_saucy.yaml':
+            ensure: 'present'
+            content: |
+                name: empy_saucy
+                method: http://packages.osrfoundation.org/gazebo/ubuntu
+                suites: [saucy]
+                component: main
+                architectures: [i386, amd64, source]
+                filter_formula: Package (% python3-empy)
+
+
+On the master:
+* `jenkins::authorized_keys`
+* This is the string contents for the authorized keys for the slaves to push into the repo.
+  It should match the `jenkins::private_ssh_key` on the master.
+  * `jenkins::private_ssh_key`
+  * The key which authorizes access to push content into the repository or to connect back to the master from a job.
+  * `master::ip`
+  * The IP address of the master instance.
+  * `repo::ip`
+  * The IP address of the repository instance.
+
+On the slave:
+* `master::ip`
+* The IP address of the master instance.
+* `repo::ip`
+* The IP address of the repository instance.
+* `jenkins::slave::num_executors`
+ * The number of executors to instantiate on each slave.
+   From current testing you can do one per available core, as long as at least 2GB of memory are available for each executor.
 
 
 ## Deployment

@@ -50,3 +50,11 @@ fig up
 ### Accessing the local images
 
 This will expose the master as http://localhost:8080 and the repo at http://localhost:8081
+
+
+## Kicking off jobs inside docker
+
+Once you have the farm up you will need to configure it using [ros_buildfarm](https://github.com/ros-infrastructure/ros_buildfarm).
+
+You can get access to the docker machines by ip.
+But for convenience there's a helper docker image you can use to configure the buildfarm inside docker, [buildfarm_inprogress_helpers]](http://github.com/tfoote/buildfarm_inprogress_helpers)

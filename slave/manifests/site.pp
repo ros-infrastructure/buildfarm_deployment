@@ -22,24 +22,33 @@ else {
   }
 }
 
+# Setup generic ssh_keys
+if hiera('ssh_keys', false){
+  $defaults = {
+    'ensure' => 'present',
+  }
+  create_resources(ssh_authorized_key, hiera('ssh_keys'), $defaults)
+}
+else{
+  notice("No ssh_keys defined. You should probably have at least one.")
+}
+
 class { 'jenkins::slave':
   labels => 'buildslave',
   slave_mode => 'exclusive',
   slave_user => 'jenkins-slave',
-  manage_slave_user => '1',
+  manage_slave_user => false,
   executors => hiera('jenkins::slave::num_executors', 1),
+  require => User['jenkins-slave'],
 }
 
-
-exec {"jenkins-slave docker membership":
-  path    => '/usr/sbin:/usr/bin:/sbin:/bin',
-  unless => "grep -q 'docker\\S*jenkins-slave' /etc/group",
-  command => "usermod -aG docker jenkins-slave",
-  require => [User['jenkins-slave'],
-              Package['docker'],
-             ],
-  notify => Service['jenkins-slave'],
+user{'jenkins-slave':
+  ensure => present,
+  managehome => true,
+  groups => ['docker'],
+  require => Package['lxc-docker']
 }
+
 
 ## required by jobs to generate Dockerfiles
 package { 'python3-empy':
