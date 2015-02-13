@@ -132,6 +132,10 @@ file { '/var/lib/jenkins/diskcheck.xml':
 }
 
 jenkins::plugin {
+  'email-ext': ;
+}
+
+jenkins::plugin {
   'extra-columns': ;
 }
 
