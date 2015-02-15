@@ -1,11 +1,14 @@
 #!/usr/bin/env python3
 # Script to clean up docker images
 import argparse
+import dateutil.parser
+import datetime
 import fcntl
 import logging
 import psutil
 import subprocess
 import sys
+import json
 
 from contextlib import contextmanager
 
@@ -60,7 +63,7 @@ def print_progress(args):
                   args.minimum_free_percent))
 
 
-def run_image_cleanup(args):
+def run_image_cleanup(args, minimum_age):
     logging.info("cleaning up docker images")
     images = get_image_list()
 
@@ -74,13 +77,34 @@ def run_image_cleanup(args):
             break
         try:
             processed_images.add(i)
-            logging.info("removing image %s" % i)
-            remove_docker_image(i)
-            logging.info("successfully removed image: %s" % i)
+            if docker_id_older(i, minimum_age):
+                logging.info("removing image %s" % i)
+                if args.dry_run:
+                    logging.info("Dry run >> I would have removed image: %s" % i)
+                else:
+                    remove_docker_image(i)
+                    logging.info("successfully removed image: %s" % i)
+            else:
+                logging.info("skipped removal of image due to age: %s" % i)
         except subprocess.CalledProcessError as ex:
             logging.info("failed to remove image %s Exception [%s] Output: [%s]" % (i, ex, ex.output))
 
         print_progress(args)
+
+
+def inspect_docker_id(docker_id):
+    cmd = ("docker inspect %s" % docker_id).split()
+    info = subprocess.check_output(cmd).decode('utf8')
+    return json.loads(info)[0]
+
+
+def docker_id_older(docker_id, minimum_age):
+    """ Check the age of a docker container or image is older
+    """
+    info = inspect_docker_id(docker_id)
+    created = dateutil.parser.parse(info['Created'])
+    now = datetime.datetime.now(datetime.timezone.utc)
+    return now - created > minimum_age
 
 
 def get_container_list():
@@ -94,14 +118,20 @@ def remove_docker_container(containerid):
     subprocess.check_output(cmd, stderr=subprocess.STDOUT)
 
 
-def run_container_cleanup():
+def run_container_cleanup(args, minimum_age):
     logging.info("cleaning up docker containers")
     containers = get_container_list()
     for c in containers:
         try:
-            logging.info("removing container %s" % c)
-            remove_docker_container(c)
-            logging.info("successfully removed container: %s" % c)
+            if docker_id_older(c, minimum_age):
+                logging.info("removing container %s" % c)
+                if args.dry_run:
+                    logging.info("Dry run >> I would have removed container: %s" % c)
+                else:
+                    remove_docker_container(c)
+                    logging.info("successfully removed container: %s" % c)
+            else:
+                logging.info("skipped removal of container due to age: %s" % c)
         except subprocess.CalledProcessError as ex:
             logging.info("failed to remove cointainer %s Exception [%s] Output [%s]" %
                          (c, ex, ex.output))
@@ -115,9 +145,20 @@ if __name__ == '__main__':
                         help='Number of percent free required')
     parser.add_argument('--path', type=str, default='/',
                         help='What mount point to introspect')
-    parser.add_argument('--logfile', type=str, default='/var/log/jenkins-slave/cleanup_docker_images.log',
+    parser.add_argument('--logfile', type=str,
+                        default='/var/log/jenkins-slave/cleanup_docker_images.log',
                         help='Where to log output')
+    parser.add_argument('--min-days', type=int, default=1,
+                        help='The minimum age of items to clean up in days.')
+    parser.add_argument('--min-hours', type=int, default=0,
+                        help='The minimum age of items to clean up in hours, added to days.')
+    parser.add_argument('--dry-run', '-n', default=False,
+                        action='store_true',
+                        help='Do not actually clean up, just print to log.')
+
     args = parser.parse_args()
+
+    minimum_age = datetime.timedelta(days=args.min_days, hours=args.min_hours)
 
     #initialize logging
     logging.basicConfig(filename=args.logfile, format='%(asctime)s %(message)s',
@@ -132,11 +173,11 @@ if __name__ == '__main__':
     with open(filename, 'w') as fh:
         try:
             with flocked(fh):
-                run_container_cleanup()
-                run_image_cleanup(args)
+                run_container_cleanup(args, minimum_age)
+                run_image_cleanup(args, minimum_age)
         except BlockingIOError as ex:
             logging.error("Failed to get lock on %s aborting. Exception[%s]. "
                           "This most likely means an instance of this script"
                           " is already running." %
-                           (filename, ex))
+                          (filename, ex))
             sys.exit(1)
