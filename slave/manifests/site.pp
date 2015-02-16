@@ -49,6 +49,10 @@ user{'jenkins-slave':
   require => Package['lxc-docker']
 }
 
+# required by cleanup_docker_images.py
+package { 'python3-dateutil':
+  ensure => 'installed',
+}
 
 ## required by jobs to generate Dockerfiles
 package { 'python3-empy':
