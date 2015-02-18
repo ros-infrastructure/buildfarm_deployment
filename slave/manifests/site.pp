@@ -122,6 +122,8 @@ if hiera('run_squid', false) {
     command => '/tmp/deploy_squid.py',
     env     => ['DISK_CACHE_SIZE=5000', 'MAX_CACHE_OBJECT=1000', 'SQUID_DIRECTIVES=\'
 refresh_pattern . 0 0 1 refresh-ims
+refresh_all_ims on # make sure we do not get out of date content #41
+ignore_expect_100 on # needed for new relic system monitor
 \''],
     volumes => ['/var/cache/squid-in-a-can:/var/cache/squid3'],
     net     => 'host',
