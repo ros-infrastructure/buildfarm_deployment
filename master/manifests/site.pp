@@ -497,3 +497,16 @@ cron {'docker_cleanup_images':
   weekday => absent,
   require => User['jenkins-slave'],
 }
+
+
+package { 'python3-pip':
+ ensure => 'installed',
+}
+# required by cleanup_docker script
+pip::install { 'docker-py':
+  #package => 'jenkinsapi', # defaults to $title
+  #version => '1.6', # if undef installs latest version
+  python_version => '3', # defaults to 2.7
+  #ensure => present, # defaults to present
+  require => Package['python3-pip'],
+}

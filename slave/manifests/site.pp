@@ -94,6 +94,19 @@ include '::ntp'
 class {'docker':
 }
 
+package { 'python3-pip':
+ ensure => 'installed',
+}
+
+# required by cleanup_docker script
+pip::install { 'docker-py':
+  #package => 'jenkinsapi', # defaults to $title
+  #version => '1.6', # if undef installs latest version
+  python_version => '3', # defaults to 2.7
+  #ensure => present, # defaults to present
+  require => Package['python3-pip'],
+}
+
 # script to clean up docker images from oldest
 file { '/home/jenkins-slave/cleanup_docker_images.py':
   mode => '0774',

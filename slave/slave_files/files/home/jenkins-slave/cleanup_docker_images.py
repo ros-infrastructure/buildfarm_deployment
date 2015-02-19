@@ -3,6 +3,7 @@
 import argparse
 import dateutil.parser
 import datetime
+import docker
 import fcntl
 import logging
 import psutil
@@ -36,17 +37,6 @@ def get_free_disk_percentage(path='/'):
     return 100 - usage.percent
 
 
-def get_image_list():
-    cmd = "docker images -q".split()
-    images = subprocess.check_output(cmd).decode('utf8').splitlines()
-    return reversed(images)
-
-
-def remove_docker_image(imageid):
-    cmd = ("docker rmi %s" % imageid).split()
-    subprocess.check_output(cmd, stderr=subprocess.STDOUT)
-
-
 def check_done(args):
     if get_free_disk_percentage(args.path) >= args.minimum_free_percent and\
        get_free_disk_space(args.path) >= args.minimum_free_space:
@@ -63,31 +53,34 @@ def print_progress(args):
                   args.minimum_free_percent))
 
 
-def run_image_cleanup(args, minimum_age):
+def run_image_cleanup(args, minimum_age, dclient):
     logging.info("cleaning up docker images")
-    images = get_image_list()
+    images = dclient.images()
 
     #keep track of already tried images to avoid duplication
     processed_images = set()
     for i in images:
-        if i in processed_images:
+        dockerid = i['Id']
+        info = inspect_docker_id(dockerid)
+        if dockerid in processed_images:
             continue
         if check_done(args):
             logging.info("Disk space satified ending")
             break
         try:
-            processed_images.add(i)
-            if docker_id_older(i, minimum_age):
-                logging.info("removing image %s" % i)
+            processed_images.add(dockerid)
+            if docker_id_older(info, minimum_age):
+                repo_tags = i['RepoTags'][0] if '<none>:<none>' not in i['RepoTags'] else dockerid
+                logging.info("removing image %s by identifier %s" % (dockerid, repo_tags))
                 if args.dry_run:
-                    logging.info("Dry run >> I would have removed image: %s" % i)
+                    logging.info("Dry run >> I would have removed image: %s" % repo_tags)
                 else:
-                    remove_docker_image(i)
-                    logging.info("successfully removed image: %s" % i)
+                    dclient.remove_image(repo_tags)
+                    logging.info("successfully removed image: %s" % repo_tags)
             else:
-                logging.info("skipped removal of image due to age: %s" % i)
-        except subprocess.CalledProcessError as ex:
-            logging.info("failed to remove image %s Exception [%s] Output: [%s]" % (i, ex, ex.output))
+                logging.info("skipped removal of image due to age: %s" % dockerid)
+        except docker.errors.APIError as ex:
+            logging.info("failed to remove image %s Exception [%s]" % (dockerid, ex))
 
         print_progress(args)
 
@@ -98,43 +91,33 @@ def inspect_docker_id(docker_id):
     return json.loads(info)[0]
 
 
-def docker_id_older(docker_id, minimum_age):
+def docker_id_older(docker_info, minimum_age):
     """ Check the age of a docker container or image is older
     """
-    info = inspect_docker_id(docker_id)
-    created = dateutil.parser.parse(info['Created'])
+    created = dateutil.parser.parse(docker_info['Created'])
     now = datetime.datetime.now(datetime.timezone.utc)
     return now - created > minimum_age
 
 
-def get_container_list():
-    cmd = "docker ps -aq".split()
-    containers = subprocess.check_output(cmd).decode('utf8').splitlines()
-    return containers
-
-
-def remove_docker_container(containerid):
-    cmd = ("docker rm %s" % containerid).split()
-    subprocess.check_output(cmd, stderr=subprocess.STDOUT)
-
-
-def run_container_cleanup(args, minimum_age):
+def run_container_cleanup(args, minimum_age, dclient):
     logging.info("cleaning up docker containers")
-    containers = get_container_list()
+    containers = dclient.containers(all=True)
     for c in containers:
+        dockerid = c['Id']
         try:
-            if docker_id_older(c, minimum_age):
-                logging.info("removing container %s" % c)
+            info = dclient.inspect_container(dockerid)
+            if docker_id_older(info, minimum_age):
+                logging.info("removing container %s" % dockerid)
                 if args.dry_run:
-                    logging.info("Dry run >> I would have removed container: %s" % c)
+                    logging.info("Dry run >> I would have removed container: %s" % dockerid)
                 else:
-                    remove_docker_container(c)
-                    logging.info("successfully removed container: %s" % c)
+                    dclient.remove_container(dockerid)
+                    logging.info("successfully removed container: %s" % dockerid)
             else:
-                logging.info("skipped removal of container due to age: %s" % c)
-        except subprocess.CalledProcessError as ex:
-            logging.info("failed to remove cointainer %s Exception [%s] Output [%s]" %
-                         (c, ex, ex.output))
+                logging.info("skipped removal of container due to age: %s" % dockerid)
+        except docker.errors.APIError as ex:
+            logging.info("failed to remove cointainer %s Exception [%s]" %
+                         (dockerid, ex))
 
 
 if __name__ == '__main__':
@@ -148,16 +131,18 @@ if __name__ == '__main__':
     parser.add_argument('--logfile', type=str,
                         default='/var/log/jenkins-slave/cleanup_docker_images.log',
                         help='Where to log output')
-    parser.add_argument('--min-days', type=int, default=1,
+    parser.add_argument('--min-days', type=int, default=0,
                         help='The minimum age of items to clean up in days.')
-    parser.add_argument('--min-hours', type=int, default=0,
+    parser.add_argument('--min-hours', type=int, default=8,
                         help='The minimum age of items to clean up in hours, added to days.')
+    parser.add_argument('--docker-api-version', type=str, default='1.16',
+                            help='The docker server API level.')
     parser.add_argument('--dry-run', '-n', default=False,
                         action='store_true',
                         help='Do not actually clean up, just print to log.')
 
     args = parser.parse_args()
-
+    dclient = docker.Client(base_url='unix://var/run/docker.sock', version=args.docker_api_version)
     minimum_age = datetime.timedelta(days=args.min_days, hours=args.min_hours)
 
     #initialize logging
@@ -173,8 +158,8 @@ if __name__ == '__main__':
     with open(filename, 'w') as fh:
         try:
             with flocked(fh):
-                run_container_cleanup(args, minimum_age)
-                run_image_cleanup(args, minimum_age)
+                run_container_cleanup(args, minimum_age, dclient)
+                run_image_cleanup(args, minimum_age, dclient)
         except BlockingIOError as ex:
             logging.error("Failed to get lock on %s aborting. Exception[%s]. "
                           "This most likely means an instance of this script"

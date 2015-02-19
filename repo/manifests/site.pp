@@ -284,6 +284,15 @@ exec {"init_main_repo":
                  ]
 }
 
+# script to clean up docker images from oldest
+file { '/home/jenkins-slave/cleanup_docker_images.py':
+  mode => '0774',
+  owner => 'jenkins-slave',
+  group => 'jenkins-slave',
+  source => 'puppet:///modules/repo_files/home/jenkins-slave/cleanup_docker_images.py',
+  require => User['jenkins-slave'],
+}
+
 # clean up containers and dangling images https://github.com/docker/docker/issues/928#issuecomment-58619854
 cron {'docker_cleanup_images':
   command => 'bash -c "python3 -u /home/jenkins-slave/cleanup_docker_images.py"',
@@ -294,6 +303,19 @@ cron {'docker_cleanup_images':
   minute  => 15,
   weekday => absent,
   require => User['jenkins-slave'],
+}
+
+package { 'python3-pip':
+ ensure => 'installed',
+}
+
+# required by cleanup_docker script
+pip::install { 'docker-py':
+  #package => 'jenkinsapi', # defaults to $title
+  #version => '1.6', # if undef installs latest version
+  python_version => '3', # defaults to 2.7
+  #ensure => present, # defaults to present
+  require => Package['python3-pip'],
 }
 
 # remove old cron jobs from previously configured re #46

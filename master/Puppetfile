@@ -4,5 +4,6 @@ mod 'example42-iptables'
 mod 'garethr-docker'
 mod 'puppetlabs-ntp'
 mod 'rtyler/jenkins'
+mod 'tracywebtech-pip'
 
 mod 'saz-timezone'
