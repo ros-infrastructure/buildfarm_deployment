@@ -136,6 +136,10 @@ jenkins::plugin {
 }
 
 jenkins::plugin {
+  'embeddable-build-status': ;
+}
+
+jenkins::plugin {
   'extra-columns': ;
 }
 
