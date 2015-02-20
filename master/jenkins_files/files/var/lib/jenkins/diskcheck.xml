@@ -1,5 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<org.jenkinsci.plugin.PluginImpl plugin="diskcheck@0.21">
-  <diskrecyclerenabled>false</diskrecyclerenabled>
-  <spacecheck>5</spacecheck>
-</org.jenkinsci.plugin.PluginImpl>
