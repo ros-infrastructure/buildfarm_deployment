@@ -22,6 +22,9 @@ else {
   }
 }
 
+# bring in classes listed in hiera
+hiera_include('classes')
+
 # Setup generic ssh_keys
 if hiera('ssh_keys', false){
   $defaults = {
