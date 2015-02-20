@@ -7,7 +7,6 @@ import docker
 import fcntl
 import logging
 import psutil
-import subprocess
 import sys
 import json
 
@@ -61,7 +60,7 @@ def run_image_cleanup(args, minimum_age, dclient):
     processed_images = set()
     for i in images:
         dockerid = i['Id']
-        info = inspect_docker_id(dockerid)
+        info = dclient.inspect_image(dockerid)
         if dockerid in processed_images:
             continue
         if check_done(args):
@@ -83,12 +82,6 @@ def run_image_cleanup(args, minimum_age, dclient):
             logging.info("failed to remove image %s Exception [%s]" % (dockerid, ex))
 
         print_progress(args)
-
-
-def inspect_docker_id(docker_id):
-    cmd = ("docker inspect %s" % docker_id).split()
-    info = subprocess.check_output(cmd).decode('utf8')
-    return json.loads(info)[0]
 
 
 def docker_id_older(docker_info, minimum_age):
