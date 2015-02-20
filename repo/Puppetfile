@@ -5,6 +5,8 @@ mod 'garethr-docker'
 mod 'puppetlabs-ntp'
 mod 'rtyler/jenkins'
 mod 'tracywebtech-pip'
+mod 'newrelic-nrsysmond',
+  :git => "git://github.com/newrelic/puppet-nrsysmond.git"
 
 mod 'puppetlabs-apache', '1.1.1'
 mod 'puppetlabs-vcsrepo'

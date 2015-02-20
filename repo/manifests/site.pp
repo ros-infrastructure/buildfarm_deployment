@@ -18,6 +18,9 @@ user{'jenkins-slave':
 # setup ntp with defaults
 include '::ntp'
 
+# bring in classes listed in hiera
+hiera_include('classes')
+
 ### install latest docker
 
 class {'docker':
