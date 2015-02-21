@@ -9,9 +9,10 @@ import logging
 import psutil
 import sys
 import json
+import traceback
 
 from contextlib import contextmanager
-
+from requests.exceptions import Timeout
 
 @contextmanager
 def flocked(fd):
@@ -58,8 +59,9 @@ def run_image_cleanup(args, minimum_age, dclient):
 
     #keep track of already tried images to avoid duplication
     processed_images = set()
-    for i in images:
+    for i in reversed(images):
         dockerid = i['Id']
+        repo_tags = i['RepoTags'][0] if '<none>:<none>' not in i['RepoTags'] else dockerid
         info = dclient.inspect_image(dockerid)
         if dockerid in processed_images:
             continue
@@ -69,7 +71,6 @@ def run_image_cleanup(args, minimum_age, dclient):
         try:
             processed_images.add(dockerid)
             if docker_id_older(info, minimum_age):
-                repo_tags = i['RepoTags'][0] if '<none>:<none>' not in i['RepoTags'] else dockerid
                 logging.info("removing image %s by identifier %s" % (dockerid, repo_tags))
                 if args.dry_run:
                     logging.info("Dry run >> I would have removed image: %s" % repo_tags)
@@ -77,9 +78,13 @@ def run_image_cleanup(args, minimum_age, dclient):
                     dclient.remove_image(repo_tags)
                     logging.info("successfully removed image: %s" % repo_tags)
             else:
-                logging.info("skipped removal of image due to age: %s" % dockerid)
+                logging.info("skipped removal of image due to age: %s -- %s" % (info['Created'], repo_tags))
         except docker.errors.APIError as ex:
-            logging.info("failed to remove image %s Exception [%s]" % (dockerid, ex))
+            logging.info("APIError: failed to remove image %s Exception [%s]" % (repo_tags, ex))
+        except Timeout as ex:
+            logging.info("Timeout: failed to remove image %s Exception [%s]" % (repo_tags, ex))
+
+
 
         print_progress(args)
 
@@ -113,7 +118,7 @@ def run_container_cleanup(args, minimum_age, dclient):
                          (dockerid, ex))
 
 
-if __name__ == '__main__':
+def main():
     parser = argparse.ArgumentParser(description='Free up disk space from docker images and containers')
     parser.add_argument('--minimum-free-space', type=int, default=50,
                         help='Number of GB miniumum free required')
@@ -141,7 +146,7 @@ if __name__ == '__main__':
     #initialize logging
     logging.basicConfig(filename=args.logfile, format='%(asctime)s %(message)s',
                         level=logging.INFO)
-    logging.info("Starting run of cleanup_docker_images.py arguments %s" % args)
+    logging.info(">>>>>> Starting run of cleanup_docker_images.py arguments %s" % args)
     if check_done(args):
         logging.info("Disk space satified ending")
         sys.exit(0)
@@ -159,3 +164,11 @@ if __name__ == '__main__':
                           " is already running." %
                           (filename, ex))
             sys.exit(1)
+    logging.info("<<<<<<< Finishing run of cleanup_docker_images.py arguments %s" % args)
+
+
+if __name__ == '__main__':
+    try:
+        main()
+    except:
+        logging.error("Uncaught exception in cleanup_docker_image.py: %s" % traceback.format_exc())
