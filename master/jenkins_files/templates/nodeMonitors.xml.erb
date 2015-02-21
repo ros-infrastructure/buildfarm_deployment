@@ -11,7 +11,7 @@
     <freeSpaceThreshold><%= scope.function_hiera(["jenkins::nodeMonitor::minimum_disk_space"]) %></freeSpaceThreshold>
   </hudson.node__monitors.DiskSpaceMonitor>
   <hudson.node__monitors.SwapSpaceMonitor>
-    <ignored>false</ignored>
+    <ignored>true</ignored>
   </hudson.node__monitors.SwapSpaceMonitor>
   <hudson.node__monitors.TemporarySpaceMonitor>
     <ignored>false</ignored>
