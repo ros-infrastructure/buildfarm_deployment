@@ -62,14 +62,15 @@ def run_image_cleanup(args, minimum_age, dclient):
     for i in reversed(images):
         dockerid = i['Id']
         repo_tags = i['RepoTags'][0] if '<none>:<none>' not in i['RepoTags'] else dockerid
-        info = dclient.inspect_image(dockerid)
         if dockerid in processed_images:
+            logging.info("already processed %s, continuing" % repo_tags)
             continue
         if check_done(args):
             logging.info("Disk space satified ending")
             break
+        processed_images.add(dockerid)
         try:
-            processed_images.add(dockerid)
+            info = dclient.inspect_image(dockerid)
             if docker_id_older(info, minimum_age):
                 logging.info("removing image %s by identifier %s" % (dockerid, repo_tags))
                 if args.dry_run:
