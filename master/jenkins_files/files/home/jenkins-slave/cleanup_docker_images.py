@@ -132,7 +132,7 @@ def main():
                         help='Where to log output')
     parser.add_argument('--min-days', type=int, default=0,
                         help='The minimum age of items to clean up in days.')
-    parser.add_argument('--min-hours', type=int, default=8,
+    parser.add_argument('--min-hours', type=int, default=10,
                         help='The minimum age of items to clean up in hours, added to days.')
     parser.add_argument('--docker-api-version', type=str, default='1.16',
                             help='The docker server API level.')
