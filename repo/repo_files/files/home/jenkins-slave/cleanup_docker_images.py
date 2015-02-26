@@ -149,8 +149,8 @@ def main():
                         level=logging.INFO)
     logging.info(">>>>>> Starting run of cleanup_docker_images.py arguments %s" % args)
     if check_done(args):
-        logging.info("Disk space satified ending")
-        sys.exit(0)
+        logging.info("Disk space satified before running, no need to run.")
+        return
     print_progress(args)
 
     filename = '/tmp/cleanup_docker_images.py.marker'
@@ -165,11 +165,12 @@ def main():
                           " is already running." %
                           (filename, ex))
             sys.exit(1)
-    logging.info("<<<<<<< Finishing run of cleanup_docker_images.py arguments %s" % args)
 
 
 if __name__ == '__main__':
     try:
         main()
+        logging.info("<<<<<<< Finishing run of cleanup_docker_images.pyc cleanly")
+
     except:
         logging.error("Uncaught exception in cleanup_docker_image.py: %s" % traceback.format_exc())
