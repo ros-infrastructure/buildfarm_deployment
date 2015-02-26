@@ -187,7 +187,7 @@ cron {'docker_cleanup_containers':
 
 # clean up containers and dangling images https://github.com/docker/docker/issues/928#issuecomment-58619854
 cron {'docker_cleanup_images':
-  command => 'bash -c "python3 -u /home/jenkins-slave/cleanup_docker_images.py"',
+  command => 'bash -c "python3 -u /home/jenkins-slave/cleanup_docker_images.py --minimum-free-percent 10 --minimum-free-space 50"',
   user    => 'jenkins-slave',
   month   => absent,
   monthday => absent,
