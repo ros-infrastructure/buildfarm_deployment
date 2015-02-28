@@ -8,7 +8,9 @@ include jenkins_files
 include '::ntp'
 
 # bring in classes listed in hiera
-hiera_include('classes')
+if hiera('classes', false) {
+  hiera_include('classes')
+}
 
 # Needed by jenkins-slave to connect to the local master generically
 if hiera('master::ip', false) {

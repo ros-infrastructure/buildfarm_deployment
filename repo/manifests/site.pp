@@ -19,7 +19,9 @@ user{'jenkins-slave':
 include '::ntp'
 
 # bring in classes listed in hiera
-hiera_include('classes')
+if hiera('classes', false) {
+  hiera_include('classes')
+}
 
 ### install latest docker
 
