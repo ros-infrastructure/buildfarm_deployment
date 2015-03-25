@@ -1,3 +1,6 @@
+# to setup services
+include upstart
+
 # Find the other instances
 if hiera('repo::ip', false) {
   host {'repo':
@@ -148,16 +151,22 @@ ignore_expect_100 on # needed for new relic system monitor
                ],
   }
 
-  class { 'iptables':
-    config => 'file', # This is needed to activate file mode
-    source => [ "puppet:///modules/slave_files/etc/iptables.docker_squid"],
+  file { '/home/jenkins-slave/manage.py':
+    ensure => present,
+    source => 'puppet:///modules/slave_files/home/jenkins-slave/manage.py',
+    mode => 755,
+  }
+
+  upstart::job{'manage-tproxy':
+    description => 'Manage iptables for tproxy',
+    chdir       => '/home/jenkins-slave',
+    exec        => '/home/jenkins-slave/manage.py',
+    require     => File[ '/home/jenkins-slave/manage.py'],
+    respawn     => true,
+    respawn_limit => '99 5',
   }
 }
 else {
-  class { 'iptables':
-    config => 'file', # This is needed to activate file mode
-    source => [ "puppet:///modules/slave_files/etc/iptables.docker"],
-  }
 
 }
 if hiera('autoreconfigure') {
