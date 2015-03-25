@@ -52,7 +52,7 @@ They are intended as a guideline for choosing the appropriate parameters when de
 
 ## Forking (or not)
 
-The config repository will contain your secrets such as private keys and access tokens.
+**The config repository will contain your secrets such as private keys and access tokens, keep it private!**
 You should make a copy of the config repository and make it private.
 Unfortunately you can't use the "Fork" button on GitHub and then make it private.
 
@@ -84,8 +84,9 @@ On all three:
 * `autoreconfigure::branch`
 * If you are forking into a repo and using a different branch name, update the autoreconfigure command to point to the right branch.
 * `ssh_keys`
- * Configure as many license keys as you want for administrators to log in.
- * Make sure there is at least one key for jenkins-slave on the repo matching the `jenkins::private_key` provisioned on the master.
+ * Configure as many public ssh-keys as you want for administrators to log in. It's recommended at least one for root.
+ * On the repo machine make sure there is at least one key for the jenkins-slave user matching the
+  `jenkins::private_key` provisioned on the master.
 
 ::
 
@@ -133,7 +134,9 @@ On the master:
 * This is the string contents for the authorized keys for the slaves to push into the repo.
   It should match the `jenkins::private_ssh_key` on the master.
   * `jenkins::private_ssh_key`
-  * The key which authorizes access to push content into the repository or to connect back to the master from a job.
+  * The ssh private key which authorizes access to push content into the repository or to connect back to the master from a job. 
+    This will be provisioned as an ssh-credential available via the ssh-agent inside a jenkins jobs.
+    **Note: This value should be kept secret!**
   * `master::ip`
   * The IP address of the master instance.
   * `repo::ip`
