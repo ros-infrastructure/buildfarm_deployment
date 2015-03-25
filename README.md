@@ -84,8 +84,9 @@ On all three:
 * `autoreconfigure::branch`
 * If you are forking into a repo and using a different branch name, update the autoreconfigure command to point to the right branch.
 * `ssh_keys`
- * Configure as many public ssh-keys as you want for administrators to log in. It's recommended at least one for root.
- * On the repo machine make sure there is at least one key for the jenkins-slave user matching the
+ * Configure as many public ssh-keys as you want for administrators to log in.
+   It's recommended at least one for root.
+ * On the repo machine make sure there is at least one key for the jenkins-slave user matching the ssh private key 
   `jenkins::private_key` provisioned on the master.
 
 ::
@@ -103,10 +104,9 @@ On all three:
             user: jenkins-slave
 
 On repo:
-* `jenkins-slave::authorized_keys`
-* This is the string contents for the authorized keys for the slaves to push into the repo. (It should match the `jenkins::private_ssh_key` on the master.
   * `jenkins-slave::gpg_public_key`
-  * The GPG public key matching the private key. This will be made available for download from the repo for verification.
+  * The GPG public key matching the private key.
+    This will be made available for download from the repo for verification.
   * `jenkins-slave::gpg_private_key`
   * The GPG key with which to sign the repository.
   * `master::ip`
@@ -130,12 +130,11 @@ On repo:
 
 
 On the master:
-* `jenkins::authorized_keys`
-* This is the string contents for the authorized keys for the slaves to push into the repo.
-  It should match the `jenkins::private_ssh_key` on the master.
   * `jenkins::private_ssh_key`
-  * The ssh private key which authorizes access to push content into the repository or to connect back to the master from a job. 
-    This will be provisioned as an ssh-credential available via the ssh-agent inside a jenkins jobs.
+  * The ssh private key  will be provisioned as an ssh-credential available via the ssh-agent inside a jenkins jobs.
+    This is necessary for access to push content onto the repo machine.
+    It can also be used to access other machines from within the job execution environment.
+    This will require deploying the matching public key to the other machines appropriately. 
     **Note: This value should be kept secret!**
   * `master::ip`
   * The IP address of the master instance.
