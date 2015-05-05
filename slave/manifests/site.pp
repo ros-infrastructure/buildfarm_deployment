@@ -57,6 +57,15 @@ user{'jenkins-slave':
   require => Package['lxc-docker']
 }
 
+# Make sure this directory exists so it can be mounted.
+file { '/home/jenkins-slave/.ccache' :
+  ensure => 'directory',
+  mode   => 644,
+  owner  => 'jenkins-slave',
+  group  => 'jenkins-slave',
+  require => User['jenkins-slave'],
+}
+
 # required by cleanup_docker_images.py
 package { 'python3-dateutil':
   ensure => 'installed',
