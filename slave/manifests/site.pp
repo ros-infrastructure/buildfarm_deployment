@@ -60,7 +60,7 @@ user{'jenkins-slave':
 # Make sure this directory exists so it can be mounted.
 file { '/home/jenkins-slave/.ccache' :
   ensure => 'directory',
-  mode   => 644,
+  mode   => '644',
   owner  => 'jenkins-slave',
   group  => 'jenkins-slave',
   require => User['jenkins-slave'],
