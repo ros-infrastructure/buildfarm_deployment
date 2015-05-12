@@ -54,7 +54,7 @@ user{'jenkins-slave':
   ensure => present,
   managehome => true,
   groups => ['docker'],
-  require => Package['lxc-docker']
+  require => Class['docker']
 }
 
 # Make sure this directory exists so it can be mounted.
