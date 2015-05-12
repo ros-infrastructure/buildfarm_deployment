@@ -157,7 +157,7 @@ Once you have customized all the content of the config repo on each provisioned 
 
 ### Master deployment
 
-    sudo -s
+    sudo su
     cd
     apt-get update
     apt-get install -y git
@@ -171,7 +171,7 @@ Once you have customized all the content of the config repo on each provisioned 
 
 ### repo deployment
 
-    sudo -s
+    sudo su
     cd
     apt-get update
     apt-get install -y git
@@ -184,7 +184,7 @@ Once you have customized all the content of the config repo on each provisioned 
 
 ### slave deployment
 
-    sudo -s
+    sudo su
     cd
     apt-get update
     apt-get install -y git
