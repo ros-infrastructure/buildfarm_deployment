@@ -141,6 +141,15 @@ On the master:
   * `repo::ip`
   * The IP address of the repository instance.
 
+  * `credentials::jenkins-slave::username`
+  * The name of the credentials
+  * `credentials::jenkins-slave::id`
+  * A UUID for the credentials in thef format `1e7d4696-7fd4-4bc6-8c87-ebc7b6ce16e5`
+  * `credentials::jenkins-slave::passphrase`
+  * The hashed passphrase for the key. The UI puts this has in if there's now passphrase `4lRsx/NwfEndwUlcWOOnYg== `
+   * If you would like to modify these values from the default it will likely be easiest to boot an instance. Change the credentials via the UI, then grab the values out of the config file. 
+  
+
 On the slave:
 * `master::ip`
 * The IP address of the master instance.
