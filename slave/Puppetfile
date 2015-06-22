@@ -4,6 +4,6 @@ mod 'garethr-docker'
 mod 'krakatoa-upstart', :path => '../krakatoa-upstart-0.0.1'
 mod 'puppetlabs-ntp'
 mod 'rtyler/jenkins'
-mod 'tracywebtech-pip'
+mod 'tracywebtech-pip', '1.3.2'
 mod 'newrelic-nrsysmond',
   :git => "git://github.com/newrelic/puppet-nrsysmond.git"
