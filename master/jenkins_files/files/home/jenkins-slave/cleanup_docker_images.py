@@ -66,7 +66,7 @@ def run_image_cleanup(args, minimum_age, dclient):
             logging.info("already processed %s, continuing" % repo_tags)
             continue
         if check_done(args):
-            logging.info("Disk space satified ending")
+            logging.info("Disk space satisfied ending")
             break
         processed_images.add(dockerid)
         try:
@@ -149,7 +149,7 @@ def main():
                         level=logging.INFO)
     logging.info(">>>>>> Starting run of cleanup_docker_images.py arguments %s" % args)
     if check_done(args):
-        logging.info("Disk space satified before running, no need to run.")
+        logging.info("Disk space satisfied before running, no need to run.")
         return
     print_progress(args)
 
