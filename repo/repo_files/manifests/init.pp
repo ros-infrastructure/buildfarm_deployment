@@ -1,3 +1,3 @@
-class slave_files {
+class repo_files {
 
 }
