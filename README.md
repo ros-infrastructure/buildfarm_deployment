@@ -86,7 +86,7 @@ On all three:
 * `ssh_keys`
  * Configure as many public ssh-keys as you want for administrators to log in.
    It's recommended at least one for root.
- * On the repo machine make sure there is at least one key for the jenkins-slave user matching the ssh private key 
+ * On the repo machine make sure there is at least one key for the jenkins-slave user matching the ssh private key
   `jenkins::private_key` provisioned on the master.
 
 ::
@@ -134,7 +134,7 @@ On the master:
   * The ssh private key  will be provisioned as an ssh-credential available via the ssh-agent inside a jenkins jobs.
     This is necessary for access to push content onto the repo machine.
     It can also be used to access other machines from within the job execution environment.
-    This will require deploying the matching public key to the other machines appropriately. 
+    This will require deploying the matching public key to the other machines appropriately.
     **Note: This value should be kept secret!**
   * `master::ip`
   * The IP address of the master instance.
@@ -147,8 +147,18 @@ On the master:
   * A UUID for the credentials in thef format `1e7d4696-7fd4-4bc6-8c87-ebc7b6ce16e5`
   * `credentials::jenkins-slave::passphrase`
   * The hashed passphrase for the key. The UI puts this has in if there's now passphrase `4lRsx/NwfEndwUlcWOOnYg== `
-   * If you would like to modify these values from the default it will likely be easiest to boot an instance. Change the credentials via the UI, then grab the values out of the config file. 
-  
+   * If you would like to modify these values from the default it will likely be easiest to boot an instance. Change the credentials via the UI, then grab the values out of the config file.
+
+  * If you would like to be able to clone source and release repositories over git+ssh, add the `git-fetch-ssh` credential by setting the following optional parameters:
+    * `credentials::git-fetch-ssh::username`
+    * The name of the credentials
+    * `credentials::git-fetch-ssh::id`
+    * A UUID for the credentials in the format `1e7d4696-7fd4-4bc6-8c87-ebc7b6ce16e5`
+    * `credentials::git-fetch-ssh::passphrase`
+    * The hashed passphrase for the key. The UI puts this hash in if there's no passphrase: `4lRsx/NwfEndwUlcWOOnYg== `
+    * `credentials::git-fetch-ssh::private_key`
+    * An SSH private key that has access to the source and release repositories that the buildfarm will use.
+
 
 On the slave:
 * `master::ip`
@@ -158,7 +168,15 @@ On the slave:
 * `jenkins::slave::num_executors`
  * The number of executors to instantiate on each slave.
    From current testing you can do one per available core, as long as at least 2GB of memory are available for each executor.
-
+* `ssh_host_keys`
+* Optional. If you would like to clone source and release repositories over git+ssh, set the host keys for the servers that will be used in the `ssh_host_keys` parameter. This parameter is a dictionary mapping server names to host keys. Host keys can be discovered with the `ssh-keyscan -H <hostname>` command.
+````
+ssh_host_keys:
+    'github.com': |
+        |1|/F/a+D+AA/y+qf7+IMSwXbvfFZo=|Pygbd2OeNdWzbgAyZK/kwEet9u0= ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXYPCPy6rbTrTtw7PHkccKrpp0yVhp5HdEIcKr6pLlVDBfOLX9QUsyCOV0wzfjIJNlGEYsdlLJizHhbn2mUjvSAHQqZETYP81eFzLQNnPHt4EVVUh7VfDESU84KezmD5QlWpXLmvU31/yMf+Se8xhHTvKSCZIFImWwoG6mbUoWf9nzpIoaSjB+weqqUUmpaaasXVal72J+UX2B+2RPW3RcT0eOzQgqlJL3RKrTJvdsjE3JEAvGq3lGHSZXy28G3skua2SmVi/w4yCE6gbODqnTWlg7+wC604ydGXA8VJiS5ap43JXiUFFAaQ==
+    'bitbucket.org': |
+        |1|VoTP5i1zOk28A+ELJ0XpcMdpiBc=|Y61MET377AK92/9wJzCZhQMoGmw= ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAubiN81eDcafrgMeLzaFPsw2kNvEcqTKl/VqLat/MaB33pZy0y3rJZtnqwR2qOOvbwKZYKiEO1O6VqNEBxKvJJelCq0dTXWT5pbO2gDXC6h6QDXCaHo6pOHGPUy+YBaGQRGuSusMEASYiWunYN0vCAI8QaXnWMXNMdFP3jHAJH0eDsoiGnLPBlBp4TNm6rYI74nMzgz3B9IikW4WVK+dc8KZJZWYjAuORU3jc1c/NPskD2ASinf8v3xnfXeukU0sJ5N6m5E8VLjObPEO+mN2t/FZTMZLiFqPWc/ALSqnMnnhwrNi2rbfg/rd/IpL8Le3pSBne8+seeFVBoGqzHM9yXw==
+````
 
 ## Deployment
 

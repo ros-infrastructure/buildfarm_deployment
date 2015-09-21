@@ -454,6 +454,18 @@ else{
 
 
 # Reference above credientials
+$credentials = {
+  'jenkins-slave' => {
+    'username' => hiera('credentials::jenkins-slave::username'),
+    'passphrase' => hiera('credentials::jenkins-slave::passphrase'),
+    'id' => hiera('credentials::jenkins-slave::id'),
+  },
+  'git-fetch-ssh' => {
+    'username' => hiera('credentials::git-fetch-ssh::username', ''),
+    'passphrase' => hiera('credentials::git-fetch-ssh::passphrase', ''),
+    'id' => hiera('credentials::git-fetch-ssh::id', ''),
+  },
+}
 file { '/var/lib/jenkins/credentials.xml':
     mode => '0600',
     owner => 'jenkins',

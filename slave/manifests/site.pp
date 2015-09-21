@@ -41,6 +41,25 @@ else{
   notice("No ssh_keys defined. You should probably have at least one.")
 }
 
+# Setup SSH known hosts
+file { '/home/jenkins-slave/.ssh/' :
+  ensure => 'directory',
+  mode   => '644',
+  owner  => 'jenkins-slave',
+  group  => 'jenkins-slave',
+  require => User['jenkins-slave'],
+}
+
+$host_keys = hiera('ssh_host_keys', [])
+file { '/home/jenkins-slave/.ssh/known_hosts':
+  ensure => 'present',
+  mode => '0644',
+  owner => 'jenkins-slave',
+  group => 'jenkins-slave',
+  content => template('slave_files/known_hosts.erb'),
+  require => User['jenkins-slave'],
+}
+
 class { 'jenkins::slave':
   labels => 'buildslave',
   slave_mode => 'exclusive',
