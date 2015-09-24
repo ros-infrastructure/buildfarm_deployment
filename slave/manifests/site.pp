@@ -57,7 +57,7 @@ file { '/home/jenkins-slave/.ssh/known_hosts':
   owner => 'jenkins-slave',
   group => 'jenkins-slave',
   content => template('slave_files/known_hosts.erb'),
-  require => User['jenkins-slave'],
+  require => File['/home/jenkins-slave/.ssh/'],
 }
 
 class { 'jenkins::slave':
