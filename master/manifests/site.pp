@@ -464,6 +464,7 @@ $credentials = {
     'username' => hiera('credentials::git-fetch-ssh::username', ''),
     'passphrase' => hiera('credentials::git-fetch-ssh::passphrase', ''),
     'id' => hiera('credentials::git-fetch-ssh::id', ''),
+    'private_key' => hiera('credentials::git-fetch-ssh::private_key', '')
   },
 }
 file { '/var/lib/jenkins/credentials.xml':
