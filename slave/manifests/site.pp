@@ -50,7 +50,6 @@ file { '/home/jenkins-slave/.ssh/' :
   require => User['jenkins-slave'],
 }
 
-$host_keys = hiera('ssh_host_keys', [])
 file { '/home/jenkins-slave/.ssh/known_hosts':
   ensure => 'present',
   mode => '0644',
