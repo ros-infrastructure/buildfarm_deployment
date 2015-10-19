@@ -109,7 +109,7 @@ include '::ntp'
 ### install latest docker
 
 class {'docker':
-  version => '1.6.1',
+  version => '1.7.1',
 }
 
 package { 'python3-pip':
