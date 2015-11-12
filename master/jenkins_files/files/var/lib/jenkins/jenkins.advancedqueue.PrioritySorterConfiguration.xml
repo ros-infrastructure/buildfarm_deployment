@@ -1,19 +1,21 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<jenkins.advancedqueue.PrioritySorterConfiguration plugin="PrioritySorter@2.8">
-  <legacyMode>false</legacyMode>
-  <legacyMaxPriority>2147483647</legacyMaxPriority>
-  <legacyMinPriority>-2147483648</legacyMinPriority>
-  <allowPriorityOnJobs>true</allowPriorityOnJobs>
-  <onlyAdminsMayEditPriorityConfiguration>true</onlyAdminsMayEditPriorityConfiguration>
-  <strategy class="jenkins.advancedqueue.sorter.strategy.AbsoluteStrategy">
-    <ifCondition></ifCondition>
-    <unlessCondition></unlessCondition>
-    <children/>
-    <location>
-      <lineNumber>0</lineNumber>
-      <columnNumber>0</columnNumber>
-    </location>
-    <numberOfPriorities>99</numberOfPriorities>
-    <defaultPriority>99</defaultPriority>
-  </strategy>
-</jenkins.advancedqueue.PrioritySorterConfiguration>
+<jenkins.advancedqueue.PriorityConfiguration plugin="PrioritySorter@3.4">
+  <jobGroups class="linked-list">
+    <jenkins.advancedqueue.JobGroup>
+      <id>0</id>
+      <priority>-1</priority>
+      <jobGroupStrategy class="jenkins.advancedqueue.jobinclusion.strategy.AllJobsJobInclusionStrategy"/>
+      <description>All</description>
+      <runExclusive>false</runExclusive>
+      <useJobFilter>false</useJobFilter>
+      <jobPattern>.*</jobPattern>
+      <usePriorityStrategies>true</usePriorityStrategies>
+      <priorityStrategies>
+        <jenkins.advancedqueue.JobGroup_-PriorityStrategyHolder>
+          <id>0</id>
+          <priorityStrategy class="jenkins.advancedqueue.priority.strategy.JobPropertyStrategy"/>
+        </jenkins.advancedqueue.JobGroup_-PriorityStrategyHolder>
+      </priorityStrategies>
+    </jenkins.advancedqueue.JobGroup>
+  </jobGroups>
+</jenkins.advancedqueue.PriorityConfiguration>
