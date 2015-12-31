@@ -11,7 +11,7 @@ user{'jenkins-slave':
   ensure => present,
   managehome => true,
   groups => ['docker'],
-  require => Package['lxc-docker']
+  require => Package['docker']
 }
 
 
