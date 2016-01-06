@@ -239,7 +239,7 @@ file { '/var/lib/jenkins/jenkins.plugins.publish_over_ssh.BapSshPublisherPlugin.
     mode => '0640',
     owner => jenkins,
     group => jenkins,
-    source => 'puppet:///modules/jenkins_files/var/lib/jenkins/jenkins.plugins.publish_over_ssh.BapSshPublisherPlugin.xml',
+    content => template('jenkins_files/jenkins.plugins.publish_over_ssh.BapSshPublisherPlugin.xml.erb'),
     require => Jenkins::Plugin['publish-over-ssh'],
     notify => Service['jenkins'],
 }
