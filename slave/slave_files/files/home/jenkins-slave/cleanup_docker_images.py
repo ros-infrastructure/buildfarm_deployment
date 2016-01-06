@@ -1,19 +1,4 @@
 #!/usr/bin/env python3
-
-#   Copyright 2015 Open Source Robotics Foundation, Inc.
-#
-#   Licensed under the Apache License, Version 2.0 (the "License");
-#   you may not use this file except in compliance with the License.
-#   You may obtain a copy of the License at
-#
-#       http://www.apache.org/licenses/LICENSE-2.0
-#
-#   Unless required by applicable law or agreed to in writing, software
-#   distributed under the License is distributed on an "AS IS" BASIS,
-#   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#   See the License for the specific language governing permissions and
-#   limitations under the License.
-
 # Script to clean up docker images
 import argparse
 import dateutil.parser
@@ -113,29 +98,8 @@ def docker_id_older(docker_info, minimum_age):
     return now - created > minimum_age
 
 
-def run_container_cleanup(args, minimum_age, dclient):
-    logging.info("cleaning up docker containers")
-    containers = dclient.containers(all=True)
-    for c in containers:
-        dockerid = c['Id']
-        try:
-            info = dclient.inspect_container(dockerid)
-            if docker_id_older(info, minimum_age):
-                logging.info("removing container %s" % dockerid)
-                if args.dry_run:
-                    logging.info("Dry run >> I would have removed container: %s" % dockerid)
-                else:
-                    dclient.remove_container(dockerid)
-                    logging.info("successfully removed container: %s" % dockerid)
-            else:
-                logging.info("skipped removal of container due to age: %s" % dockerid)
-        except docker.errors.APIError as ex:
-            logging.info("failed to remove cointainer %s Exception [%s]" %
-                         (dockerid, ex))
-
-
 def main():
-    parser = argparse.ArgumentParser(description='Free up disk space from docker images and containers')
+    parser = argparse.ArgumentParser(description='Free up disk space from docker images')
     parser.add_argument('--minimum-free-space', type=int, default=50,
                         help='Number of GB miniumum free required')
     parser.add_argument('--minimum-free-percent', type=int, default=50,
@@ -172,7 +136,6 @@ def main():
     with open(filename, 'w') as fh:
         try:
             with flocked(fh):
-                run_container_cleanup(args, minimum_age, dclient)
                 run_image_cleanup(args, minimum_age, dclient)
         except BlockingIOError as ex:
             logging.error("Failed to get lock on %s aborting. Exception[%s]. "
