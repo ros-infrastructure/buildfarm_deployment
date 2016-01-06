@@ -146,6 +146,13 @@ if hiera('run_squid', false) {
     group  => 'proxy',
   }
 
+  file { '/var/log/squid-in-a-can' :
+    ensure => 'directory',
+    mode   => 644,
+    owner  => 'proxy',
+    group  => 'proxy',
+  }
+
   docker::run {'squid-in-a-can':
     image   => 'jpetazzo/squid-in-a-can',
     command => '/tmp/deploy_squid.py',
@@ -154,10 +161,13 @@ refresh_pattern . 0 0 1 refresh-ims
 refresh_all_ims on # make sure we do not get out of date content #41
 ignore_expect_100 on # needed for new relic system monitor
 \''],
-    volumes => ['/var/cache/squid-in-a-can:/var/cache/squid3'],
+    volumes => ['/var/cache/squid-in-a-can:/var/cache/squid3',
+                '/var/log/squid-in-a-can:/var/log/squid3',
+                ],
     net     => 'host',
     require => [Docker::Image['jpetazzo/squid-in-a-can'],
                 File['/var/cache/squid-in-a-can'],
+                File['/var/log/squid-in-a-can'],
                ],
   }
 
