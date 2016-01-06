@@ -53,7 +53,7 @@ user{'jenkins-slave':
   ensure => present,
   managehome => true,
   groups => ['docker'],
-  require => Package['lxc-docker']
+  require => Package['docker']
 }
 
 
@@ -271,7 +271,12 @@ jenkins::plugin {
 }
 
 jenkins::plugin {
-  'swarm': ;
+  'swarm':
+    require => Package['wget'];
+}
+
+package { 'wget':
+  ensure => 'installed',
 }
 
 jenkins::plugin {
@@ -418,10 +423,11 @@ class { 'timezone':
 class {'docker':
 }
 
-user { 'jenkins':
-  name => 'jenkins',
-  groups => ['jenkins', 'docker'],
-  require => Package['docker'],
+# Add jenkins user to docker group if not already
+exec {"jenkins docker membership":
+  unless => "/bin/grep -q 'docker\\S*jenkins' /etc/group",
+  command => "/usr/sbin/usermod -aG docker jenkins",
+  require => User['jenkins'],
 }
 
 file { '/var/lib/jenkins/.ssh':
