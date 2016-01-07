@@ -430,23 +430,6 @@ exec {"jenkins docker membership":
   require => User['jenkins'],
 }
 
-file { '/var/lib/jenkins/.ssh':
-    ensure => 'directory',
-    owner  => 'jenkins',
-    group  => 'jenkins',
-    mode   => '0700',
-    require => User['jenkins'],
-}
-
-# add ssh key
-file { '/var/lib/jenkins/.ssh/id_rsa':
-    mode => '0600',
-    owner => 'jenkins',
-    group => 'jenkins',
-    content => hiera('jenkins::private_ssh_key'),
-    require => File['/var/lib/jenkins/.ssh'],
-}
-
 # Setup generic ssh_keys
 if hiera('ssh_keys', false){
   $defaults = {
