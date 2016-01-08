@@ -448,7 +448,6 @@ file { '/var/lib/jenkins/credentials.xml':
     owner => 'jenkins',
     group => 'jenkins',
     content => template('jenkins_files/credentials.xml.erb'),
-    require => File['/var/lib/jenkins/.ssh'],
 }
 
 
