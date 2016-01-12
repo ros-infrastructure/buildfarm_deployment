@@ -359,7 +359,9 @@ file { '/var/lib/jenkins/nodeMonitors.xml':
 
 $user_dirs = ['/var/lib/jenkins/users',
               '/var/lib/jenkins/users/admin',
-              '/var/lib/jenkins/secrets',]
+              '/var/lib/jenkins/secrets',
+              '/var/lib/jenkins/secrets/filepath-filters.d',
+              ]
 
 file { $user_dirs:
   ensure => 'directory',
@@ -376,10 +378,22 @@ file { '/var/lib/jenkins/secrets/slave-to-master-security-kill-switch':
   owner => jenkins,
   group => jenkins,
   source => 'puppet:///modules/jenkins_files/var/lib/jenkins/secrets/slave-to-master-security-kill-switch',
-  require => Package['jenkins'],
+  require => [Package['jenkins'],
+              File[$user_dirs],],
   notify => Service['jenkins'],
 }
 
+# Give access to ssh_id to slaves
+file { '/var/lib/jenkins/secrets/filepath-filters.d/60-ssh-id.conf':
+  ensure => 'present',
+  mode => '0640',
+  owner => jenkins,
+  group => jenkins,
+  source => 'puppet:///modules/jenkins_files/var/lib/jenkins/secrets/filepath-filters.d/60-ssh-id.conf',
+  require => [Package['jenkins'],
+              File[$user_dirs],],
+  notify => Service['jenkins'],
+}
 
 # Create an admin user:
 file { '/var/lib/jenkins/users/admin/config.xml':
