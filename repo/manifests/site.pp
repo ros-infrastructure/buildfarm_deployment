@@ -161,7 +161,9 @@ file { '/home/jenkins-slave/.buildfarm/reprepro-updater.ini':
 }
 
 # Set up apache
-class { 'apache': }
+class { 'apache':
+  default_vhost => false,
+}
 
 # Make your repo publicly accessible
 apache::vhost { 'repos':
