@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<jenkins.advancedqueue.PrioritySorterConfiguration plugin="PrioritySorter@3.4">
+  <allowPriorityOnJobs>false</allowPriorityOnJobs>
+  <onlyAdminsMayEditPriorityConfiguration>true</onlyAdminsMayEditPriorityConfiguration>
+  <strategy class="jenkins.advancedqueue.sorter.strategy.AbsoluteStrategy">
+    <ifCondition></ifCondition>
+    <unlessCondition></unlessCondition>
+    <children/>
+    <location>
+      <lineNumber>0</lineNumber>
+      <columnNumber>0</columnNumber>
+    </location>
+    <numberOfPriorities>99</numberOfPriorities>
+    <defaultPriority>99</defaultPriority>
+  </strategy>
+</jenkins.advancedqueue.PrioritySorterConfiguration>
