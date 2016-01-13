@@ -327,7 +327,7 @@ file { '/etc/default/jenkins':
     mode => '0644',
     owner => root,
     group => root,
-    source => template('jenkins_files/etc_default_jenkins.erb'),
+    content => template('jenkins_files/etc_default_jenkins.erb'),
     require => Package['jenkins'],
     notify => Service['jenkins'],
 }
