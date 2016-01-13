@@ -536,3 +536,16 @@ pip::install { 'docker-py':
   #ensure => present, # defaults to present
   require => Package['python3-pip'],
 }
+
+# setup apache
+class { 'apache':
+  default_vhost => false,
+}
+
+apache::vhost { 'master':
+  docroot => '/var/www.html',
+  port    => '80',
+  proxy_pass => [
+    { 'path' => '/', 'url' => 'http://localhost:8080/'},
+  ],
+}
