@@ -208,11 +208,6 @@ else {
   }
 }
 
-# leave this in to clean up autoreconfigured machines #2015-02-02
-cron {'docker_cleanup_containers':
-  ensure => absent,
-  user    => 'jenkins-slave',
-}
 
 # clean up containers and dangling images https://github.com/docker/docker/issues/928#issuecomment-58619854
 cron {'docker_cleanup_images':

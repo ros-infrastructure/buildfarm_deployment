@@ -326,12 +326,6 @@ pip::install { 'docker-py':
   require => Package['python3-pip'],
 }
 
-# remove old cron jobs from previously configured re #46
-# This can be removed once there are verified to be no machines running this cron job.
-cron {'docker_cleanup_containers':
-  ensure => 'absent',
-  user    => 'jenkins-slave',
-}
 
 # needed for boostrapping the repo
 vcsrepo { "/home/jenkins-slave/reprepro-updater":
