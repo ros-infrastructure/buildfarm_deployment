@@ -327,7 +327,7 @@ file { '/etc/default/jenkins':
     mode => '0644',
     owner => root,
     group => root,
-    source => 'puppet:///modules/jenkins_files/etc/default/jenkins',
+    source => template('jenkins_files/etc_default_jenkins.erb'),
     require => Package['jenkins'],
     notify => Service['jenkins'],
 }
