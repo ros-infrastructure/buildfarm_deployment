@@ -230,6 +230,14 @@ file { '/var/lib/jenkins/jenkins.advancedqueue.PrioritySorterConfiguration.xml':
     require => Jenkins::Plugin['PrioritySorter'],
     notify => Service['jenkins'],
 }
+file { '/var/lib/jenkins/jenkins.advancedqueue.PriorityConfiguration.xml':
+    mode => '0640',
+    owner => jenkins,
+    group => jenkins,
+    source => 'puppet:///modules/jenkins_files/var/lib/jenkins/jenkins.advancedqueue.PriorityConfiguration.xml',
+    require => Jenkins::Plugin['PrioritySorter'],
+    notify => Service['jenkins'],
+}
 
 jenkins::plugin {
   'publish-over-ssh': ;
