@@ -76,31 +76,16 @@ file { '/home/jenkins-slave/.buildfarm/jenkins.ini':
   notify => Service['jenkins-slave'],
 }
 
-package { 'git':
-  ensure => 'installed',
-}
-
-package { 'subversion':
-  ensure => 'installed',
-}
 
 ### Jenkins Plugins
 
-jenkins::plugin {
-  'bazaar': ;
-}
-
-package { 'bzr':
-  ensure => 'installed',
-}
-
-jenkins::plugin {
-  'build-timeout': ;
-}
-
-jenkins::plugin {
-  'collapsing-console-sections': ;
-}
+# required by groovy-postbuild
+jenkins::plugin { 'ace-editor': ; }
+jenkins::plugin { 'bazaar': ; }
+jenkins::plugin { 'build-timeout': ; }
+jenkins::plugin { 'collapsing-console-sections': ; }
+# needed for ssh-agent
+jenkins::plugin { 'credentials': ; }
 # config for collapsing-console-sections
 file { '/var/lib/jenkins/org.jvnet.hudson.plugins.collapsingconsolesections.CollapsingSectionNote.xml':
     mode => '0640',
@@ -111,33 +96,14 @@ file { '/var/lib/jenkins/org.jvnet.hudson.plugins.collapsingconsolesections.Coll
     notify => Service['jenkins'],
 }
 
-jenkins::plugin {
-  'copyartifact': ;
-}
+jenkins::plugin { 'copyartifact': ; }
+jenkins::plugin { 'dashboard-view': ; }
+jenkins::plugin { 'description-setter': ; }
+jenkins::plugin { 'email-ext': ; }
+jenkins::plugin { 'embeddable-build-status': ; }
+jenkins::plugin { 'extra-columns': ; }
+jenkins::plugin { 'ghprb': ; }
 
-jenkins::plugin {
-  'dashboard-view': ;
-}
-
-jenkins::plugin {
-  'description-setter': ;
-}
-
-jenkins::plugin {
-  'email-ext': ;
-}
-
-jenkins::plugin {
-  'embeddable-build-status': ;
-}
-
-jenkins::plugin {
-  'extra-columns': ;
-}
-
-jenkins::plugin {
-  'ghprb': ;
-}
 # config for auto-managing github web hooks
 file { '/var/lib/jenkins/com.cloudbees.jenkins.GitHubPushTrigger.xml':
     ensure => 'present',
@@ -160,68 +126,29 @@ file { '/var/lib/jenkins/org.jenkinsci.plugins.ghprb.GhprbTrigger.xml':
 }
 
 # required by ghprb
-jenkins::plugin {
-  'git': ;
-}
-
-jenkins::plugin {
-  'git-client': ;
-}
-
+jenkins::plugin { 'git': ; }
+jenkins::plugin { 'git-client': ; }
 # required by ghprb
-jenkins::plugin {
-  'github': ;
-}
-
-jenkins::plugin {
-  'github-api': ;
-}
-
-jenkins::plugin {
-  'greenballs': ;
-}
-
-jenkins::plugin {
-  'groovy': ;
-}
-
-jenkins::plugin {
-  'groovy-postbuild': ;
-}
-
-jenkins::plugin {
-  'jobrequeue': ;
-}
-
+jenkins::plugin { 'github': ; }
+jenkins::plugin { 'github-api': ; }
+jenkins::plugin { 'greenballs': ; }
+jenkins::plugin { 'groovy': ; }
+jenkins::plugin { 'groovy-postbuild': ; }
+jenkins::plugin { 'jobrequeue': ; }
+# required by groovy-postbuild
+jenkins::plugin { 'jquery-detached': ; }
 # required by subversion
-jenkins::plugin {
-  'mapdb-api': ;
-}
-
-jenkins::plugin {
-  'mercurial': ;
-}
-
-package { 'mercurial':
-  ensure => 'installed',
-}
-
-jenkins::plugin {
-  'monitoring': ;
-}
-
-jenkins::plugin {
-  'parameterized-trigger': ;
-}
-
-jenkins::plugin {
-  'pollscm': ;
-}
-
-jenkins::plugin {
-  'PrioritySorter': ;
-}
-# config for PrioritySorter
+jenkins::plugin { 'mapdb-api': ; }
+# required for ghprb and groovy-postbuild
+jenkins::plugin { 'matrix-project': ; }
+jenkins::plugin { 'mercurial': ; }
+jenkins::plugin { 'monitoring': ; }
+jenkins::plugin { 'parameterized-trigger': ; }
+# required by ghprb
+jenkins::plugin { 'plain-credentials': ; }
+jenkins::plugin { 'pollscm': ; }
+jenkins::plugin { 'PrioritySorter': ; }
+# config for PrioritySorter plugin
 file { '/var/lib/jenkins/jenkins.advancedqueue.PrioritySorterConfiguration.xml':
     mode => '0640',
     owner => jenkins,
@@ -231,9 +158,7 @@ file { '/var/lib/jenkins/jenkins.advancedqueue.PrioritySorterConfiguration.xml':
     notify => Service['jenkins'],
 }
 
-jenkins::plugin {
-  'publish-over-ssh': ;
-}
+jenkins::plugin { 'publish-over-ssh': ; }
 # config for publish-over-ssh
 file { '/var/lib/jenkins/jenkins.plugins.publish_over_ssh.BapSshPublisherPlugin.xml':
     mode => '0640',
@@ -244,58 +169,57 @@ file { '/var/lib/jenkins/jenkins.plugins.publish_over_ssh.BapSshPublisherPlugin.
     notify => Service['jenkins'],
 }
 
-jenkins::plugin {
-  'purge-build-queue-plugin': ;
-}
-
+jenkins::plugin { 'purge-build-queue-plugin': ; }
 # required by mercurial
-jenkins::plugin {
-  'scm-api': ;
-}
-
+jenkins::plugin { 'scm-api': ; }
 # required by groovy-postbuild
-jenkins::plugin {
-  'script-security': ;
-}
-
-jenkins::plugin {
-  'ssh-agent': ;
-}
-
-jenkins::plugin {
-  'subversion': ;
-}
-
-jenkins::plugin {
-  'systemloadaverage-monitor': ;
-}
-
-jenkins::plugin {
-  'swarm':
+jenkins::plugin { 'script-security': ; }
+# required by groovy-postbuild
+# required by groovy-postbuild
+jenkins::plugin { 'durable-task': ; }
+# required by groovy-postbuild
+jenkins::plugin { 'ssh-agent': ; }
+# needed for ssh-agent
+jenkins::plugin { 'ssh-credentials': ; }
+jenkins::plugin { 'subversion': ; }
+jenkins::plugin { 'systemloadaverage-monitor': ; }
+jenkins::plugin { 'swarm':
     require => Package['wget'];
 }
+jenkins::plugin { 'timestamper': ; }
+# required by build-timeout
+jenkins::plugin { 'token-macro': ; }
+# required by groovy-postbuild
+jenkins::plugin { 'workflow-api': ; }
+# needed for ssh-agent
+jenkins::plugin { 'workflow-cps': ; }
+# required by groovy-postbuild
+jenkins::plugin { 'workflow-scm-step': ; }
+# required by groovy-postbuild
+jenkins::plugin { 'workflow-support': ; }
+jenkins::plugin { 'workflow-step-api': ; }
+jenkins::plugin { 'writable-filesystem-monitor': ; }
+jenkins::plugin { 'xunit': ; }
 
+### version control systems and plugin dependencies
+package { 'bzr':
+  ensure => 'installed',
+}
+package { 'git':
+  ensure => 'installed',
+}
+# required for mercurial plugin
+package { 'mercurial':
+ensure => 'installed',
+}
+# required by subversion plugin
+package { 'subversion':
+  ensure => 'installed',
+}
+# required by swarm plugin
 package { 'wget':
   ensure => 'installed',
 }
-
-jenkins::plugin {
-  'timestamper': ;
-}
-
-# required by build-timeout
-jenkins::plugin {
-  'token-macro': ;
-}
-
-jenkins::plugin {
-  'writable-filesystem-monitor': ;
-}
-
-jenkins::plugin {
-  'xunit': ;
-}
-
 
 ### Dependencies for Scripting
 
