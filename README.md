@@ -76,7 +76,7 @@ In particular you should change the following:
 
 On all three:
 * `jenkins::slave::ui_pass`
-* This is the passworkd for the slave to access the master
+* This is the password for the slave to access the master
  * `user::admin::password_hash`
 * On the master this should be the hashed password from above
  * The easiest way to create this is to setup a jenkins instance.
