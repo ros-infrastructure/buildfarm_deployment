@@ -439,7 +439,7 @@ class {'docker':
 
 # Add jenkins user to docker group if not already
 exec {"jenkins docker membership":
-  unless => "/bin/grep -q 'docker\\S*jenkins' /etc/group",
+  unless => "/bin/bash -c '/usr/bin/id -nG jenkins | /bin/grep -wq docker'",
   command => "/usr/sbin/usermod -aG docker jenkins",
   require => User['jenkins'],
 }
