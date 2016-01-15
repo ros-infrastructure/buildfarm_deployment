@@ -438,9 +438,9 @@ class {'docker':
 }
 
 # Add jenkins user to docker group if not already
-exec {"jenkins docker membership":
-  unless => "/bin/bash -c '/usr/bin/id -nG jenkins | /bin/grep -wq docker'",
-  command => "/usr/sbin/usermod -aG docker jenkins",
+exec {'jenkins docker membership':
+  unless => '/bin/bash -c "/usr/bin/id -nG jenkins | /bin/grep -wq docker"',
+  command => '/usr/sbin/usermod -aG docker jenkins',
   require => User['jenkins'],
 }
 
@@ -471,7 +471,7 @@ if hiera('ssh_keys', false){
   create_resources(ssh_authorized_key, hiera('ssh_keys'), $defaults)
 }
 else{
-  notice("No ssh_authorized_keys defined. There should probably be at least one.")
+  notice('No ssh_authorized_keys defined. There should probably be at least one.')
 }
 
 
@@ -526,7 +526,7 @@ cron {'docker_cleanup_images':
 
 
 package { 'python3-pip':
- ensure => 'installed',
+  ensure => 'installed',
 }
 # required by cleanup_docker script
 pip::install { 'docker-py':
