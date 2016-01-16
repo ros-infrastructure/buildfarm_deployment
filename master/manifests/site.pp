@@ -349,10 +349,6 @@ jenkins::plugin {
 }
 
 jenkins::plugin {
-  'workflow-step-api': ;
-}
-
-jenkins::plugin {
   'writable-filesystem-monitor': ;
 }
 
