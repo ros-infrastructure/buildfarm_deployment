@@ -86,6 +86,11 @@ package { 'subversion':
 
 ### Jenkins Plugins
 
+# required by workflow-cps
+jenkins::plugin {
+  'ace-editor': ;
+}
+
 jenkins::plugin {
   'bazaar': ;
 }
@@ -115,12 +120,22 @@ jenkins::plugin {
   'copyartifact': ;
 }
 
+# required by ssh-agent
+jenkins::plugin {
+  'credentials': ;
+}
+
 jenkins::plugin {
   'dashboard-view': ;
 }
 
 jenkins::plugin {
   'description-setter': ;
+}
+
+# required by groovy-postbuild
+jenkins::plugin {
+  'durable-task': ;
 }
 
 jenkins::plugin {
@@ -193,9 +208,19 @@ jenkins::plugin {
   'jobrequeue': ;
 }
 
+# required by groovy-postbuild
+jenkins::plugin {
+  'jquery-detached': ;
+}
+
 # required by subversion
 jenkins::plugin {
   'mapdb-api': ;
+}
+
+# required by ghprb and groovy-postbuild
+jenkins::plugin {
+  'matrix-project': ;
 }
 
 jenkins::plugin {
@@ -212,6 +237,11 @@ jenkins::plugin {
 
 jenkins::plugin {
   'parameterized-trigger': ;
+}
+
+# required by ghprb
+jenkins::plugin {
+  'plain-credentials': ;
 }
 
 jenkins::plugin {
@@ -262,6 +292,11 @@ jenkins::plugin {
   'ssh-agent': ;
 }
 
+# required by ssh-agent
+jenkins::plugin {
+  'ssh-credentials': ;
+}
+
 jenkins::plugin {
   'subversion': ;
 }
@@ -286,6 +321,31 @@ jenkins::plugin {
 # required by build-timeout
 jenkins::plugin {
   'token-macro': ;
+}
+
+# required by workflow-cps
+jenkins::plugin {
+  'workflow-api': ;
+}
+
+# required by groovy-postbuild
+jenkins::plugin {
+  'workflow-cps': ;
+}
+
+# required by workflow-cps
+jenkins::plugin {
+  'workflow-support': ;
+}
+
+# required by workflow-cps
+jenkins::plugin {
+  'workflow-scm-step': ;
+}
+
+# required by ssh-agent and workflow-cps
+jenkins::plugin {
+  'workflow-step-api': ;
 }
 
 jenkins::plugin {
@@ -438,9 +498,9 @@ class {'docker':
 }
 
 # Add jenkins user to docker group if not already
-exec {"jenkins docker membership":
-  unless => "/bin/bash -c '/usr/bin/id -nG jenkins | /bin/grep -wq docker'",
-  command => "/usr/sbin/usermod -aG docker jenkins",
+exec {'jenkins docker membership':
+  unless => '/bin/bash -c "/usr/bin/id -nG jenkins | /bin/grep -wq docker"',
+  command => '/usr/sbin/usermod -aG docker jenkins',
   require => User['jenkins'],
 }
 
@@ -471,7 +531,7 @@ if hiera('ssh_keys', false){
   create_resources(ssh_authorized_key, hiera('ssh_keys'), $defaults)
 }
 else{
-  notice("No ssh_authorized_keys defined. There should probably be at least one.")
+  notice('No ssh_authorized_keys defined. There should probably be at least one.')
 }
 
 
@@ -526,7 +586,7 @@ cron {'docker_cleanup_images':
 
 
 package { 'python3-pip':
- ensure => 'installed',
+  ensure => 'installed',
 }
 # required by cleanup_docker script
 pip::install { 'docker-py':
