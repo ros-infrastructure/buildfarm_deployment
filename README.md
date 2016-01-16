@@ -227,6 +227,22 @@ Once you have customized all the content of the config repo on each provisioned 
 Now that you have a running system you will need to add jobs for one or more rosdistros.
 See the [ros_buildfarm repo](https://github.com/ros-infrastructure/ros_buildfarm) for more info.
 
+### Setup Master for Email Delivery
+
+Jenkins is most powerful when you set it up for email notifications.
+By default we have not provisioned how to send emails, which means that non will be sent.
+Jenkins will attempt to send via a local mail trainsfer agent(MTA), if SMTP is not configured.
+You can install postfix or sendmail to provide a local MTA.
+If you do setup a local MTA, make sure that you provide proper reverse DNS lookups for your server.
+And it's also highly recommended to make sure to add SPF entries for your server to make sure that the automated emails are not caught in the spam filter.
+
+When you enable email for your server, make sure to update the administrator email address.
+It can be found in the main configuration, `Manage Jenkins -> Configure Jenkins -> System Admin e-mail address`.
+Our values is 'ROS Buildfarm <noreploy@build.ros.org>' This will be the return address for the automated emails.
+
+Instead of setting up an MTA you can also use an external SMTP server.
+To use this in `Manage Jenkins -> Configure Jenkins` you will find `Extended E-mail Notification` and `E-mail Notification` both of which you should fill out with your SMTP server's credentials.
+
 # For information on development and testing
 
 See [doc/DevelopmentTesting.md](doc/DevelopmentTesting.md)
