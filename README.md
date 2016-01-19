@@ -169,9 +169,15 @@ On the slave:
  * The number of executors to instantiate on each slave.
    From current testing you can do one per available core, as long as at least 2GB of memory are available for each executor.
 * `ssh_host_keys`
-* Optional. If you would like to clone source and release repositories over git+ssh, set the host keys for the servers that will be used in the `ssh_host_keys` parameter. This parameter is a dictionary mapping server names to host keys. Host keys can be discovered with the `ssh-keyscan -H <hostname>` command.
+* Required for uploading to doc job results. You will need to add the host verification for both the name and IP of the repo server. 
+* If you would like to clone source and release repositories over git+ssh, set the host keys for the servers that will be used in the `ssh_host_keys` parameter. This parameter is a dictionary mapping server names to host keys. Host keys can be discovered with the `ssh-keyscan -H <hostname>` command.
 ````
 ssh_host_keys:
+ssh_host_keys:
+    repo: |
+        repo ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBFc/Nq1TAnCl4XC4nFl6QNOLcJLw5vY0lkvMlVULn8jkQPn3iUy59Q2fja+h4lmQlD17iSY3o4luHUYkYKAdHcI=
+    54.183.65.232: |
+        54.183.65.232 ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBFc/Nq1TAnCl4XC4nFl6QNOLcJLw5vY0lkvMlVULn8jkQPn3iUy59Q2fja+h4lmQlD17iSY3o4luHUYkYKAdHcI=
     'github.com': |
         |1|/F/a+D+AA/y+qf7+IMSwXbvfFZo=|Pygbd2OeNdWzbgAyZK/kwEet9u0= ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXYPCPy6rbTrTtw7PHkccKrpp0yVhp5HdEIcKr6pLlVDBfOLX9QUsyCOV0wzfjIJNlGEYsdlLJizHhbn2mUjvSAHQqZETYP81eFzLQNnPHt4EVVUh7VfDESU84KezmD5QlWpXLmvU31/yMf+Se8xhHTvKSCZIFImWwoG6mbUoWf9nzpIoaSjB+weqqUUmpaaasXVal72J+UX2B+2RPW3RcT0eOzQgqlJL3RKrTJvdsjE3JEAvGq3lGHSZXy28G3skua2SmVi/w4yCE6gbODqnTWlg7+wC604ydGXA8VJiS5ap43JXiUFFAaQ==
     'bitbucket.org': |
