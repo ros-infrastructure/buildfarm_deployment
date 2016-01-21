@@ -1,7 +1,7 @@
 forge "https://forgeapi.puppetlabs.com"
 
 mod 'example42-iptables'
-mod 'garethr-docker'
+mod 'garethr-docker', '5.0.0'
 mod 'puppetlabs-apache', '1.1.1'
 mod 'puppetlabs-concat', '1.2.3'
 mod 'puppetlabs-ntp'
