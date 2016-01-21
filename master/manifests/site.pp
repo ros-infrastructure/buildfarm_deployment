@@ -587,7 +587,7 @@ cron {'docker_cleanup_images':
   user    => 'jenkins-slave',
   month   => absent,
   monthday => absent,
-  hour    => '*/2',
+  hour    => '*',
   minute  => 15,
   weekday => absent,
   require => User['jenkins-slave'],
