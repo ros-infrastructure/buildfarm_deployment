@@ -300,6 +300,15 @@ jenkins::plugin {
 jenkins::plugin {
   'subversion': ;
 }
+# config for subversion
+file { '/var/lib/jenkins/hudson.scm.SubversionSCM.xml':
+    mode => '0640',
+    owner => jenkins,
+    group => jenkins,
+    source => 'puppet:///modules/jenkins_files/var/lib/jenkins/hudson.scm.SubversionSCM.xml',
+    require => Jenkins::Plugin['subversion'],
+    notify => Service['jenkins'],
+}
 
 jenkins::plugin {
   'systemloadaverage-monitor': ;
