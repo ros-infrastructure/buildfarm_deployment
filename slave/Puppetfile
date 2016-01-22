@@ -1,6 +1,6 @@
 forge "https://forgeapi.puppetlabs.com"
 
-mod 'garethr-docker'
+mod 'garethr-docker', '5.0.0'
 mod 'krakatoa-upstart', :path => '../krakatoa-upstart-0.0.1'
 mod 'puppetlabs-concat', '1.2.3'
 mod 'puppetlabs-ntp'
