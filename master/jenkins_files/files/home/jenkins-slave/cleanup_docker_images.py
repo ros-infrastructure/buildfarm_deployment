@@ -34,7 +34,7 @@ def get_free_disk_space(path='/'):
 def get_free_disk_percentage(path='/'):
     """Return the number of percent free."""
     usage = psutil.disk_usage(path)
-    return 100 - usage.percent
+    return usage.free * 100.0 / usage.total
 
 
 def check_done(args):
