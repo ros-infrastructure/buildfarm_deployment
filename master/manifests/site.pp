@@ -92,6 +92,19 @@ jenkins::plugin {
 }
 
 jenkins::plugin {
+  'audit-trail': ;
+}
+# config for audit-trail
+file { '/var/lib/jenkins/audit-trail.xml':
+    mode => '0640',
+    owner => jenkins,
+    group => jenkins,
+    source => 'puppet:///modules/jenkins_files/var/lib/jenkins/audit-trail.xml',
+    require => Jenkins::Plugin['audit-trail'],
+    notify => Service['jenkins'],
+}
+
+jenkins::plugin {
   'bazaar': ;
 }
 
