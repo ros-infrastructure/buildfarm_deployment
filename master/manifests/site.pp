@@ -205,6 +205,19 @@ jenkins::plugin {
 }
 
 jenkins::plugin {
+  'jobConfigHistory': ;
+}
+# config for jobConfigHistory
+file { '/var/lib/jenkins/jobConfigHistory.xml':
+    mode => '0640',
+    owner => jenkins,
+    group => jenkins,
+    source => 'puppet:///modules/jenkins_files/var/lib/jenkins/jobConfigHistory.xml',
+    require => Jenkins::Plugin['jobConfigHistory'],
+    notify => Service['jenkins'],
+}
+
+jenkins::plugin {
   'jobrequeue': ;
 }
 
