@@ -57,25 +57,6 @@ user{'jenkins-slave':
 }
 
 
-$slave_buildfarm_config_dir = ['/home/jenkins-slave/.buildfarm']
-file { $slave_buildfarm_config_dir:
-  ensure => 'directory',
-  mode => '0640',
-  owner => jenkins-slave,
-  group => jenkins-slave,
-}
-
-file { '/home/jenkins-slave/.buildfarm/jenkins.ini':
-  ensure => 'present',
-  mode => '0640',
-  owner => jenkins-slave,
-  group => jenkins-slave,
-  content => template('jenkins_files/jenkins.ini.erb'),
-  require => [User['jenkins-slave'],
-              File[$slave_buildfarm_config_dir],],
-  notify => Service['jenkins-slave'],
-}
-
 package { 'git':
   ensure => 'installed',
 }
@@ -499,24 +480,6 @@ file { '/var/lib/jenkins/users/admin/config.xml':
   content => template('jenkins_files/user_config.xml.erb'),
   require => [Package['jenkins'],
               File[$user_dirs],],
-  notify => Service['jenkins'],
-}
-
-$buildfarm_config_dir = ['/var/lib/jenkins/.buildfarm']
-file { $buildfarm_config_dir:
-  ensure => 'directory',
-  mode => '0640',
-  owner => jenkins,
-  group => jenkins,
-}
-file { '/var/lib/jenkins/.buildfarm/jenkins.ini':
-  ensure => 'present',
-  mode => '0640',
-  owner => jenkins,
-  group => jenkins,
-  content => template('jenkins_files/jenkins.ini.erb'),
-  require => [Package['jenkins'],
-              File[$buildfarm_config_dir],],
   notify => Service['jenkins'],
 }
 
