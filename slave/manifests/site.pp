@@ -59,15 +59,6 @@ file { '/home/jenkins-slave/.ssh/known_hosts':
   require => File['/home/jenkins-slave/.ssh/'],
 }
 
-class { 'jenkins::slave':
-  labels => 'buildslave',
-  slave_mode => 'exclusive',
-  slave_user => 'jenkins-slave',
-  manage_slave_user => false,
-  executors => hiera('jenkins::slave::num_executors', 1),
-  require => User['jenkins-slave'],
-}
-
 user{'jenkins-slave':
   ensure => present,
   managehome => true,
