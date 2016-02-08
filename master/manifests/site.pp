@@ -423,6 +423,19 @@ file { '/var/lib/jenkins/config.xml':
   notify => Service['jenkins'],
 }
 
+# Use default mercurial, but enable caching.
+# Otherwise if the workspace is lost mercurial will trigger a job
+# whenever it tries to poll.
+file { '/var/lib/jenkins/hudson.plugins.mercurial.MercurialInstallation.xml':
+  ensure => 'present',
+  mode => '0640',
+  owner => jenkins,
+  group => jenkins,
+  source => 'puppet:///modules/jenkins_files/var/lib/jenkins/hudson.plugins.mercurial.MercurialInstallation.xml',
+  require => Package['jenkins'],
+  notify => Service['jenkins'],
+}
+
 file { '/var/lib/jenkins/nodeMonitors.xml':
   ensure => 'present',
   mode => '0640',
