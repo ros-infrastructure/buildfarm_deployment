@@ -162,10 +162,14 @@ if hiera('run_squid', false) {
     group  => 'proxy',
   }
 
+  $disk_cache_size = hiera('squid-in-a-can::max_cache_size', 5000)
+  $max_cache_object = hiera('squid-in-a-can::max_cache_object', 1000)
   docker::run {'squid-in-a-can':
     image   => 'jpetazzo/squid-in-a-can',
     command => '/tmp/deploy_squid.py',
-    env     => ['DISK_CACHE_SIZE=5000', 'MAX_CACHE_OBJECT=1000', 'SQUID_DIRECTIVES=\'
+    env     => ["DISK_CACHE_SIZE=${disk_cache_size}",
+                "MAX_CACHE_OBJECT=${max_cache_object}",
+                'SQUID_DIRECTIVES=\'
 refresh_pattern . 0 0 1 refresh-ims
 refresh_all_ims on # make sure we do not get out of date content #41
 ignore_expect_100 on # needed for new relic system monitor
