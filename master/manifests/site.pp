@@ -72,6 +72,11 @@ jenkins::plugin {
   'ace-editor': ;
 }
 
+# required by warnings
+jenkins::plugin {
+  'analysis-core': ;
+}
+
 jenkins::plugin {
   'audit-trail': ;
 }
@@ -337,6 +342,10 @@ jenkins::plugin {
 # required by build-timeout
 jenkins::plugin {
   'token-macro': ;
+}
+
+jenkins::plugin {
+  'warnings': ;
 }
 
 # required by workflow-cps
