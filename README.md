@@ -117,16 +117,16 @@ On repo:
      You can have as many elements as you want for different files.
 
 
-    jenkins-slave::reprepro_config:
-        '/home/jenkins-slave/reprepro_config/empy_saucy.yaml':
-            ensure: 'present'
-            content: |
-                name: empy_saucy
-                method: http://packages.osrfoundation.org/gazebo/ubuntu
-                suites: [saucy]
-                component: main
-                architectures: [i386, amd64, source]
-                filter_formula: Package (% python3-empy)
+          jenkins-slave::reprepro_config:
+              '/home/jenkins-slave/reprepro_config/empy_saucy.yaml':
+                  ensure: 'present'
+                  content: |
+                      name: empy_saucy
+                      method: http://packages.osrfoundation.org/gazebo/ubuntu
+                      suites: [saucy]
+                      component: main
+                      architectures: [i386, amd64, source]
+                      filter_formula: Package (% python3-empy)
 
 
 On the master:
