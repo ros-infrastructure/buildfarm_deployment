@@ -144,9 +144,9 @@ On the master:
   * `credentials::jenkins-slave::username`
   * The name of the credentials
   * `credentials::jenkins-slave::id`
-  * A UUID for the credentials in thef format `1e7d4696-7fd4-4bc6-8c87-ebc7b6ce16e5`
+  * A UUID for the credentials in the format `1e7d4696-7fd4-4bc6-8c87-ebc7b6ce16e5`
   * `credentials::jenkins-slave::passphrase`
-  * The hashed passphrase for the key. The UI puts this has in if there's now passphrase `4lRsx/NwfEndwUlcWOOnYg== `
+  * The hashed passphrase for the key. The UI puts this has in if there's no passphrase `4lRsx/NwfEndwUlcWOOnYg== `
    * If you would like to modify these values from the default it will likely be easiest to boot an instance. Change the credentials via the UI, then grab the values out of the config file.
 
   * If you would like to be able to clone source and release repositories over git+ssh, add the `git-fetch-ssh` credential by setting the following optional parameters:
