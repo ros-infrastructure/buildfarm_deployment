@@ -184,6 +184,11 @@ ssh_host_keys:
         |1|VoTP5i1zOk28A+ELJ0XpcMdpiBc=|Y61MET377AK92/9wJzCZhQMoGmw= ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAubiN81eDcafrgMeLzaFPsw2kNvEcqTKl/VqLat/MaB33pZy0y3rJZtnqwR2qOOvbwKZYKiEO1O6VqNEBxKvJJelCq0dTXWT5pbO2gDXC6h6QDXCaHo6pOHGPUy+YBaGQRGuSusMEASYiWunYN0vCAI8QaXnWMXNMdFP3jHAJH0eDsoiGnLPBlBp4TNm6rYI74nMzgz3B9IikW4WVK+dc8KZJZWYjAuORU3jc1c/NPskD2ASinf8v3xnfXeukU0sJ5N6m5E8VLjObPEO+mN2t/FZTMZLiFqPWc/ALSqnMnnhwrNi2rbfg/rd/IpL8Le3pSBne8+seeFVBoGqzHM9yXw==
 ````
 
+ * `squid-in-a-can::max_cache_size`
+ *  Optional: The maxium size of the squid cache in Mb. Default: 5000
+ * `squid-in-a-can::max_cache_object`
+ *  Optional: The maxiumum size of an object in the squid cache in Mb. Default: 1000
+
 ## Deployment
 
 Once you have customized all the content of the config repo on each provisioned machine run the following sequence of commands.
