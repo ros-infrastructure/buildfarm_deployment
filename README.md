@@ -75,7 +75,9 @@ It is recommended to change all the security parameters from this configuration.
 In particular you should change the following:
 
 On all three:
-* `jenkins::slave::ui_user` and `jenkins::slave::ui_pass` are passed to the jenkins::slave puppet module. You may need to update them depending on your slave's security model. See:
+* `jenkins::slave::ui_user` and `jenkins::slave::ui_pass` are passed to the jenkins::slave puppet module.
+  You may need to update them depending on your slave's security model.
+  See:
   * https://github.com/jenkinsci/puppet-jenkins#slaves
   * https://github.com/jenkinsci/puppet-jenkins/blob/d2ceee61c1971256427dee11dd6472d30bf95228/manifests/slave.pp#L20-L21
 * This is the password for the slave to access the master
