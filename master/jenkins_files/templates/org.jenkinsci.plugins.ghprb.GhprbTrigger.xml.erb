@@ -3,7 +3,7 @@
   <serverAPIUrl><%= scope.function_hiera(["jenkins::github::api_url", 'https://api.github.com']) %></serverAPIUrl>
   <whitelistPhrase></whitelistPhrase>
   <okToTestPhrase></okToTestPhrase>
-  <retestPhrase></retestPhrase>
+  <retestPhrase>.*test\W+this\W+please.*</retestPhrase>
   <skipBuildPhrase>.*\[skip\W+ci\].*</skipBuildPhrase>
   <cron></cron>
   <useComments>false</useComments>
