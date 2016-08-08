@@ -132,6 +132,10 @@ jenkins::plugin {
   'description-setter': ;
 }
 
+jenkins::plugin {
+  'disable-failed-job': ;
+}
+
 # required by groovy-postbuild
 jenkins::plugin {
   'durable-task': ;
