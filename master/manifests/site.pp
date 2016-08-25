@@ -351,6 +351,15 @@ jenkins::plugin {
 jenkins::plugin {
   'warnings': ;
 }
+# config for warnings
+file { '/var/lib/jenkins/hudson.plugins.warnings.WarningsPublisher.xml':
+  mode => '0640',
+  owner => jenkins,
+  group => jenkins,
+  source => 'puppet:///modules/jenkins_files/var/lib/jenkins/hudson.plugins.warnings.WarningsPublisher.xml',
+  require => Jenkins::Plugin['warnings'],
+  notify => Service['jenkins'],
+}
 
 # required by workflow-cps
 jenkins::plugin {
