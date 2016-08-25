@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<hudson.plugins.warnings.WarningsDescriptor plugin="warnings@4.52">
+  <groovyParsers>
+    <hudson.plugins.warnings.GroovyParser>
+      <name>CMake</name>
+      <regexp>^CMake (Deprecation Warning|Warning|Warning \(dev\)|Error) at (.+):(\d+) \((.+)\):\n(  .+\n)?(.+\n(  .+\n)*)?</regexp>
+      <script>import hudson.plugins.analysis.util.model.Priority
+import hudson.plugins.warnings.parser.Warning
+
+String messageType = matcher.group(1)
+String fileName = matcher.group(2)
+String lineNumber = matcher.group(3)
+String scope = matcher.group(4)
+String cmakeMessage = matcher.group(5)
+String callStack = matcher.group(6)
+
+String message = &quot;&quot;
+if (cmakeMessage) {
+    message += cmakeMessage + &quot;&lt;br /&gt;&quot;
+}
+if (callStack) {
+    message += &quot;&lt;pre&gt;&quot; + callStack + &quot;&lt;/pre&gt;&quot;
+}
+
+Priority priority = Priority.NORMAL
+if (messageType == &quot;Deprecation Warning&quot;) {
+    priority = Priority.LOW
+} else if (messageType == &quot;Error&quot;) {
+    priority = Priority.HIGH
+}
+return new Warning(fileName, Integer.parseInt(lineNumber), &quot;CMake&quot;, scope, message, priority);</script>
+      <example></example>
+      <linkName>CMake</linkName>
+      <trendName>CMake</trendName>
+    </hudson.plugins.warnings.GroovyParser>
+  </groovyParsers>
+</hudson.plugins.warnings.WarningsDescriptor>
