@@ -434,24 +434,6 @@ class profile::jenkins::master {
   }
 
 
-  # Create an admin user:
-  file { '/var/lib/jenkins/users/admin/config.xml':
-    ensure => 'present',
-    mode => '0640',
-    owner => jenkins,
-    group => jenkins,
-    content => template('jenkins_files/user_config.xml.erb'),
-    require => [Package['jenkins'],
-    File[$user_dirs],],
-    notify => Service['jenkins'],
-  }
-
-  # For our convenience reading the logs
-  class { 'timezone':
-    timezone => hiera('timezone', 'America/Los_Angeles'),
-  }
-
-
   ### install latest docker
 
   class {'docker':
