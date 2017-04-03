@@ -1,2 +1,3 @@
-
+class profiles::osrf::base {
+}
 

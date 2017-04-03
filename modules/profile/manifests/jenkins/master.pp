@@ -1,5 +1,5 @@
 class profile::jenkins::master {
-  include jenkins
+  include '::jenkins'
 
   include jenkins_files
 
