@@ -7,6 +7,7 @@ include jenkins_files
 # setup ntp with defaults
 include '::ntp'
 
+# Must be declared for pip installation module to succeed.
 package {'curl':
   ensure => present,
 }
