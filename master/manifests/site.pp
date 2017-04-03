@@ -7,6 +7,10 @@ include jenkins_files
 # setup ntp with defaults
 include '::ntp'
 
+package {'curl':
+  ensure => present,
+}
+
 # bring in classes listed in hiera
 if hiera('classes', false) {
   hiera_include('classes')
@@ -119,10 +123,6 @@ jenkins::plugin {
   'copyartifact': ;
 }
 
-# required by ssh-agent
-jenkins::plugin {
-  'credentials': ;
-}
 
 jenkins::plugin {
   'dashboard-view': ;
@@ -618,16 +618,14 @@ cron {'docker_cleanup_images':
 }
 
 
-package { 'python3-pip':
-  ensure => 'installed',
-}
+pip::installation { '3.5': ; }
+
 # required by cleanup_docker script
 pip::install { 'docker-py':
   #package => 'jenkinsapi', # defaults to $title
   #version => '1.6', # if undef installs latest version
-  python_version => '3', # defaults to 2.7
+  python_version => '3.5', # defaults to 2.7
   #ensure => present, # defaults to present
-  require => Package['python3-pip'],
 }
 
 # setup apache
