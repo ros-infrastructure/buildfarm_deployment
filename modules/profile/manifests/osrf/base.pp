@@ -1,3 +1,3 @@
-class profiles::osrf::base {
+class profile::osrf::base {
 }
 
