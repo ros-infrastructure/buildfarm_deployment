@@ -13,7 +13,7 @@ else {
 if hiera('master::ip', false) {
   host {'master':
     ip => hiera('master::ip'),
-    notify => Service['jenkins-slave'],
+    notify => Service['jenkins-agent'],
   }
 }
 else {
@@ -39,33 +39,33 @@ else{
 }
 
 # Setup SSH known hosts
-file { '/home/jenkins-slave/.ssh/' :
+file { '/home/jenkins-agent/.ssh/' :
   ensure => 'directory',
   mode   => '644',
-  owner  => 'jenkins-slave',
-  group  => 'jenkins-slave',
-  require => User['jenkins-slave'],
+  owner  => 'jenkins-agent',
+  group  => 'jenkins-agent',
+  require => User['jenkins-agent'],
 }
 
-file { '/home/jenkins-slave/.ssh/known_hosts':
+file { '/home/jenkins-agent/.ssh/known_hosts':
   ensure => 'present',
   mode => '0644',
-  owner => 'jenkins-slave',
-  group => 'jenkins-slave',
-  content => template('slave_files/known_hosts.erb'),
-  require => File['/home/jenkins-slave/.ssh/'],
+  owner => 'jenkins-agent',
+  group => 'jenkins-agent',
+  content => template('agent_files/known_hosts.erb'),
+  require => File['/home/jenkins-agent/.ssh/'],
 }
 
 class { 'jenkins::slave':
   labels => 'buildslave',
   slave_mode => 'exclusive',
-  slave_user => 'jenkins-slave',
+  slave_user => 'jenkins-agent',
   manage_slave_user => false,
   executors => hiera('jenkins::slave::num_executors', 1),
-  require => User['jenkins-slave'],
+  require => User['jenkins-agent'],
 }
 
-user{'jenkins-slave':
+user{'jenkins-agent':
   ensure => present,
   managehome => true,
   groups => ['docker'],
@@ -73,12 +73,12 @@ user{'jenkins-slave':
 }
 
 # Make sure this directory exists so it can be mounted.
-file { '/home/jenkins-slave/.ccache' :
+file { '/home/jenkins-agent/.ccache' :
   ensure => 'directory',
   mode   => '644',
-  owner  => 'jenkins-slave',
-  group  => 'jenkins-slave',
-  require => User['jenkins-slave'],
+  owner  => 'jenkins-agent',
+  group  => 'jenkins-agent',
+  require => User['jenkins-agent'],
 }
 
 # required by cleanup_docker_images.py
@@ -96,7 +96,7 @@ package { 'python3-psutil':
   ensure => 'installed',
 }
 
-# For jenkins-slave instance checkouts
+# For jenkins-agent instance checkouts
 package { 'bzr':
   ensure => 'installed',
 }
@@ -141,12 +141,12 @@ pip::install { 'docker-py':
 }
 
 # script to clean up docker images from oldest
-file { '/home/jenkins-slave/cleanup_docker_images.py':
+file { '/home/jenkins-agent/cleanup_docker_images.py':
   mode => '0774',
-  owner => 'jenkins-slave',
-  group => 'jenkins-slave',
-  source => 'puppet:///modules/slave_files/home/jenkins-slave/cleanup_docker_images.py',
-  require => User['jenkins-slave'],
+  owner => 'jenkins-agent',
+  group => 'jenkins-agent',
+  source => 'puppet:///modules/agent_files/home/jenkins-agent/cleanup_docker_images.py',
+  require => User['jenkins-agent'],
 }
 
 if hiera('run_squid', false) {
@@ -190,17 +190,17 @@ ignore_expect_100 on # needed for new relic system monitor
                ],
   }
 
-  file { '/home/jenkins-slave/manage.py':
+  file { '/home/jenkins-agent/manage.py':
     ensure => present,
-    source => 'puppet:///modules/slave_files/home/jenkins-slave/manage.py',
+    source => 'puppet:///modules/agent_files/home/jenkins-agent/manage.py',
     mode => 755,
   }
 
   upstart::job{'manage-tproxy':
     description => 'Manage iptables for tproxy',
-    chdir       => '/home/jenkins-slave',
-    exec        => '/home/jenkins-slave/manage.py',
-    require     => File[ '/home/jenkins-slave/manage.py'],
+    chdir       => '/home/jenkins-agent',
+    exec        => '/home/jenkins-agent/manage.py',
+    require     => File[ '/home/jenkins-agent/manage.py'],
     respawn     => true,
     respawn_limit => '99 5',
   }
@@ -230,12 +230,12 @@ else {
 
 # clean up containers and dangling images https://github.com/docker/docker/issues/928#issuecomment-58619854
 cron {'docker_cleanup_images':
-  command => 'bash -c "python3 -u /home/jenkins-slave/cleanup_docker_images.py --minimum-free-percent 10 --minimum-free-space 50"',
-  user    => 'jenkins-slave',
+  command => 'bash -c "python3 -u /home/jenkins-agent/cleanup_docker_images.py --minimum-free-percent 10 --minimum-free-space 50"',
+  user    => 'jenkins-agent',
   month   => absent,
   monthday => absent,
   hour    => '*',
   minute  => '*/15',
   weekday => absent,
-  require => User['jenkins-slave'],
+  require => User['jenkins-agent'],
 }
