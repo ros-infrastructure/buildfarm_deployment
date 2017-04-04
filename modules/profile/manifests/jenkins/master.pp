@@ -3,9 +3,6 @@ class profile::jenkins::master {
 
   include jenkins_files
 
-  # setup ntp with defaults
-  include '::ntp'
-
   ## Jenkins plugins
   ### Jenkins Plugins
 
