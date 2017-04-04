@@ -1,10 +1,3 @@
-user{'jenkins-agent':
-  ensure => present,
-  managehome => true,
-  groups => ['docker'],
-  require => Package['docker']
-}
-
 # bring in classes listed in hiera
 if hiera('classes', false) {
   hiera_include('classes')
@@ -35,3 +28,5 @@ else{
   notice("No ssh_keys defined. You need at least one for jenkins-agent.")
 }
 
+include profile::osrf::base
+include profile::osrf::repo
