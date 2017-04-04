@@ -1,6 +1,3 @@
-# to setup services
-include upstart
-
 # Find the other instances
 if hiera('repo::ip', false) {
   host {'repo':
