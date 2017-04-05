@@ -5,6 +5,7 @@ mod 'garethr-docker', '5.3.0'
 mod 'puppetlabs-apache', '1.11.0'
 mod 'puppetlabs-concat', '2.2.0'
 mod 'puppetlabs-ntp', '4.2.0'
+mod 'puppetlabs-vcsrepo', '1.5.0'
 mod 'rtyler/jenkins', '1.7.0'
 mod 'tracywebtech-pip', '1.3.4'
 mod 'newrelic-nrsysmond',
