@@ -188,7 +188,7 @@ class profile::osrf::repo {
     unless      => '/home/jenkins-agent/reprepro-updater/scripts/setup_repo.py ubuntu_building -q',
     logoutput   => on_failure,
     require     => [
-      Vcsrepo ["/home/jenkins-agent/reprepro-updater"],
+      Vcsrepo["/home/jenkins-agent/reprepro-updater"],
       File['/home/jenkins-agent/.buildfarm/reprepro-updater.ini'],
     ]
   }
@@ -202,7 +202,7 @@ class profile::osrf::repo {
     unless      => '/home/jenkins-agent/reprepro-updater/scripts/setup_repo.py ubuntu_testing -q',
     logoutput   => on_failure,
     require     => [
-      Vcsrepo ["/home/jenkins-agent/reprepro-updater"],
+      Vcsrepo["/home/jenkins-agent/reprepro-updater"],
       File['/home/jenkins-agent/.buildfarm/reprepro-updater.ini'],
     ]
   }
@@ -216,7 +216,7 @@ class profile::osrf::repo {
     unless      => '/home/jenkins-agent/reprepro-updater/scripts/setup_repo.py ubuntu_testing -q',
     logoutput   => on_failure,
     require     => [
-      Vcsrepo ["/home/jenkins-agent/reprepro-updater"],
+      Vcsrepo["/home/jenkins-agent/reprepro-updater"],
       File['/home/jenkins-agent/.buildfarm/reprepro-updater.ini'],
     ]
   }
