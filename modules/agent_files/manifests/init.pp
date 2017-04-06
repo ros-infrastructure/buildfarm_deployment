@@ -1,3 +1,2 @@
-class slave_files {
-
+class agent_files {
 }
