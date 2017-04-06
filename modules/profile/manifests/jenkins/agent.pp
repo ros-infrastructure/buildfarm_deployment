@@ -58,9 +58,9 @@ class profile::jenkins::agent (
     require => User[$agent_username],
   }
 
-  # Must be declared for pip installation module to succeed.
-  package {'curl':
-    ensure => present,
+  class { 'python' :
+    version => '3',
+    pip     => 'present',
   }
 
   # required by cleanup_docker_images.py
@@ -99,19 +99,12 @@ class profile::jenkins::agent (
     ensure => 'installed',
   }
 
-  package { 'python3-pip':
-    ensure => 'installed',
-  }
-
   include docker
 
   # required by cleanup_docker script
-  pip::install { 'docker-py':
-    #package => 'jenkinsapi', # defaults to $title
-    #version => '1.6', # if undef installs latest version
-    python_version => '3', # defaults to 2.7
-    #ensure => present, # defaults to present
-    require => Package['python3-pip'],
+  python::pip { 'docker-py':
+    pkgname        => 'docker-py',
+    #ensure        => present, # defaults to present
   }
 
   # script to clean up docker images from oldest
