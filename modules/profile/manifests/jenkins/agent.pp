@@ -1,3 +1,13 @@
+# Jenkins Agent Profile
+#
+# Profile class for a node configured to act as a swarm agent for Jenkins.
+# This profile should only ever be declared with an include into a role or site manifest.
+# Parameter overloading should be done using hiera automatic parameter lookup.
+#
+# @example
+#    include profile::jenkins::master
+#
+# @pararm agent_username The unix user the agent will configure and run as.
 class profile::jenkins::agent (
   String $agent_username = 'jenkins-agent',
 ) {
