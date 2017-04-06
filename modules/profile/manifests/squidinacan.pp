@@ -34,9 +34,9 @@ ignore_expect_100 on # needed for new relic system monitor
                 ],
     net     => 'host',
     require => [Docker::Image['jpetazzo/squid-in-a-can'],
-                File['/var/cache/squid-in-a-can'],
-                File['/var/log/squid-in-a-can'],
-               ],
+      File['/var/cache/squid-in-a-can'],
+      File['/var/log/squid-in-a-can'],
+    ],
   }
 
   file { '/home/jenkins-agent/manage.py':
