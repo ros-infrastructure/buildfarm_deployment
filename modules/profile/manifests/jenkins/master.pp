@@ -1,6 +1,6 @@
 class profile::jenkins::master {
   include '::jenkins'
-  include '::jenkins/master'
+  include '::jenkins::master'
 
   include jenkins_files
 
