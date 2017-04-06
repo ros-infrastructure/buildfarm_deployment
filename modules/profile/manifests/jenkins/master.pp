@@ -1,5 +1,6 @@
 class profile::jenkins::master {
   include '::jenkins'
+  include '::jenkins/master'
 
   include jenkins_files
 
@@ -254,15 +255,6 @@ class profile::jenkins::master {
 
   jenkins::plugin {
     'systemloadaverage-monitor': ;
-  }
-
-  jenkins::plugin {
-    'swarm':
-      require => Package['wget'];
-  }
-
-  package { 'wget':
-    ensure => 'installed',
   }
 
   jenkins::plugin {
