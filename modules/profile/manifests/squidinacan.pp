@@ -5,14 +5,14 @@ class profile::squidinacan {
 
   file { '/var/cache/squid-in-a-can' :
     ensure => 'directory',
-    mode   => 644,
+    mode   => '0644',
     owner  => 'proxy',
     group  => 'proxy',
   }
 
   file { '/var/log/squid-in-a-can' :
     ensure => 'directory',
-    mode   => 644,
+    mode   => '0644',
     owner  => 'proxy',
     group  => 'proxy',
   }
@@ -42,7 +42,7 @@ ignore_expect_100 on # needed for new relic system monitor
   file { '/home/jenkins-agent/manage.py':
     ensure => present,
     source => 'puppet:///modules/agent_files/home/jenkins-agent/manage.py',
-    mode => 755,
+    mode => '0755',
   }
 
   upstart::job{'manage-tproxy':

@@ -2,7 +2,7 @@ class profile::jenkins::agent (
   String $agent_username = 'jenkins-agent',
 ) {
 
-  user { "$agent_username" :
+  user { $agent_username :
     ensure => present,
     managehome => true,
     groups => ['docker'],
@@ -13,21 +13,21 @@ class profile::jenkins::agent (
   }
 
   # Setup SSH known hosts
-  file { "/home/$agent_username/.ssh/" :
+  file { "/home/${agent_username}/.ssh/" :
     ensure => 'directory',
-    mode   => '644',
+    mode   => '0644',
     owner  => $agent_username,
     group  => $agent_username,
-    require => User["$agent_username"],
+    require => User[$agent_username],
   }
 
-  file { "/home/$agent_username/.ssh/known_hosts":
+  file { "/home/${agent_username}/.ssh/known_hosts":
     ensure => 'present',
     mode => '0644',
     owner => $agent_username,
     group => $agent_username,
     content => template('agent_files/known_hosts.erb'),
-    require => File["/home/$agent_username/.ssh/"],
+    require => File["/home/${agent_username}/.ssh/"],
   }
 
   class { 'jenkins::slave':
@@ -40,9 +40,9 @@ class profile::jenkins::agent (
   }
 
   # Make sure this directory exists so it can be mounted.
-  file { "/home/$agent_username/.ccache" :
+  file { "/home/${agent_username}/.ccache" :
     ensure => 'directory',
-    mode   => '644',
+    mode   => '0644',
     owner  => $agent_username,
     group  => $agent_username,
     require => User[$agent_username],
@@ -105,7 +105,7 @@ class profile::jenkins::agent (
   }
 
   # script to clean up docker images from oldest
-  file { "/home/$agent_username/cleanup_docker_images.py":
+  file { "/home/${agent_username}/cleanup_docker_images.py":
     mode => '0774',
     owner => $agent_username,
     group => $agent_username,
@@ -115,7 +115,7 @@ class profile::jenkins::agent (
 
   # clean up containers and dangling images https://github.com/docker/docker/issues/928#issuecomment-58619854
   cron {'docker_cleanup_images':
-    command => "bash -c \"python3 -u /home/$agent_username/cleanup_docker_images.py --minimum-free-percent 10 --minimum-free-space 50\"",
+    command => "bash -c \"python3 -u /home/${agent_username}/cleanup_docker_images.py --minimum-free-percent 10 --minimum-free-space 50\"",
     user    => $agent_username,
     month   => absent,
     monthday => absent,
