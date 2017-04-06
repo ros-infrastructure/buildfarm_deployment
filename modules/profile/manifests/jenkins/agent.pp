@@ -44,6 +44,7 @@ class profile::jenkins::agent (
     labels => 'buildslave',
     slave_mode => 'exclusive',
     slave_user => $agent_username,
+    slave_home => "/home/${agent_username}",
     manage_slave_user => false,
     executors => hiera('jenkins::agent::num_executors', 1),
     require => User[$agent_username],
