@@ -3,10 +3,6 @@ class profile::osrf::repo {
   # This is not a class parameter so it cannot be overloaded separately from the jenkins::agent value.
   $agent_username = $profile::jenkins::agent::agent_username
 
-  package {'git':
-    ensure => 'installed',
-  }
-
   package {'openssh-server':
     ensure => 'installed',
   }
