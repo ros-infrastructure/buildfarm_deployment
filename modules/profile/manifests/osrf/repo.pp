@@ -226,8 +226,8 @@ class profile::osrf::repo {
       provider => git,
       source   => 'https://github.com/ros-infrastructure/reprepro-updater.git',
       revision => 'refactor',
-      user     => $profile::jenkins::agent::username,
-      require => User[$profile::jenkins::agent::username],
+      user     => $agent_username,
+      require => User[$agent_username],
     }
 
     # Create directory for reprepro_config
@@ -236,7 +236,7 @@ class profile::osrf::repo {
       owner  => $agent_username,
       group  => $agent_username,
       mode   => '0700',
-      require => User[$profile::jenkins::agent::username],
+      require => User[$agent_username],
     }
 
     # Pull reprepro updater
