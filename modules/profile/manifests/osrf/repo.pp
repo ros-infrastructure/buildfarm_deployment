@@ -19,23 +19,6 @@ class profile::osrf::repo {
     ensure => 'installed',
   }
 
-  # required by cleanup_docker_images.py
-  package { 'python3-dateutil':
-    ensure => 'installed',
-  }
-  # required by jobs to generate Dockerfiles
-  package { 'python3-empy':
-    ensure => 'installed',
-  }
-
-  # required by subprocess reaper script
-  package { 'python3-psutil':
-    ensure => 'installed',
-  }
-
-  ### install latest docker
-  include docker
-
   file { "/home/${agent_username}/.ssh":
     ensure => 'directory',
     owner  => $agent_username,
