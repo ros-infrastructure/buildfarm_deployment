@@ -60,7 +60,7 @@ class profile::jenkins::agent (
   }
 
   class { 'python' :
-    version => '3',
+    version => 'python3',
     pip     => 'present',
   }
 
