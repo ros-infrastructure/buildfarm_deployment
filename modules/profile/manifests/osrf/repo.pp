@@ -15,14 +15,6 @@ class profile::osrf::repo {
     ensure => 'installed',
   }
 
-  file { "/home/${agent_username}/.ssh":
-    ensure => 'directory',
-    owner  => $agent_username,
-    group  => $agent_username,
-    mode   => '0700',
-    require => User[$agent_username],
-  }
-
   file { '/var/repos/docs':
     ensure => 'directory',
     mode   => '0755',
