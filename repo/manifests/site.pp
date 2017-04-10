@@ -8,7 +8,6 @@ if hiera('classes', false) {
 if hiera('master::ip', false) {
   host {'master':
     ip => hiera('master::ip'),
-    notify => Service['jenkins-agent'],
   }
 }
 else {
