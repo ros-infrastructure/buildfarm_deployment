@@ -7,10 +7,6 @@ class profile::osrf::repo {
     ensure => 'installed',
   }
 
-  package {'python':
-    ensure => 'installed',
-  }
-
   package {'python-yaml':
     ensure => 'installed',
   }
