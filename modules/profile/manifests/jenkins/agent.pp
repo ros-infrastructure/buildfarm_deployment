@@ -41,13 +41,14 @@ class profile::jenkins::agent (
   }
 
   class { 'jenkins::slave':
-    labels => 'buildslave',
-    slave_mode => 'exclusive',
-    slave_user => $agent_username,
-    slave_home => "/home/${agent_username}",
+    labels            => 'buildslave',
+    slave_mode        => 'exclusive',
+    slave_user        => $agent_username,
+    slave_home        => "/home/${agent_username}",
     manage_slave_user => false,
-    executors => hiera('jenkins::agent::num_executors', 1),
-    require => User[$agent_username],
+    executors         => hiera('jenkins::agent::num_executors', 1),
+    require           => User[$agent_username],
+    notify            => Service['jenkins-slave'],
   }
 
   # Make sure this directory exists so it can be mounted.
