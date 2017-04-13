@@ -128,4 +128,10 @@ class profile::jenkins::agent (
     weekday => absent,
     require => User[$agent_username],
   }
+
+  exec { 'systemctl-daemon-reload':
+    command => '/bin/systemctl daemon-reload',
+    require => File['/etc/init.d/jenkins-slave'],
+    before  => Service['jenkins-slave'],
+  }
 }
