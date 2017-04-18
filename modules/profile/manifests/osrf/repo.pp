@@ -3,6 +3,8 @@ class profile::osrf::repo {
   # This is not a class parameter so it cannot be overloaded separately from the jenkins::agent value.
   $agent_username = $profile::jenkins::agent::agent_username
 
+  include reprepro
+
   package {'openssh-server':
     ensure => 'installed',
   }
@@ -90,12 +92,6 @@ class profile::osrf::repo {
     priority   => '10',
     #  servername => 'localhost',
     #  require    => Reprepro::Distribution['precise'],
-    }
-
-
-    # Manually managing reprepro, the puppet formula is too fragile wrt to user management.
-    package {'reprepro':
-      ensure => 'installed',
     }
 
     #needed by reprepro-updater
