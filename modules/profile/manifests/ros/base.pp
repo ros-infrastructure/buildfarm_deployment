@@ -1,4 +1,4 @@
-class profile::osrf::base {
+class profile::ros::base {
 
   # setup ntp with defaults
   include '::ntp'

@@ -28,6 +28,6 @@ class role::buildfarm::repo {
     notice("No ssh_keys defined. You need at least one for jenkins-agent.")
   }
 
-  include profile::osrf::base
-  include profile::osrf::repo
+  include profile::ros::base
+  include profile::ros::repo
 }

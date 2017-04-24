@@ -38,7 +38,7 @@ class role::buildfarm::agent {
     notice("No ssh_keys defined. You should probably have at least one.")
   }
 
-  include profile::osrf::base
+  include profile::ros::base
   include profile::jenkins::agent
 
   if hiera('run_squid', false) {

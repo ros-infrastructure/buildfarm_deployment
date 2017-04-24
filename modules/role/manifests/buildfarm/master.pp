@@ -1,5 +1,5 @@
 class role::buildfarm::master {
-  include profile::osrf::base
+  include profile::ros::base
   include profile::jenkins::master
 
   if hiera('classes', false) {

@@ -1,4 +1,4 @@
-class profile::osrf::repo {
+class profile::ros::repo {
   require profile::jenkins::agent
   # This is not a class parameter so it cannot be overloaded separately from the jenkins::agent value.
   $agent_username = $profile::jenkins::agent::agent_username
