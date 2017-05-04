@@ -1,24 +1,12 @@
 class profile::jenkins::master {
-  include '::jenkins'
-  include '::jenkins::master'
+  include ::jenkins
+  include ::jenkins::master
+  include profile::jenkins::rosplugins
 
   include jenkins_files
 
   ### Jenkins Plugins
 
-  # required by workflow-cps
-  jenkins::plugin {
-    'ace-editor': ;
-  }
-
-  # required by warnings
-  jenkins::plugin {
-    'analysis-core': ;
-  }
-
-  jenkins::plugin {
-    'audit-trail': ;
-  }
   # config for audit-trail
   file { '/var/lib/jenkins/audit-trail.xml':
     mode => '0640',
@@ -29,17 +17,6 @@ class profile::jenkins::master {
     notify => Service['jenkins'],
   }
 
-  jenkins::plugin {
-    'bazaar': ;
-  }
-
-  jenkins::plugin {
-    'build-timeout': ;
-  }
-
-  jenkins::plugin {
-    'collapsing-console-sections': ;
-  }
   # config for collapsing-console-sections
   file { '/var/lib/jenkins/org.jvnet.hudson.plugins.collapsingconsolesections.CollapsingSectionNote.xml':
     mode => '0640',
@@ -48,44 +25,6 @@ class profile::jenkins::master {
     source => 'puppet:///modules/jenkins_files/var/lib/jenkins/org.jvnet.hudson.plugins.collapsingconsolesections.CollapsingSectionNote.xml',
     require => Jenkins::Plugin['collapsing-console-sections'],
     notify => Service['jenkins'],
-  }
-
-  jenkins::plugin {
-    'copyartifact': ;
-  }
-
-
-  jenkins::plugin {
-    'dashboard-view': ;
-  }
-
-  jenkins::plugin {
-    'description-setter': ;
-  }
-
-  jenkins::plugin {
-    'disable-failed-job': ;
-  }
-
-  # required by groovy-postbuild
-  jenkins::plugin {
-    'durable-task': ;
-  }
-
-  jenkins::plugin {
-    'email-ext': ;
-  }
-
-  jenkins::plugin {
-    'embeddable-build-status': ;
-  }
-
-  jenkins::plugin {
-    'extra-columns': ;
-  }
-
-  jenkins::plugin {
-    'ghprb': ;
   }
   # config for auto-managing github web hooks
   file { '/var/lib/jenkins/com.cloudbees.jenkins.GitHubPushTrigger.xml':
@@ -108,39 +47,6 @@ class profile::jenkins::master {
     notify => Service['jenkins'],
   }
 
-  # required by ghprb
-  jenkins::plugin {
-    'git': ;
-  }
-
-  jenkins::plugin {
-    'git-client': ;
-  }
-
-  # required by ghprb
-  jenkins::plugin {
-    'github': ;
-  }
-
-  jenkins::plugin {
-    'github-api': ;
-  }
-
-  jenkins::plugin {
-    'greenballs': ;
-  }
-
-  jenkins::plugin {
-    'groovy': ;
-  }
-
-  jenkins::plugin {
-    'groovy-postbuild': ;
-  }
-
-  jenkins::plugin {
-    'jobConfigHistory': ;
-  }
   # config for jobConfigHistory
   file { '/var/lib/jenkins/jobConfigHistory.xml':
     mode => '0640',
@@ -149,50 +55,6 @@ class profile::jenkins::master {
     source => 'puppet:///modules/jenkins_files/var/lib/jenkins/jobConfigHistory.xml',
     require => Jenkins::Plugin['jobConfigHistory'],
     notify => Service['jenkins'],
-  }
-
-  jenkins::plugin {
-    'jobrequeue': ;
-  }
-
-  # required by groovy-postbuild
-  jenkins::plugin {
-    'jquery-detached': ;
-  }
-
-  # required by subversion
-  jenkins::plugin {
-    'mapdb-api': ;
-  }
-
-  # required by ghprb and groovy-postbuild
-  jenkins::plugin {
-    'matrix-project': ;
-  }
-
-  jenkins::plugin {
-    'mercurial': ;
-  }
-
-  jenkins::plugin {
-    'monitoring': ;
-  }
-
-  jenkins::plugin {
-    'parameterized-trigger': ;
-  }
-
-  # required by ghprb
-  jenkins::plugin {
-    'plain-credentials': ;
-  }
-
-  jenkins::plugin {
-    'pollscm': ;
-  }
-
-  jenkins::plugin {
-    'PrioritySorter': ;
   }
   # config for PrioritySorter
   file { '/var/lib/jenkins/jenkins.advancedqueue.PrioritySorterConfiguration.xml':
@@ -204,9 +66,6 @@ class profile::jenkins::master {
     notify => Service['jenkins'],
   }
 
-  jenkins::plugin {
-    'publish-over-ssh': ;
-  }
   # config for publish-over-ssh
   file { '/var/lib/jenkins/jenkins.plugins.publish_over_ssh.BapSshPublisherPlugin.xml':
     mode => '0640',
@@ -217,32 +76,6 @@ class profile::jenkins::master {
     notify => Service['jenkins'],
   }
 
-  jenkins::plugin {
-    'purge-build-queue-plugin': ;
-  }
-
-  # required by mercurial
-  jenkins::plugin {
-    'scm-api': ;
-  }
-
-  # required by groovy-postbuild
-  jenkins::plugin {
-    'script-security': ;
-  }
-
-  jenkins::plugin {
-    'ssh-agent': ;
-  }
-
-  # required by ssh-agent
-  jenkins::plugin {
-    'ssh-credentials': ;
-  }
-
-  jenkins::plugin {
-    'subversion': ;
-  }
   # config for subversion
   file { '/var/lib/jenkins/hudson.scm.SubversionSCM.xml':
     mode => '0640',
@@ -253,22 +86,6 @@ class profile::jenkins::master {
     notify => Service['jenkins'],
   }
 
-  jenkins::plugin {
-    'systemloadaverage-monitor': ;
-  }
-
-  jenkins::plugin {
-    'timestamper': ;
-  }
-
-  # required by build-timeout
-  jenkins::plugin {
-    'token-macro': ;
-  }
-
-  jenkins::plugin {
-    'warnings': ;
-  }
   # config for warnings
   file { '/var/lib/jenkins/hudson.plugins.warnings.WarningsPublisher.xml':
     mode => '0640',
@@ -279,38 +96,6 @@ class profile::jenkins::master {
     notify => Service['jenkins'],
   }
 
-  # required by workflow-cps
-  jenkins::plugin {
-    'workflow-api': ;
-  }
-
-  # required by groovy-postbuild
-  jenkins::plugin {
-    'workflow-cps': ;
-  }
-
-  # required by workflow-cps
-  jenkins::plugin {
-    'workflow-support': ;
-  }
-
-  # required by workflow-cps
-  jenkins::plugin {
-    'workflow-scm-step': ;
-  }
-
-  # required by ssh-agent and workflow-cps
-  jenkins::plugin {
-    'workflow-step-api': ;
-  }
-
-  jenkins::plugin {
-    'writable-filesystem-monitor': ;
-  }
-
-  jenkins::plugin {
-    'xunit': ;
-  }
   # make sure that the config.xml is present.
   # It does not get generated initially see https://github.com/ros-infrastructure/buildfarm_deployment/issues/2
   # This is too strong, if puppet is rerun it will override any changed configs
