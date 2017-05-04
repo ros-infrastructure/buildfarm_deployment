@@ -67,10 +67,10 @@ class profile::jenkins::rosplugins {
     require => [ Jenkins::Plugin['bouncycastle-api'], Jenkins::Plugin['matrix-project'], Jenkins::Plugin['maven-plugin'] ]
   }
 
-  ::jenkins::plugin { 'credentials':
-    version => '2.1.13',
-    require => [ Jenkins::Plugin['bouncycastle-api'] ]
-  }
+  # ::jenkins::plugin { 'credentials':
+  #   version => '2.1.13',
+  #   require => [ Jenkins::Plugin['bouncycastle-api'] ]
+  # }
 
   ::jenkins::plugin { 'cvs':
     version => '2.13',
