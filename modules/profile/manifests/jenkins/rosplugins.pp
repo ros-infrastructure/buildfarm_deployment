@@ -307,10 +307,10 @@ class profile::jenkins::rosplugins {
     require => [ Jenkins::Plugin['bouncycastle-api'], Jenkins::Plugin['credentials'], Jenkins::Plugin['mapdb-api'], Jenkins::Plugin['scm-api'], Jenkins::Plugin['ssh-credentials'], Jenkins::Plugin['workflow-scm-step'] ]
   }
 
-  ::jenkins::plugin { 'swarm':
-    version => '3.4',
-    require => [ Jenkins::Plugin['bouncycastle-api'] ]
-  }
+  # ::jenkins::plugin { 'swarm':
+  #   version => '3.4',
+  #   require => [ Jenkins::Plugin['bouncycastle-api'] ]
+  # }
 
   ::jenkins::plugin { 'systemloadaverage-monitor':
     version => '1.2',
