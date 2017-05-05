@@ -16,6 +16,10 @@ resource_template = """  ::jenkins::plugin {{ '{name}':
   }}
 """
 
+# Some plugins are managed by the upstream Jenkins puppet modules and should not be declared in this file.
+# The skipped plugins can still be depended upon as they should be installed.
+skip_plugins = ["credentials", "swarm"]
+
 def main():
     parser = ArgumentParser(description="Generate a puppet class for currently installed Jenkins plugins.")
     parser.add_argument("--username")
@@ -36,6 +40,8 @@ def generate_class(args):
     response = urlopen(plugin_request)
     parsed = json.loads(response.read().decode())
     for plugin in sorted(parsed['plugins'], key=lambda p: p['shortName']):
+        if plugin['shortName'] in skip_plugins:
+            continue
         dependencies = ", ".join(["Jenkins::Plugin['{}']".format(dep['shortName'])
                                   for dep in sorted(plugin['dependencies'], key=lambda d: d['shortName'])])
         print(resource_template.format(name=plugin['shortName'], version=plugin['version'],

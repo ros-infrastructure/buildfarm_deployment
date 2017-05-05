@@ -1,4 +1,4 @@
-# This module was automatically generated on 2017-05-04 14:52:48
+# This module was automatically generated on 2017-05-04 17:10:42
 # Instead of editing it, update plugins via the Jenkins web UI and rerun the generator.
 # Otherwise your changes will be overwritten the next time it is run.
 class profile::jenkins::rosplugins {
@@ -66,11 +66,6 @@ class profile::jenkins::rosplugins {
     version => '1.38.1',
     require => [ Jenkins::Plugin['bouncycastle-api'], Jenkins::Plugin['matrix-project'], Jenkins::Plugin['maven-plugin'] ]
   }
-
-  # ::jenkins::plugin { 'credentials':
-  #   version => '2.1.13',
-  #   require => [ Jenkins::Plugin['bouncycastle-api'] ]
-  # }
 
   ::jenkins::plugin { 'cvs':
     version => '2.13',
@@ -306,11 +301,6 @@ class profile::jenkins::rosplugins {
     version => '2.7.2',
     require => [ Jenkins::Plugin['bouncycastle-api'], Jenkins::Plugin['credentials'], Jenkins::Plugin['mapdb-api'], Jenkins::Plugin['scm-api'], Jenkins::Plugin['ssh-credentials'], Jenkins::Plugin['workflow-scm-step'] ]
   }
-
-  # ::jenkins::plugin { 'swarm':
-  #   version => '3.4',
-  #   require => [ Jenkins::Plugin['bouncycastle-api'] ]
-  # }
 
   ::jenkins::plugin { 'systemloadaverage-monitor':
     version => '1.2',
