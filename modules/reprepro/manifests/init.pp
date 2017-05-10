@@ -30,6 +30,6 @@ class reprepro {
     }
 
     file { '/tmp/reprepro_5.1.1-1_amd64.deb':
-      source => 'puppet://modules/reprepro/reprepro_5.1.1-1_amd64.deb',
+      source => 'puppet:///modules/reprepro/reprepro_5.1.1-1_amd64.deb',
     }
 }
