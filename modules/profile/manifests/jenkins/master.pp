@@ -2,6 +2,7 @@ class profile::jenkins::master {
   include ::jenkins
   include ::jenkins::master
   include profile::jenkins::rosplugins
+  include profile::jenkins::agent
 
   include jenkins_files
 
