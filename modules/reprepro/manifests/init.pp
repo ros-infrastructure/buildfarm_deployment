@@ -26,7 +26,9 @@ class reprepro {
       command   => '/usr/bin/dpkg -i /tmp/reprepro_5.1.1-1_amd64.deb',
       unless    => '/usr/bin/dpkg-query -l reprepro | tail -1 | grep -qs 5.1.1-1',
       logoutput => on_failure,
-      require   => File['/tmp/reprepro_5.1.1-1_amd64.deb']
+      require   => [ File['/tmp/reprepro_5.1.1-1_amd64.deb'], Package['debhelper'], Package['libarchive-dev'],
+                    Package['libbz2-dev'], Package['libdb-dev'], Package['libgpgme11-dev'], Package['liblzma-dev'],
+                    Package['libz-dev'] ]
     }
 
     file { '/tmp/reprepro_5.1.1-1_amd64.deb':
