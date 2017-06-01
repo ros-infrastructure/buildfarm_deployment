@@ -4,7 +4,7 @@
     <jenkins.plugins.publish__over__ssh.BapSshHostConfiguration>
       <name>repo</name>
       <hostname>repo</hostname>
-      <username>jenkins-slave</username>
+      <username>jenkins-agent</username>
       <secretPassword></secretPassword>
       <remoteRootDir>/var/repos/ubuntu/building/queue</remoteRootDir>
       <port>22</port>
@@ -26,7 +26,7 @@
     <jenkins.plugins.publish__over__ssh.BapSshHostConfiguration>
       <name>docs</name>
       <hostname><%= scope.function_hiera(["upload::docs::host", 'repo']) %></hostname>
-      <username><%= scope.function_hiera(["upload::docs::user", 'jenkins-slave']) %></username>
+      <username><%= scope.function_hiera(["upload::docs::user", 'jenkins-agent']) %></username>
       <secretPassword></secretPassword>
       <remoteRootDir><%= scope.function_hiera(["upload::docs::root", '/var/repos/docs']) %></remoteRootDir>
       <port>22</port>
@@ -43,7 +43,7 @@
     <jenkins.plugins.publish__over__ssh.BapSshHostConfiguration>
       <name>rosdistro_cache</name>
       <hostname>repo</hostname>
-      <username>jenkins-slave</username>
+      <username>jenkins-agent</username>
       <secretPassword></secretPassword>
       <remoteRootDir>/var/repos/rosdistro_cache</remoteRootDir>
       <port>22</port>
@@ -60,7 +60,7 @@
     <jenkins.plugins.publish__over__ssh.BapSshHostConfiguration>
       <name>status_page</name>
       <hostname>repo</hostname>
-      <username>jenkins-slave</username>
+      <username>jenkins-agent</username>
       <secretPassword></secretPassword>
       <remoteRootDir>/var/repos/status_page</remoteRootDir>
       <port>22</port>
