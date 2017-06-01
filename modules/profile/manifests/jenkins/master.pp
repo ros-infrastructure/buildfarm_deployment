@@ -240,18 +240,6 @@ class profile::jenkins::master {
     require => File['/var/lib/jenkins/.ssh'],
   }
 
-  # Setup generic ssh_keys
-  if hiera('ssh_keys', false){
-    $defaults = {
-      'ensure' => 'present',
-    }
-    create_resources(ssh_authorized_key, hiera('ssh_keys'), $defaults)
-  }
-  else{
-    notice('No ssh_authorized_keys defined. There should probably be at least one.')
-  }
-
-
   # Reference above credientials
   file { '/var/lib/jenkins/credentials.xml':
     mode => '0600',
