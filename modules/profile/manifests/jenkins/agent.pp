@@ -41,8 +41,6 @@ class profile::jenkins::agent (
   }
 
   class { 'jenkins::slave':
-    labels => 'buildslave',
-    slave_mode => 'exclusive',
     slave_user => $agent_username,
     slave_home => "/home/${agent_username}",
     manage_slave_user => false,
