@@ -25,6 +25,7 @@ At the end of this process you will have a Jenkins master, a package repository,
 
 ## Provisioning
 
+The ROS buldfarm deployment is currently based on Ubuntu 14.04 Trusty.
 The following EC2 instance types are recommended when deploying to Amazon EC2.
 They are intended as a guideline for choosing the appropriate parameters when deploying to other platforms.
 
