@@ -46,12 +46,15 @@ ignore_expect_100 on # needed for new relic system monitor
     mode => '0755',
   }
 
-  upstart::job{'manage-tproxy':
-    description => 'Manage iptables for tproxy',
-    chdir       => '/home/jenkins-agent',
-    exec        => '/home/jenkins-agent/manage.py',
-    require     => File[ '/home/jenkins-agent/manage.py'],
-    respawn     => true,
-    respawn_limit => '99 5',
+  file { '/etc/systemd/system/manage-tproxy.service':
+    ensure  => present,
+    source  => 'puppet:///modules/agent_files/etc/systemd/system/manage-tproxy.service',
+  }
+
+  service { 'manage-tproxy.service':
+    enable   => true,
+    ensure   => running,
+    provider => systemd,
+    require  => [File['/home/jenkins-agent/manage.py'],File['/etc/systemd/system/manage-tproxy.service']],
   }
 }

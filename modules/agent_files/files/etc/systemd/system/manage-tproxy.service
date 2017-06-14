@@ -1,0 +1,11 @@
+[Unit]
+Description=Manage IP tables for ROS repo's transparent reverse proxy.
+
+[Service]
+WorkingDirectory=/home/jenkins-agent
+ExecStart=/home/jenkins-agent/manage.py
+Restart=always
+RestartSec=5
+StartLimitBurst=10
+StartLimitIntervalSec=300
+
