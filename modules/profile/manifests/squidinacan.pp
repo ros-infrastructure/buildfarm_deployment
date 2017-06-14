@@ -1,6 +1,7 @@
 class profile::squidinacan {
+  require docker
+
   docker::image {'jpetazzo/squid-in-a-can':
-    require => Package['docker'],
   }
 
   file { '/var/cache/squid-in-a-can' :
