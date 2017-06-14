@@ -7,5 +7,5 @@ ExecStart=/home/jenkins-agent/manage.py
 Restart=always
 RestartSec=5
 StartLimitBurst=10
-StartLimitIntervalSec=300
+StartLimitInterval=300s
 
