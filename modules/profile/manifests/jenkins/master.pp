@@ -27,6 +27,7 @@ class profile::jenkins::master {
     require => Jenkins::Plugin['collapsing-console-sections'],
     notify => Service['jenkins'],
   }
+
   # config for auto-managing github web hooks
   file { '/var/lib/jenkins/com.cloudbees.jenkins.GitHubPushTrigger.xml':
     ensure => 'present',
@@ -132,6 +133,16 @@ class profile::jenkins::master {
     content => template('jenkins_files/nodeMonitors.xml.erb'),
     require => Package['jenkins'],
     notify => Service['jenkins'],
+  }
+
+  file { '/var/lib/jenkins/scriptApproval.xml':
+    ensure  => 'present',
+    mode    => '0640',
+    owner   => jenkins,
+    group   => jenkins,
+    source  => 'puppet:///modules/jenkins_files/var/lib/jenkins/scriptApproval.xml'),
+    require => Package['jenkins'],
+    notify  => Service['jenkins'],
   }
 
   $user_dirs = ['/var/lib/jenkins/users',
