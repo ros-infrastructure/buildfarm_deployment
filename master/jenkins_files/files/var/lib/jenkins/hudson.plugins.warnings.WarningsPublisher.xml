@@ -3,16 +3,20 @@
   <groovyParsers>
     <hudson.plugins.warnings.GroovyParser>
       <name>CMake</name>
-      <regexp>^CMake (Deprecation Warning|Warning|Warning \(dev\)|Error) at (.+):(\d+) \((.+)\):\n(  .+\n)?(.+\n(  .+\n)*)?</regexp>
+      <regexp>^CMake (Deprecation Warning|Warning|Warning \(dev\)|Error) at (.+):(\d+)( \((.+)\))?:\n(  .+\n)?(.+\n(  .+\n)*)?</regexp>
       <script>import hudson.plugins.analysis.util.model.Priority
 import hudson.plugins.warnings.parser.Warning
 
 String messageType = matcher.group(1)
 String fileName = matcher.group(2)
 String lineNumber = matcher.group(3)
-String scope = matcher.group(4)
-String cmakeMessage = matcher.group(5)
-String callStack = matcher.group(6)
+String scope = matcher.group(5)
+String cmakeMessage = matcher.group(6)
+String callStack = matcher.group(7)
+
+if (!scope) {
+    scope = &quot;global&quot;
+}
 
 String message = &quot;&quot;
 if (cmakeMessage) {
