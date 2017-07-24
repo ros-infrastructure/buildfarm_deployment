@@ -140,7 +140,7 @@ class profile::jenkins::master {
     mode    => '0640',
     owner   => jenkins,
     group   => jenkins,
-    source  => 'puppet:///modules/jenkins_files/var/lib/jenkins/scriptApproval.xml'),
+    source  => 'puppet:///modules/jenkins_files/var/lib/jenkins/scriptApproval.xml',
     require => Package['jenkins'],
     notify  => Service['jenkins'],
   }
