@@ -41,11 +41,10 @@ class profile::jenkins::agent (
   }
 
   class { 'jenkins::slave':
-    slave_user        => $agent_username,
-    slave_home        => "/home/${agent_username}",
+    slave_user => $agent_username,
+    slave_home => "/home/${agent_username}",
     manage_slave_user => false,
-    version           => '3.4',
-    require           => User[$agent_username],
+    require => User[$agent_username],
   }
 
   # Make sure this directory exists so it can be mounted.
