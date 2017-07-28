@@ -18,7 +18,7 @@ notifications e.g. about any upcoming changes.
 
 To effectively use this there will be three main steps.
 * Provision the hardware/VM instances.
-* Fork this repository and update the configuration.
+* Fork the config repository and update the configuration.
 * Deploy the forked configuration onto the machines.
 
 At the end of this process you will have a Jenkins master, a package repository, and N jenkins-slaves.
