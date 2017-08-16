@@ -113,7 +113,7 @@ def main():
                         help='The minimum age of items to clean up in days.')
     parser.add_argument('--min-hours', type=int, default=10,
                         help='The minimum age of items to clean up in hours, added to days.')
-    parser.add_argument('--docker-api-version', type=str, default='1.16',
+    parser.add_argument('--docker-api-version', type=str, default='1.30',
                             help='The docker server API level.')
     parser.add_argument('--dry-run', '-n', default=False,
                         action='store_true',
