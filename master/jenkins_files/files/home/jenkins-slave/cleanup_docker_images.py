@@ -55,13 +55,13 @@ def print_progress(args):
 
 def run_image_cleanup(args, minimum_age, dclient):
     logging.info("cleaning up docker images")
-    images = dclient.images()
+    images = dclient.images.list()
 
     #keep track of already tried images to avoid duplication
     processed_images = set()
     for i in reversed(images):
-        dockerid = i['Id']
-        repo_tags = i['RepoTags'][0] if '<none>:<none>' not in i['RepoTags'] else dockerid
+        dockerid = i.id
+        repo_tags = i.attrs['RepoTags'][0] if '<none>:<none>' not in i.attrs['RepoTags'] else dockerid
         if dockerid in processed_images:
             logging.info("already processed %s, continuing" % repo_tags)
             continue
@@ -70,7 +70,7 @@ def run_image_cleanup(args, minimum_age, dclient):
             break
         processed_images.add(dockerid)
         try:
-            info = dclient.inspect_image(dockerid)
+            info = dclient.api.inspect_image(dockerid)
             if docker_id_older(info, minimum_age):
                 logging.info("removing image %s by identifier %s" % (dockerid, repo_tags))
                 if args.dry_run:
@@ -120,7 +120,7 @@ def main():
                         help='Do not actually clean up, just print to log.')
 
     args = parser.parse_args()
-    dclient = docker.Client(base_url='unix://var/run/docker.sock', version=args.docker_api_version)
+    dclient = docker.DockerClient(base_url='unix://var/run/docker.sock', version=args.docker_api_version)
     minimum_age = datetime.timedelta(days=args.min_days, hours=args.min_hours)
 
     #initialize logging
