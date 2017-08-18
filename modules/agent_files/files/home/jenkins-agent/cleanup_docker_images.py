@@ -14,6 +14,7 @@ import traceback
 from contextlib import contextmanager
 from requests.exceptions import Timeout
 
+
 @contextmanager
 def flocked(fd):
     """ Locks FD before entering the context, always releasing the lock.
@@ -57,7 +58,7 @@ def run_image_cleanup(args, minimum_age, dclient):
     logging.info("cleaning up docker images")
     images = dclient.images.list()
 
-    #keep track of already tried images to avoid duplication
+    # keep track of already tried images to avoid duplication
     processed_images = set()
     for i in reversed(images):
         dockerid = i.id
@@ -84,9 +85,6 @@ def run_image_cleanup(args, minimum_age, dclient):
             logging.info("APIError: failed to remove image %s Exception [%s]" % (repo_tags, ex))
         except Timeout as ex:
             logging.info("Timeout: failed to remove image %s Exception [%s]" % (repo_tags, ex))
-
-
-
         print_progress(args)
 
 
@@ -114,7 +112,7 @@ def main():
     parser.add_argument('--min-hours', type=int, default=10,
                         help='The minimum age of items to clean up in hours, added to days.')
     parser.add_argument('--docker-api-version', type=str, default='1.30',
-                            help='The docker server API level.')
+                        help='The docker server API level.')
     parser.add_argument('--dry-run', '-n', default=False,
                         action='store_true',
                         help='Do not actually clean up, just print to log.')
@@ -123,7 +121,7 @@ def main():
     dclient = docker.DockerClient(base_url='unix://var/run/docker.sock', version=args.docker_api_version)
     minimum_age = datetime.timedelta(days=args.min_days, hours=args.min_hours)
 
-    #initialize logging
+    # initialize logging
     logging.basicConfig(filename=args.logfile, format='%(asctime)s %(message)s',
                         level=logging.INFO)
     logging.info(">>>>>> Starting run of cleanup_docker_images.py arguments %s" % args)
