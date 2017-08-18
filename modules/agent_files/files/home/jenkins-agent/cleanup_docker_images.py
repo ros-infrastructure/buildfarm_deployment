@@ -61,7 +61,7 @@ def run_image_cleanup(args, minimum_age, dclient):
     processed_images = set()
     for i in reversed(images):
         dockerid = i.id
-        repo_tags = i.attrs['RepoTags'][0] if '<none>:<none>' not in i.attrs['RepoTags'] else dockerid
+        repo_tags = i.attrs['RepoTags'][0] if i.attrs['RepoTags'] else dockerid
         if dockerid in processed_images:
             logging.info("already processed %s, continuing" % repo_tags)
             continue
@@ -76,7 +76,7 @@ def run_image_cleanup(args, minimum_age, dclient):
                 if args.dry_run:
                     logging.info("Dry run >> I would have removed image: %s" % repo_tags)
                 else:
-                    dclient.remove_image(repo_tags)
+                    dclient.images.remove(repo_tags)
                     logging.info("successfully removed image: %s" % repo_tags)
             else:
                 logging.info("skipped removal of image due to age: %s -- %s" % (info['Created'], repo_tags))
