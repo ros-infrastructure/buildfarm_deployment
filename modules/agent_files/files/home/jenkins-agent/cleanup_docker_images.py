@@ -8,7 +8,6 @@ import fcntl
 import logging
 import psutil
 import sys
-import json
 import traceback
 
 from contextlib import contextmanager
