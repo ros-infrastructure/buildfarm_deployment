@@ -71,7 +71,7 @@ class profile::jenkins::agent (
     ensure => 'installed',
   }
 
-  # required by subprocess reaper script
+  # required by subprocess reaper and docker cleanup scripts
   package { 'python3-psutil':
     ensure => 'installed',
   }
@@ -100,9 +100,9 @@ class profile::jenkins::agent (
   include docker
 
   # required by cleanup_docker script
-  python::pip { 'docker-py':
-    pkgname        => 'docker-py',
-    #ensure        => present, # defaults to present
+  python::pip { 'docker':
+    ensure  => '2.5.0',
+    pkgname => 'docker',
   }
 
   # script to clean up docker images from oldest
