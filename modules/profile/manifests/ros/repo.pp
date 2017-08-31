@@ -103,7 +103,7 @@ class profile::ros::repo {
     file { "/home/${agent_username}/.gnupg/gpg.conf":
       owner  => $agent_username,
       group  => $agent_username,
-      content => 'puppet:///modules/profile/ros/repo/gpg.conf',
+      source => 'puppet:///modules/profile/ros/repo/gpg.conf',
       require => File["/home/${agent_username}/.ssh"],
     }
 
