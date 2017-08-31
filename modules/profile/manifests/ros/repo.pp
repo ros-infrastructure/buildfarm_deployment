@@ -98,7 +98,14 @@ class profile::ros::repo {
     package {'python-configparser':
       ensure => 'installed',
     }
-    # GPG key management
+
+    ## GPG key management
+    file { "/home/${agent_username}/.gnupg/gpg.conf":
+      owner  => $agent_username,
+      group  => $agent_username,
+      content => 'puppet:///modules/profile/ros/repo/gpg.conf',
+      require => File["/home/${agent_username}/.ssh"],
+    }
 
     file { "/home/${agent_username}/.ssh/gpg_private_key.sec":
       mode => '0600',
