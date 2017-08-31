@@ -10,7 +10,7 @@ It typically requires the configurations given as an example in  [buildfarm_depl
 After the servers have been provisioned you will then want to see the [ros_buildfarm](https://github.com/ros-infrastructure/ros_buildfarm) project for how to configure Jenkins with ROS jobs.
 
 If you are going to use any of the provided infrastructure please consider
-monitoring the ROS Discourse Buildfarm category
+signing up for the build farm mailing list
 (https://discourse.ros.org/c/buildfarm) in order to receive
 notifications e.g. about any upcoming changes.
 
@@ -21,7 +21,7 @@ To effectively use this there will be three main steps.
 * Fork the config repository and update the configuration.
 * Deploy the forked configuration onto the machines.
 
-At the end of this process you will have a Jenkins master, a package repository, and N jenkins-slaves.
+At the end of this process you will have a Jenkins master, a package repository, and N jenkins agents.
 
 ## Provisioning
 
@@ -34,10 +34,10 @@ They are intended as a guideline for choosing the appropriate parameters when de
 <table>
 <tr><td>Memory</td><td>30Gb</td></tr>
 <tr><td>Disk space</td><td>200Gb</td></tr>
-<tr><td><strong>Recommendation</strong></td><td>r3.xlarge</td></tr>
+<tr><td><strong>Recommendation</strong></td><td>r4.xlarge</td></tr>
 </table>
 
-### Slave
+### Agent
 
 <table>
 <tr><td>Disk space</td><td>200Gb+</td></tr>
@@ -53,18 +53,16 @@ They are intended as a guideline for choosing the appropriate parameters when de
 
 ## Forking (or not)
 
-**The config repository will contain your secrets such as private keys and access tokens, keep it private!**
-You should make a copy of the config repository and make it private.
-Unfortunately you can't use the "Fork" button on GitHub and then make it private.
+***Since your config repository will contain secrets such as private keys and access tokens, keep it private!***
 
-To create a private fork.
+You can make a private copy of the sample config by following the steps in [Duplicating a repository](https://help.github.com/articles/duplicating-a-repository/).
 
-1. Create a new empty private repo
-1. Push from a clone of the public repo into the private repo.
+If you need to make changes to the puppet itself, you can also fork this repository.
 
-### Access
+### Access during deployment
 
-To give access to your private repo you will need to authenticate.
+To give access to your private repo you will need to provide authentication from the provisioned machines.
+You can either [add a deploy key](https://developer.github.com/v3/guides/managing-deploy-keys/#deploy-keys) and clone via ssh or [create a personal access token](https://help.github.com/articles/creating-a-personal-access-token-for-the-command-line/) and use https.
 
 The below example has setup the config repo with token access.
 And embedded the token in the below URLs.
