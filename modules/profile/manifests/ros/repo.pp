@@ -61,6 +61,23 @@ class profile::ros::repo {
     require => User[$agent_username],
   }
 
+  if hiera('upload_keys', false) {
+    hiera('upload_keys').each |$name, $content| {
+      file { "/home/${agent_username}/upload_triggers/${name}":
+        content => $content,
+        mode    => '0400',
+      }
+    }
+  }
+
+
+  file { "/home/${agent_username}/upload_triggers/upload_repo.bash":
+    source => 'puppet:///modules/profile/ros/repo/upload_repo.bash',
+    mode   => '0744',
+    owner  =>  $agent_username,
+    group  =>  $agent_username,
+  }
+
   $config_dirs = ["/home/${agent_username}/.buildfarm",
   ]
 
