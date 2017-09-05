@@ -7,6 +7,8 @@ class profile::ros::base {
   # setup ntp with defaults
   include '::ntp'
 
+  include netdata
+
   if hiera('repo::ip', false) {
     host {'repo':
       ip => hiera('repo::ip'),
