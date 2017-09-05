@@ -1,3 +1,7 @@
+# ROS server base profile
+#
+# Profile class with setup suitable and desirable for every ROS host.
+# Sets up basics like ntp, ssh keys for administrative access, netdata monitoring, and cron jobs for re-running puppet.
 class profile::ros::base {
 
   # setup ntp with defaults
