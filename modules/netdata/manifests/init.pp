@@ -1,3 +1,4 @@
+# Netdata installation and configuration.
 class netdata {
   file { '/tmp/netdata-kickstart.sh':
     source => 'puppet:///modules/netdata/netdata-kickstart.sh',
@@ -18,4 +19,5 @@ class netdata {
     ensure  => running,
     enable  => true,
     require =>  [File['/etc/systemd/system/netdata.service'],Exec['install-netdata']],
+  }
 }
