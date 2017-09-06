@@ -12,7 +12,11 @@ class netdata {
 
   file { '/etc/systemd/system/netdata.service':
     source => 'puppet:///modules/netdata/netdata.service',
-    notify =>  Exec['/bin/systemctl daemon-reload'],
+    notify =>  Exec['reload-systemd-daemons'],
+  }
+
+  exec { 'reload-systemd-daemons':
+    command => '/bin/systemctl daemon-reload'
   }
 
   service {'netdata':
