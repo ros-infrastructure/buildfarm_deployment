@@ -70,6 +70,8 @@ class profile::ros::repo {
       file { "/home/${agent_username}/upload_triggers/${name}":
         content => $content,
         mode    => '0400',
+        owner   => $agent_username,
+        group   => $agent_username,
         require => File["/home/${agent_username}/upload_triggers"],
       }
 
