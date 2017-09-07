@@ -61,12 +61,18 @@ class profile::ros::repo {
     require => User[$agent_username],
   }
 
+  file { "/home/${agent_username}/upload_triggers":
+    ensure => directory,
+  }
+
   if hiera('upload_keys', false) {
     hiera('upload_keys').each |$name, $content| {
       file { "/home/${agent_username}/upload_triggers/${name}":
         content => $content,
         mode    => '0400',
+        require => File["/home/${agent_username}/upload_triggers"],
       }
+
     }
   }
 
@@ -76,6 +82,7 @@ class profile::ros::repo {
     mode   => '0744',
     owner  =>  $agent_username,
     group  =>  $agent_username,
+    require => File["/home/${agent_username}/upload_triggers"],
   }
 
   $config_dirs = ["/home/${agent_username}/.buildfarm",
