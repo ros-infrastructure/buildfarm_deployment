@@ -10,7 +10,7 @@ It typically requires the configurations given as an example in  [buildfarm_depl
 After the servers have been provisioned you will then want to see the [ros_buildfarm](https://github.com/ros-infrastructure/ros_buildfarm) project for how to configure Jenkins with ROS jobs.
 
 If you are going to use any of the provided infrastructure please consider
-monitoring the ROS Discourse Buildfarm category
+signing up for the build farm mailing list
 (https://discourse.ros.org/c/buildfarm) in order to receive
 notifications e.g. about any upcoming changes.
 
@@ -21,7 +21,7 @@ To effectively use this there will be three main steps.
 * Fork the config repository and update the configuration.
 * Deploy the forked configuration onto the machines.
 
-At the end of this process you will have a Jenkins master, a package repository, and N jenkins-slaves.
+At the end of this process you will have a Jenkins master, a package repository, and N jenkins agents.
 
 ## Provisioning
 
@@ -34,10 +34,10 @@ They are intended as a guideline for choosing the appropriate parameters when de
 <table>
 <tr><td>Memory</td><td>30Gb</td></tr>
 <tr><td>Disk space</td><td>200Gb</td></tr>
-<tr><td><strong>Recommendation</strong></td><td>r3.xlarge</td></tr>
+<tr><td><strong>Recommendation</strong></td><td>r4.xlarge</td></tr>
 </table>
 
-### Slave
+### Agent
 
 <table>
 <tr><td>Disk space</td><td>200Gb+</td></tr>
@@ -53,18 +53,16 @@ They are intended as a guideline for choosing the appropriate parameters when de
 
 ## Forking (or not)
 
-**The config repository will contain your secrets such as private keys and access tokens, keep it private!**
-You should make a copy of the config repository and make it private.
-Unfortunately you can't use the "Fork" button on GitHub and then make it private.
+***Since your config repository will contain secrets such as private keys and access tokens, keep it private!***
 
-To create a private fork.
+You can make a private copy of the sample config by following the steps in [Duplicating a repository](https://help.github.com/articles/duplicating-a-repository/).
 
-1. Create a new empty private repo
-1. Push from a clone of the public repo into the private repo.
+If you need to make changes to the puppet itself, you can also fork this repository.
 
-### Access
+### Access during deployment
 
-To give access to your private repo you will need to authenticate.
+To give access to your private repo you will need to provide authentication from the provisioned machines.
+You can either [add a deploy key](https://developer.github.com/v3/guides/managing-deploy-keys/#deploy-keys) and clone via ssh or [create a personal access token](https://help.github.com/articles/creating-a-personal-access-token-for-the-command-line/) and use https.
 
 The below example has setup the config repo with token access.
 And embedded the token in the below URLs.
@@ -75,13 +73,17 @@ Keep this token secret!
 It is recommended to change all the security parameters from this configuration.
 In particular you should change the following:
 
-On all three:
+##### In common.yaml
+* `master::ip`
+  The IP address of the master instance.
+* `repo::ip`
+  The IP address of the repository instance.
 * `jenkins::slave::ui_user` and `jenkins::slave::ui_pass` are passed to the jenkins::slave puppet module.
-  You may need to update them depending on your slave's security model.
+  You may need to update them depending on your agent's security model.
   See:
   * https://github.com/jenkinsci/puppet-jenkins#slaves
   * https://github.com/jenkinsci/puppet-jenkins/blob/d2ceee61c1971256427dee11dd6472d30bf95228/manifests/slave.pp#L20-L21
-* This is the password for the slave to access the master
+* This is the password for the agent to access the master
  * `user::admin::password_hash`
 * On the master this should be the hashed password from above
  * The easiest way to create this is to setup a jenkins instance.
@@ -91,7 +93,7 @@ On all three:
 * `ssh_keys`
  * Configure as many public ssh-keys as you want for administrators to log in.
    It's recommended at least one for root.
- * On the repo machine make sure there is at least one key for the jenkins-slave user matching the ssh private key
+ * On the repo machine make sure there is at least one key for the jenkins-agent user matching the ssh private key
   `jenkins::private_key` provisioned on the master.
 
 ::
@@ -106,24 +108,23 @@ On all three:
             ensure: present
             key: AAAAB3NzaC1yc2EAAAADAQABAAABAQC2NOaRsdZqqTrCwNR77AQIqwAPYkDfiL1Ou7Pi/qaW9S7UU0Y1KAQ6kWhgJc9RtOhbZKGHbFTqSLT4235TkmPvlZbV2bK8ZViBmqQ3r8vDMhC/+p9Ec9SP8sjv6JcIEWOy5zXPnB3OnHHWXmvZP47rjJY0l76F71fZt3vlvyjz7IrikULmuKcyrE+zulmbSTtfGZhxQRPxZDO/RiOemCPsYo5u/rUMjWH+CkEI0swQlM6QIvjWdfYtNwQT9yo53MXFy5jodhW4YOOncKE4RMOI9Lmu6jE0GmdmSEv486R4ot6iWanx2hk/46zlmX1kSKGWObRdH57H/xIAxvw+PiTd
             type: ssh-rsa
-            user: jenkins-slave
+            user: jenkins-agent
 
-On repo:
-  * `jenkins-slave::gpg_public_key`
+##### On repo:
+
+  * `jenkins-agent::gpg_public_key`
   * The GPG public key matching the private key.
     This will be made available for download from the repo for verification.
-  * `jenkins-slave::gpg_private_key`
+  * `jenkins-agent::gpg_private_key`
   * The GPG key with which to sign the repository.
-  * `master::ip`
-  * The IP address of the master instance.
-  * `jenkins-slave::reprepro_config`
+  * `jenkins-agent::reprepro_config`
    * Fill in the correct rules for upstream imports.
      It should be a hash/dict item with the filename as the key, ensure, and content as elements like below.
      You can have as many elements as you want for different files.
 
 
-          jenkins-slave::reprepro_config:
-              '/home/jenkins-slave/reprepro_config/empy_saucy.yaml':
+          jenkins-agent::reprepro_config:
+              '/home/jenkins-agent/reprepro_config/empy_saucy.yaml':
                   ensure: 'present'
                   content: |
                       name: empy_saucy
@@ -134,23 +135,19 @@ On repo:
                       filter_formula: Package (% python3-empy)
 
 
-On the master:
+##### On the master:
   * `jenkins::private_ssh_key`
   * The ssh private key  will be provisioned as an ssh-credential available via the ssh-agent inside a jenkins jobs.
     This is necessary for access to push content onto the repo machine.
     It can also be used to access other machines from within the job execution environment.
     This will require deploying the matching public key to the other machines appropriately.
     **Note: This value should be kept secret!**
-  * `master::ip`
-  * The IP address of the master instance.
-  * `repo::ip`
-  * The IP address of the repository instance.
 
-  * `credentials::jenkins-slave::username`
+  * `credentials::jenkins-agent::username`
   * The name of the credentials
-  * `credentials::jenkins-slave::id`
+  * `credentials::jenkins-agent::id`
   * A UUID for the credentials in the format `1e7d4696-7fd4-4bc6-8c87-ebc7b6ce16e5`
-  * `credentials::jenkins-slave::passphrase`
+  * `credentials::jenkins-agent::passphrase`
   * The hashed passphrase for the key. The UI puts this has in if there's no passphrase `4lRsx/NwfEndwUlcWOOnYg== `
    * If you would like to modify these values from the default it will likely be easiest to boot an instance. Change the credentials via the UI, then grab the values out of the config file.
 
@@ -165,13 +162,9 @@ On the master:
     * An SSH private key that has access to the source and release repositories that the buildfarm will use.
 
 
-On the slave:
-* `master::ip`
-* The IP address of the master instance.
-* `repo::ip`
-* The IP address of the repository instance.
+#### On the agent:
 * `jenkins::slave::num_executors`
- * The number of executors to instantiate on each slave.
+ * The number of executors to instantiate on each agent.
    From current testing you can do one per available core, as long as at least 2GB of memory are available for each executor.
 * `ssh_host_keys`
 * Required for uploading to doc job results. You will need to add the host verification for both the name and IP of the repo server. 
@@ -225,7 +218,7 @@ Once you have customized all the content of the config repo on each provisioned 
     ./install_prerequisites.bash
     ./reconfigure.bash repo
 
-### slave deployment
+### agent deployment
 
     sudo su
     cd
@@ -236,7 +229,7 @@ Once you have customized all the content of the config repo on each provisioned 
     git clone https://8d25f41a3ed71b0b9fc571c8a35bcb47fb4f6489@github.com/YOUR_ORG/buildfarm_deployment_config.git
     cd buildfarm_deployment_config
     ./install_prerequisites.bash
-    ./reconfigure.bash slave
+    ./reconfigure.bash agent
 
 ## After Deployment
 

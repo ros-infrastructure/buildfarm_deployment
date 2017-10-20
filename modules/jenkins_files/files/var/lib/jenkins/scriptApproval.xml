@@ -1,0 +1,97 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<scriptApproval plugin="script-security@1.27">
+  <approvedScriptHashes>
+    <string>017d0db438428731cd600b6ebda805065433520f</string>
+    <string>020e2a7675880f3adff7bb3875e62b141ca761c0</string>
+    <string>051f7802e930bb65b6ec85faecf2d0037f59857a</string>
+    <string>0a5581bbbed26282ce1fbdcf3bfc50ffb3f87248</string>
+    <string>214b6890c4ff70ad9ce6d9a5ebe46a63a8f916dc</string>
+    <string>2f8fa51f6d1638e56fd5b2d5cfc85bf9f58e079b</string>
+    <string>50087ee81e6ab6b0da316611d87e105a1ba17f9e</string>
+    <string>7fb8ef68a6f8697c0e0ca730e1e9795159ff8ac6</string>
+    <string>84d27944826a737776b68f476d7faa4e0378d968</string>
+    <string>9fb8784cf298e069b536a4228baa06e8e4630b1a</string>
+    <string>acd47f040676518925823694246197abbd1ba392</string>
+    <string>bfb20dc2f57a4c7c3f618a8c53742e5781ca108f</string>
+    <string>c0ea53d98b9e0bcffdb6c6a34c3cd8d98c975c09</string>
+    <string>cc7bbe85321f8ddc9ce563d4b48d8fdc00157e04</string>
+    <string>cebd1305dba6437516c80810068fefe8fbf8ab65</string>
+    <string>d8902acf5a5eb4aa9119e389f8db5fef87b1185a</string>
+    <string>e456c35dfaa0f1ffa6684a79d981bc9c10c46b1a</string>
+    <string>e4d0cedc649a70e3bf3a7638d57b7a4abaad65db</string>
+    <string>efde7cbb1754899daca540a53d4729541f8610a1</string>
+    <string>ff0a33e4d343a8f98b4630b990a44aad9b4ad1ac</string>
+  </approvedScriptHashes>
+  <approvedSignatures>
+    <string>field hudson.model.View name</string>
+    <string>field java.util.ArrayList size</string>
+    <string>method groovy.lang.Binding getVariables</string>
+    <string>method groovy.lang.Script println java.lang.Object</string>
+    <string>method hudson.XmlFile getFile</string>
+    <string>method hudson.model.AbstractBuild getWorkspace</string>
+    <string>method hudson.model.AbstractItem getConfigFile</string>
+    <string>method hudson.model.AbstractItem updateByXml javax.xml.transform.stream.StreamSource</string>
+    <string>method hudson.model.AbstractProject getUpstreamProjects</string>
+    <string>method hudson.model.AbstractProject isDisabled</string>
+    <string>method hudson.model.BuildableItem scheduleBuild hudson.model.Cause</string>
+    <string>method hudson.model.Item delete</string>
+    <string>method hudson.model.Item getName</string>
+    <string>method hudson.model.Job getLastBuild</string>
+    <string>method hudson.model.Job getNextBuildNumber</string>
+    <string>method hudson.model.Job isBuilding</string>
+    <string>method hudson.model.Job isInQueue</string>
+    <string>method hudson.model.ModifiableViewGroup addView hudson.model.View</string>
+    <string>method hudson.model.Result isWorseOrEqualTo hudson.model.Result</string>
+    <string>method hudson.model.Run getNumber</string>
+    <string>method hudson.model.Run getResult</string>
+    <string>method hudson.model.View updateByXml javax.xml.transform.Source</string>
+    <string>method hudson.model.View writeXml java.io.OutputStream</string>
+    <string>method hudson.model.ViewGroup getViews</string>
+    <string>method java.io.File getName</string>
+    <string>method java.io.File getPath</string>
+    <string>method java.io.File listFiles</string>
+    <string>method java.lang.Thread isInterrupted</string>
+    <string>method javax.xml.parsers.DocumentBuilder parse java.io.File</string>
+    <string>method javax.xml.parsers.DocumentBuilder parse java.io.InputStream</string>
+    <string>method javax.xml.parsers.DocumentBuilder parse org.xml.sax.InputSource</string>
+    <string>method javax.xml.parsers.DocumentBuilderFactory newDocumentBuilder</string>
+    <string>method jenkins.model.Jenkins getAllItems</string>
+    <string>method jenkins.model.Jenkins getItemByFullName java.lang.String</string>
+    <string>method jenkins.model.Jenkins rebuildDependencyGraph</string>
+    <string>method jenkins.model.ModifiableTopLevelItemGroup createProjectFromXML java.lang.String java.io.InputStream</string>
+    <string>method org.apache.xml.serialize.DOMSerializer serialize org.w3c.dom.Document</string>
+    <string>method org.apache.xml.serialize.OutputFormat setIndent int</string>
+    <string>method org.apache.xml.serialize.OutputFormat setIndenting boolean</string>
+    <string>method org.w3c.dom.Document getElementsByTagName java.lang.String</string>
+    <string>method org.w3c.dom.Document importNode org.w3c.dom.Node boolean</string>
+    <string>method org.w3c.dom.Element getElementsByTagName java.lang.String</string>
+    <string>method org.w3c.dom.Node appendChild org.w3c.dom.Node</string>
+    <string>method org.w3c.dom.Node setTextContent java.lang.String</string>
+    <string>method org.w3c.dom.NodeList getLength</string>
+    <string>method org.w3c.dom.NodeList item int</string>
+    <string>new hudson.model.Cause$UpstreamCause hudson.model.AbstractBuild</string>
+    <string>new java.io.ByteArrayOutputStream</string>
+    <string>new java.io.File java.lang.String</string>
+    <string>new java.io.StringBufferInputStream java.lang.String</string>
+    <string>new java.lang.InterruptedException java.lang.String</string>
+    <string>new javax.xml.transform.stream.StreamSource java.io.Reader</string>
+    <string>new org.apache.xml.serialize.OutputFormat org.w3c.dom.Document</string>
+    <string>new org.apache.xml.serialize.XMLSerializer java.io.Writer org.apache.xml.serialize.OutputFormat</string>
+    <string>new org.xml.sax.InputSource java.io.Reader</string>
+    <string>staticMethod difflib.DiffUtils diff java.util.List java.util.List</string>
+    <string>staticMethod difflib.DiffUtils generateUnifiedDiff java.lang.String java.lang.String java.util.List difflib.Patch int</string>
+    <string>staticMethod hudson.model.View createViewFromXML java.lang.String java.io.InputStream</string>
+    <string>staticMethod java.lang.Thread currentThread</string>
+    <string>staticMethod javax.xml.parsers.DocumentBuilderFactory newInstance</string>
+    <string>staticMethod jenkins.model.Jenkins getInstance</string>
+    <string>staticMethod org.codehaus.groovy.runtime.DefaultGroovyMethods getText java.io.File java.lang.String</string>
+    <string>staticMethod org.codehaus.groovy.runtime.DefaultGroovyMethods multiply java.lang.String java.lang.Number</string>
+    <string>staticMethod org.codehaus.groovy.runtime.DefaultGroovyMethods println groovy.lang.Closure java.lang.Object</string>
+    <string>staticMethod org.codehaus.groovy.runtime.DefaultGroovyMethods sort java.lang.Object[]</string>
+  </approvedSignatures>
+  <aclApprovedSignatures/>
+  <approvedClasspathEntries/>
+  <pendingScripts/>
+  <pendingSignatures/>
+  <pendingClasspathEntries/>
+</scriptApproval>

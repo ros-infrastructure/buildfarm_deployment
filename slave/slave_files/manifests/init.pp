@@ -1,3 +1,0 @@
-class slave_files {
-
-}
