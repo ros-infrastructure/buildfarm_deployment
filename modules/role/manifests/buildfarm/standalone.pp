@@ -2,6 +2,6 @@
 class role::buildfarm::standalone {
   include profile::ros::base
   include profile::jenkins::agent
-  include profile::jenkins::repo
+  include profile::ros::repo
   include profile::jenkins::master
 }
