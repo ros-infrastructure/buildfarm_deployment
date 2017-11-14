@@ -24,7 +24,7 @@ class rosjenkins::manager {
     group => jenkins,
     replace => false,
     source => 'puppet:///modules/rosjenkins/manager/var/lib/jenkins/config.xml',
-    require => Package['jenkins'],
+    require => Class['jenkins::package'],
     notify => Service['jenkins'],
   }
 
@@ -70,7 +70,7 @@ class rosjenkins::manager {
     owner => 'jenkins',
     group => 'jenkins',
     content => template('rosjenkins/manager/com.cloudbees.jenkins.GitHubPushTrigger.xml.erb'),
-    require => Package['jenkins'],
+    require => Class['jenkins::package'],
     notify => Service['jenkins'],
   }
 
@@ -81,7 +81,7 @@ class rosjenkins::manager {
     owner => 'jenkins',
     group => 'jenkins',
     content => template('rosjenkins/manager/org.jenkinsci.plugins.ghprb.GhprbTrigger.xml.erb'),
-    require => Package['jenkins'],
+    require => Class['jenkins::package'],
     notify => Service['jenkins'],
   }
 
@@ -144,7 +144,7 @@ class rosjenkins::manager {
     owner => jenkins,
     group => jenkins,
     source => 'puppet:///modules/rosjenkins/manager/var/lib/jenkins/hudson.plugins.mercurial.MercurialInstallation.xml',
-    require => Package['jenkins'],
+    require => Class['jenkins::package'],
     notify => Service['jenkins'],
   }
 
@@ -155,7 +155,7 @@ class rosjenkins::manager {
     owner => jenkins,
     group => jenkins,
     content => template('rosjenkins/manager/nodeMonitors.xml.erb'),
-    require => Package['jenkins'],
+    require => Class['jenkins::package'],
     notify => Service['jenkins'],
   }
 
@@ -165,7 +165,7 @@ class rosjenkins::manager {
     owner   => jenkins,
     group   => jenkins,
     source  => 'puppet:///modules/rosjenkins/manager/var/lib/jenkins/scriptApproval.xml',
-    require => Package['jenkins'],
+    require => Class['jenkins::package'],
     notify  => Service['jenkins'],
   }
 
@@ -188,7 +188,7 @@ class rosjenkins::manager {
     owner => jenkins,
     group => jenkins,
     source => 'puppet:///modules/rosjenkins/manager/var/lib/jenkins/secrets/slave-to-master-security-kill-switch',
-    require => [Package['jenkins'],
+    require => [Class['jenkins::package'],
     File[$user_dirs],],
     notify => Service['jenkins'],
   }
@@ -200,7 +200,7 @@ class rosjenkins::manager {
     owner => jenkins,
     group => jenkins,
     source => 'puppet:///modules/rosjenkins/manager/var/lib/jenkins/secrets/filepath-filters.d/60-ssh-id.conf',
-    require => [Package['jenkins'],
+    require => [Class['jenkins::package'],
     File[$user_dirs],],
     notify => Service['jenkins'],
   }
@@ -212,7 +212,7 @@ class rosjenkins::manager {
     owner => jenkins,
     group => jenkins,
     content => template('rosjenkins/manager/user_config.xml.erb'),
-    require => [Package['jenkins'],
+    require => [Class['jenkins::package'],
     File[$user_dirs],],
     notify => Service['jenkins'],
   }
