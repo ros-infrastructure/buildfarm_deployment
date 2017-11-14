@@ -207,11 +207,6 @@ class profile::jenkins::master {
     notify => Service['jenkins'],
   }
 
-  # For our convenience reading the logs
-  class { 'timezone':
-    timezone => hiera('timezone', 'America/Los_Angeles'),
-  }
-
   # setup apache
   class { 'apache':
     default_vhost => false,
