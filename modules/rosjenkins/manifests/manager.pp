@@ -110,7 +110,7 @@ class rosjenkins::manager {
     mode => '0640',
     owner => jenkins,
     group => jenkins,
-    content => template('jenkins/manager/jenkins.plugins.publish_over_ssh.BapSshPublisherPlugin.xml.erb'),
+    content => template('rosjenkins/manager/jenkins.plugins.publish_over_ssh.BapSshPublisherPlugin.xml.erb'),
     require => Jenkins::Plugin['publish-over-ssh'],
     notify => Service['jenkins'],
   }
