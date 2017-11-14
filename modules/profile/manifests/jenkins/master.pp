@@ -1,3 +1,5 @@
+# vim:ft=puppet
+
 # Jenkins master Profile
 #
 # Following the puppet convention of Roles and Profiles ([1]), create a profile
@@ -7,7 +9,7 @@
 # [1]: https://puppet.com/docs/pe/2017.3/managing_nodes/roles_and_profiles_example.html
 class profile::jenkins::master {
   include rosjenkins::manager
-  include profile::jenkins::agent
+  include profile::jenkins::masteragent
 
   ### install latest docker
   include docker
