@@ -8,7 +8,6 @@ class rosjenkins::manager {
   include ::jenkins
   include ::jenkins::master
   include rosjenkins::plugins
-  include jenkins_files
 
   # required by management jobs to read rosdistro yaml files
   package { 'python3-yaml':
