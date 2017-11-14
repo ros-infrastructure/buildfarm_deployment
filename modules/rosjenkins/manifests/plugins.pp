@@ -1,7 +1,7 @@
 # This module was automatically generated on 2017-08-28 11:59:04
 # Instead of editing it, update plugins via the Jenkins web UI and rerun the generator.
 # Otherwise your changes will be overwritten the next time it is run.
-class profile::jenkins::rosplugins {
+class rosjenkins::plugins {
   ::jenkins::plugin { 'PrioritySorter':
     version => '3.5.1',
     require => [ Jenkins::Plugin['bouncycastle-api'], Jenkins::Plugin['cloudbees-folder'], Jenkins::Plugin['matrix-project'], Jenkins::Plugin['workflow-durable-task-step'] ]
