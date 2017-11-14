@@ -10,6 +10,7 @@
 class profile::jenkins::agent {
   class { 'rosjenkins::agent':
     agent_username => 'jenkins-masteragent',
+    agent_labels => 'agent_on_master',
   }
 }
 

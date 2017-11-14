@@ -12,8 +12,10 @@
 #    }
 #
 # @pararm agent_username The unix user the agent will configure and run as.
+# @pararm agent_labels A string containing space separated labels to apply to the Jenkins agent.
 class rosjenkins::agent (
   String $agent_username = 'jenkins-agent',
+  String $agent_labels = 'buildagent',
 ) {
 
   user { $agent_username :
@@ -48,6 +50,7 @@ class rosjenkins::agent (
     slave_user => $agent_username,
     slave_home => "/home/${agent_username}",
     manage_slave_user => false,
+    slave_labels => $agent_labels,
     require => User[$agent_username],
   }
 
