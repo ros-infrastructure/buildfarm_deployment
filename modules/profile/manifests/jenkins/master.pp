@@ -207,11 +207,7 @@ class profile::jenkins::master {
     notify => Service['jenkins'],
   }
 
-  # setup apache
-  class { 'apache':
-    default_vhost => false,
-  }
-
+  include rosapache
   apache::vhost { 'master':
     docroot => '/var/www.html',
     port    => '80',

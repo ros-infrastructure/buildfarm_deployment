@@ -106,10 +106,7 @@ class profile::ros::repo {
     require => File["/home/${agent_username}/.buildfarm"],
   }
 
-  # Set up apache
-  class { 'apache':
-    default_vhost => false,
-  }
+  include rosapache;
 
   # Make your repo publicly accessible
   apache::vhost { 'repos':
