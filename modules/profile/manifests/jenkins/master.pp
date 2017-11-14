@@ -1,3 +1,10 @@
+# Jenkins master Profile
+#
+# Following the puppet convention of Roles and Profiles ([1]), create a profile
+# class for operating a Jenkins master/manager with the necessary plugins to
+# run the ROS buildfarm.
+#
+# [1]: https://puppet.com/docs/pe/2017.3/managing_nodes/roles_and_profiles_example.html
 class profile::jenkins::master {
   include rosjenkins::manager
   include profile::jenkins::agent
