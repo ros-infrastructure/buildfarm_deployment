@@ -1,7 +1,8 @@
 class profile::ros::repo {
-  require profile::jenkins::agent
+  require profile::jenkins::repoagent
+
   # This is not a class parameter so it cannot be overloaded separately from the jenkins::agent value.
-  $agent_username = $profile::jenkins::agent::agent_username
+  $agent_username = $profile::jenkins::repoagent::agent_username
 
   include reprepro
 
@@ -106,10 +107,7 @@ class profile::ros::repo {
     require => File["/home/${agent_username}/.buildfarm"],
   }
 
-  # Set up apache
-  class { 'apache':
-    default_vhost => false,
-  }
+  include rosapache;
 
   # Make your repo publicly accessible
   apache::vhost { 'repos':

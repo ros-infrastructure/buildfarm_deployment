@@ -7,6 +7,12 @@ class profile::ros::base {
   # setup ntp with defaults
   include '::ntp'
 
+
+  # For our convenience reading the logs
+  class { 'timezone':
+    timezone => hiera('timezone', 'America/Los_Angeles'),
+  }
+
   # TODO finish this module and get it working.
   #include netdata
 
