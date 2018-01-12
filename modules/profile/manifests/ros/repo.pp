@@ -179,47 +179,23 @@ class profile::ros::repo {
       require    => File["/home/${agent_username}/.ssh/gpg_private_key.sec"]
     }
 
-    exec {'init_building_repo':
-      path        => '/bin:/usr/bin',
-      command     => "/home/${agent_username}/reprepro-updater/scripts/setup_repo.py ubuntu_building -c",
-      environment => ["PYTHONPATH=/home/${agent_username}/reprepro-updater/src"],
-      user  => $agent_username,
-      group  => $agent_username,
-      unless      => "/home/${agent_username}/reprepro-updater/scripts/setup_repo.py ubuntu_building -q",
-      logoutput   => on_failure,
-      require     => [
-        Vcsrepo["/home/${agent_username}/reprepro-updater"],
-        File["/home/${agent_username}/.buildfarm/reprepro-updater.ini"],
-      ]
+    ['building', 'testing', 'main'].each |String $reponame| {
+      exec {"init_${reponame}_repo":
+        path        => '/bin:/usr/bin',
+        command     => "python /home/${agent_username}/reprepro-updater/scripts/setup_repo.py ubuntu_${reponame} -c",
+        environment => ["PYTHONPATH=/home/${agent_username}/reprepro-updater/src"],
+        user  => $agent_username,
+        group  => $agent_username,
+        unless      => "python /home/${agent_username}/reprepro-updater/scripts/setup_repo.py ubuntu_${reponame} -q",
+        logoutput   => on_failure,
+        require     => [
+          Vcsrepo["/home/${agent_username}/reprepro-updater"],
+          File["/home/${agent_username}/.buildfarm/reprepro-updater.ini"],
+          Package['python-yaml'],
+        ]
+      }
     }
 
-    exec {'init_testing_repo':
-      path        => '/bin:/usr/bin',
-      command     => "/home/${agent_username}/reprepro-updater/scripts/setup_repo.py ubuntu_testing -c",
-      environment => ["PYTHONPATH=/home/${agent_username}/reprepro-updater/src"],
-      user  => $agent_username,
-      group  => $agent_username,
-      unless      => "/home/${agent_username}/reprepro-updater/scripts/setup_repo.py ubuntu_testing -q",
-      logoutput   => on_failure,
-      require     => [
-        Vcsrepo["/home/${agent_username}/reprepro-updater"],
-        File["/home/${agent_username}/.buildfarm/reprepro-updater.ini"],
-      ]
-    }
-
-    exec {'init_main_repo':
-      path        => '/bin:/usr/bin',
-      command     => "/home/${agent_username}/reprepro-updater/scripts/setup_repo.py ubuntu_main -c",
-      environment => ["PYTHONPATH=/home/${agent_username}/reprepro-updater/src"],
-      user  => $agent_username,
-      group  => $agent_username,
-      unless      => "/home/${agent_username}/reprepro-updater/scripts/setup_repo.py ubuntu_testing -q",
-      logoutput   => on_failure,
-      require     => [
-        Vcsrepo["/home/${agent_username}/reprepro-updater"],
-        File["/home/${agent_username}/.buildfarm/reprepro-updater.ini"],
-      ]
-    }
     # needed for boostrapping the repo
     vcsrepo { "/home/${agent_username}/reprepro-updater":
       ensure   => latest,
