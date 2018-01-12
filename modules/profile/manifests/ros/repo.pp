@@ -191,6 +191,7 @@ class profile::ros::repo {
         require     => [
           Vcsrepo["/home/${agent_username}/reprepro-updater"],
           File["/home/${agent_username}/.buildfarm/reprepro-updater.ini"],
+          Class['python'],
           Package['python-yaml'],
         ]
       }
