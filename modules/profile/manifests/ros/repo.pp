@@ -190,7 +190,7 @@ class profile::ros::repo {
         logoutput   => on_failure,
         require     => [
           Vcsrepo["/home/${agent_username}/reprepro-updater"],
-          File["/home/${agent_username}/.buildfarm/reprepro-updater.ini"],
+          File["/home/${agent_username}/.buildfarm/reprepro-updater.ini", $repo_dirs],
           Class['python'],
           Package['python-yaml', 'python-configparser'],
         ]
