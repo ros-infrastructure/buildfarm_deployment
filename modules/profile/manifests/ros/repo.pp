@@ -182,7 +182,7 @@ class profile::ros::repo {
     exec {'init_building_repo':
       path        => '/bin:/usr/bin',
       command     => "/home/${agent_username}/reprepro-updater/scripts/setup_repo.py ubuntu_building -c",
-      environment => ["PYTHONPATH=/home/${agent_username}/reprepro-updater/src:\$PYTHONPATH"],
+      environment => ["PYTHONPATH=/home/${agent_username}/reprepro-updater/src"],
       user  => $agent_username,
       group  => $agent_username,
       unless      => "/home/${agent_username}/reprepro-updater/scripts/setup_repo.py ubuntu_building -q",
@@ -196,7 +196,7 @@ class profile::ros::repo {
     exec {'init_testing_repo':
       path        => '/bin:/usr/bin',
       command     => "/home/${agent_username}/reprepro-updater/scripts/setup_repo.py ubuntu_testing -c",
-      environment => ["PYTHONPATH=/home/${agent_username}/reprepro-updater/src:\$PYTHONPATH"],
+      environment => ["PYTHONPATH=/home/${agent_username}/reprepro-updater/src"],
       user  => $agent_username,
       group  => $agent_username,
       unless      => "/home/${agent_username}/reprepro-updater/scripts/setup_repo.py ubuntu_testing -q",
@@ -210,7 +210,7 @@ class profile::ros::repo {
     exec {'init_main_repo':
       path        => '/bin:/usr/bin',
       command     => "/home/${agent_username}/reprepro-updater/scripts/setup_repo.py ubuntu_main -c",
-      environment => ["PYTHONPATH=/home/${agent_username}/reprepro-updater/src:\$PYTHONPATH"],
+      environment => ["PYTHONPATH=/home/${agent_username}/reprepro-updater/src"],
       user  => $agent_username,
       group  => $agent_username,
       unless      => "/home/${agent_username}/reprepro-updater/scripts/setup_repo.py ubuntu_testing -q",
