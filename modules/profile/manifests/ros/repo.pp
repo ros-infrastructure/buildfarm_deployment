@@ -126,11 +126,17 @@ class profile::ros::repo {
     }
 
     ## GPG key management
-    file { "/home/${agent_username}/.gnupg/gpg.conf":
+    file { "/home/${agent_username}/.gnupg":
       owner  => $agent_username,
       group  => $agent_username,
-      source => 'puppet:///modules/profile/ros/repo/gpg.conf',
-      require => File["/home/${agent_username}/.ssh"],
+      ensure => directory,
+    }
+
+    file { "/home/${agent_username}/.gnupg/gpg.conf":
+      owner   => $agent_username,
+      group   => $agent_username,
+      source  => 'puppet:///modules/profile/ros/repo/gpg.conf',
+      require => File["/home/${agent_username}/.gnupg"],
     }
 
     file { "/home/${agent_username}/.ssh/gpg_private_key.sec":
