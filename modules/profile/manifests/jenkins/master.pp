@@ -3,6 +3,7 @@ class profile::jenkins::master {
   include ::jenkins::master
   include profile::jenkins::rosplugins
   include profile::jenkins::agent
+  Apt::Source['jenkins'] -> Class['Apt::Update'] -> Package<|tag == $::jenkins::package_name|>
 
   include jenkins_files
 
