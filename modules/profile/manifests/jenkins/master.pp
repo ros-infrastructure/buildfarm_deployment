@@ -8,16 +8,18 @@ class profile::jenkins::master {
 
   ### Jenkins Plugins
 
+  $configure_git_user_snippet = @(GROOVY)
+  def gitscm_config = Jenkins.getInstance\(\).getDescriptor("hudson.plugins.git.GitSCM");
+  gitscm_config.setCreateAccountBasedOnEmail(false);
+  gitscm_config.setGlobalConfigName("jenkins");
+  gitscm_config.setGlobalConfigEmail("jenkins@build.ros.org");
+  gitscm_config.save();
+  | GROOVY
+
   # config for gitscm
   jenkins::cli::exec { 'configure_git_user':
     # semicolons are needed because the lines are joined with spaces rather than newlines.
-    command => [
-      'def gitscm_config = Jenkins.getInstance().getDescriptor("hudson.plugins.git.GitSCM");',
-      'gitscm_config.setCreateAccountBasedOnEmail(false);',
-      'gitscm_config.setGlobalConfigName("jenkins");',
-      'gitscm_config.setGlobalConfigEmail("jenkins@build.ros.org");',
-      'gitscm_config.save();',
-    ]
+    command => $configure_git_user_snippet,
   }
 
   # config for audit-trail
