@@ -273,7 +273,7 @@ class profile::jenkins::master {
   }
 
   cron {'docker image prune':
-    command => 'docker image prune -f'
+    command => 'docker image prune -f',
     user    => root,
     month   => absent,
     monthday => absent,
