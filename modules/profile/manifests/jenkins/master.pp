@@ -9,7 +9,7 @@ class profile::jenkins::master {
   ### Jenkins Plugins
 
   # config for gitscm
-  file { '/tmp/configure_git_user.groovy': {
+  file { '/tmp/configure_git_user.groovy':
     source => 'puppet:///modules/profile/jenkins/master/configure_git_user.groovy',
   } ->
   rosjenkins::groovy { '/tmp/configure_git_user.groovy':
