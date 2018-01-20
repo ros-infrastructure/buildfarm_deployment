@@ -270,4 +270,14 @@ class profile::jenkins::master {
     group => 'jenkins',
     content => template('jenkins_files/credentials.xml.erb'),
   }
+
+  cron {'docker image prune':
+    command => 'docker image prune -f',
+    user    => root,
+    month   => absent,
+    monthday => absent,
+    hour    => '0',
+    minute  => '0',
+    weekday => absent,
+  }
 }
