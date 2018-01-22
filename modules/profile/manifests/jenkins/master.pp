@@ -4,6 +4,12 @@ class profile::jenkins::master {
   include profile::jenkins::rosplugins
   include profile::jenkins::agent
 
+  # This is a workaround for https://github.com/jenkinsci/puppet-jenkins/pull/821
+  # Creates a dependency thread from adding the jenkins source repository, updating apt repos,
+  # and installing the Jenkins package.
+  # This can get removed when that PR merges and we update to a release that includes it.
+  Apt::Source['jenkins'] -> Class['Apt::Update'] -> Package<|tag == $::jenkins::package_name|>
+
   include jenkins_files
 
   ### Jenkins Plugins
