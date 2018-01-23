@@ -203,7 +203,7 @@ class profile::ros::repo {
       }
     }
 
-    # needed for boostrapping the repo
+    # needed for bootstrapping the repo
     vcsrepo { "/home/${agent_username}/reprepro-updater":
       ensure   => latest,
       provider => git,
