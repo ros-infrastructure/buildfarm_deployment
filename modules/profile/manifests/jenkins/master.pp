@@ -15,15 +15,11 @@ class profile::jenkins::master {
   ### Jenkins Plugins
 
   # config for gitscm
-  jenkins::cli::exec { 'configure_git_user':
-    # semicolons are needed because the lines are joined with spaces rather than newlines.
-    command => [
-      'def gitscm_config = Jenkins.getInstance().getDescriptor("hudson.plugins.git.GitSCM");',
-      'gitscm_config.setCreateAccountBasedOnEmail(false);',
-      'gitscm_config.setGlobalConfigName("jenkins");',
-      'gitscm_config.setGlobalConfigEmail("jenkins@build.ros.org");',
-      'gitscm_config.save();',
-    ]
+  file { '/tmp/configure_git_user.groovy':
+    source => 'puppet:///modules/profile/jenkins/master/configure_git_user.groovy',
+  } ->
+  rosjenkins::groovy { '/tmp/configure_git_user.groovy':
+    require => Jenkins::Plugin['git'],
   }
 
   # config for audit-trail
