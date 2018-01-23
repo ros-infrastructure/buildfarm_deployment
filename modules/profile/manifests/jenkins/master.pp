@@ -243,7 +243,7 @@ class profile::jenkins::master {
   exec {'jenkins docker membership':
     unless => '/bin/bash -c "/usr/bin/id -nG jenkins | /bin/grep -wq docker"',
     command => '/usr/sbin/usermod -aG docker jenkins',
-    require => User['jenkins'],
+    require => [Class['docker'], User['jenkins']],
   }
 
   ## Credentials necessar for Publish over SSH
