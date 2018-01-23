@@ -246,7 +246,7 @@ class profile::jenkins::master {
     require => [Class['docker'], User['jenkins']],
   }
 
-  ## Credentials necessar for Publish over SSH
+  ## Credentials necessary for 'Publish over SSH'
   ## Everything else uses the built in credentials
   file { '/var/lib/jenkins/.ssh':
     ensure => 'directory',
@@ -265,7 +265,7 @@ class profile::jenkins::master {
     require => File['/var/lib/jenkins/.ssh'],
   }
 
-  # Reference above credientials
+  # Reference above credentials
   file { '/var/lib/jenkins/credentials.xml':
     mode => '0600',
     owner => 'jenkins',
