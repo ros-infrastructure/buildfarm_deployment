@@ -114,6 +114,19 @@ class profile::jenkins::agent (
     require => User[$agent_username],
   }
 
+  # ensure jenkins-agent user is allowed to use cron
+  file { "/etc/cron.allow":
+    mode => '0600',
+    owner => 'root',
+    group => 'root',
+    ensure => 'file',
+  }
+  file_line { 'allow_jenkins_user_to_use_cron':
+    path => '/etc/cron.allow',
+    line => "${agent_username}",
+    require => File['/etc/cron.allow'],
+  }
+
   # clean up containers and dangling images https://github.com/docker/docker/issues/928#issuecomment-58619854
   cron {'docker_cleanup_images':
     command => "bash -c \"python3 -u /home/${agent_username}/cleanup_docker_images.py --minimum-free-percent 10 --minimum-free-space 50\"",
@@ -123,7 +136,7 @@ class profile::jenkins::agent (
     hour    => '*',
     minute  => '*/15',
     weekday => absent,
-    require => User[$agent_username],
+    require => [ User[$agent_username], File_line['allow_jenkins_user_to_use_cron'] ],
   }
 
   exec { 'systemctl-daemon-reload':
