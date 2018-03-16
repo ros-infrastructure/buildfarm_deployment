@@ -3,8 +3,6 @@
   <allowPriorityOnJobs>false</allowPriorityOnJobs>
   <onlyAdminsMayEditPriorityConfiguration>true</onlyAdminsMayEditPriorityConfiguration>
   <strategy class="jenkins.advancedqueue.sorter.strategy.AbsoluteStrategy">
-    <ifCondition></ifCondition>
-    <unlessCondition></unlessCondition>
     <children/>
     <location>
       <lineNumber>0</lineNumber>
