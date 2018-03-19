@@ -99,6 +99,22 @@ class profile::jenkins::agent (
 
   include docker
 
+  file { '/etc/docker/seccomp-profiles':
+    ensure  => directory,
+    require => Class[docker],
+  }
+
+  file { '/etc/docker/seccomp-profiles/docker-default-with-personality.json':
+    source  => 'puppet:///modules/agent_files/docker-default-seccomp-with-personality.json',
+    require => [Class[docker], File['/etc/docker/seccomp-profiles']],
+  }
+
+  file { '/etc/docker/daemon.json':
+    source  => 'puppet:///modules/agent_files/docker-daemon.json',
+    require => Class[docker],
+  }
+
+
   # required by cleanup_docker script
   python::pip { 'docker':
     ensure  => '2.5.0',
