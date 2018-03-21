@@ -1,4 +1,4 @@
-# This module was automatically generated on 2018-03-21 10:16:50
+# This module was automatically generated on 2018-03-21 13:38:39
 # Instead of editing it, update plugins via the Jenkins web UI and rerun the generator.
 # Otherwise your changes will be overwritten the next time it is run.
 class profile::jenkins::rosplugins {
@@ -289,7 +289,7 @@ class profile::jenkins::rosplugins {
 
   ::jenkins::plugin { 'script-security':
     version => '1.34',
-    require => [ Jenkins::Plugin['bouncycastle-api'] ]
+    require => [  ]
   }
 
   ::jenkins::plugin { 'ssh-agent':
