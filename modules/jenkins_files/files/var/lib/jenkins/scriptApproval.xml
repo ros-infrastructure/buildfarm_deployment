@@ -25,6 +25,7 @@
     <string>33252ea83853c2faa15a8df1de164cb552d72a70</string>
     <string>3537606809410b675dd30019dfc707183739322c</string>
     <string>37d3635e52c85bbc90fb7683a0b681e1871c91d9</string>
+    <string>386314de11305e6b1736fedc773473d6c1c9713e</string>
     <string>38e7a2c44874c9d8c4dc71f9cd641af1057ce774</string>
     <string>39f425329053b3d3e2904e15f49575d1eb1b947c</string>
     <string>3b9bf03ef1a91f2661b88173154ac40db2d17d18</string>
@@ -91,6 +92,7 @@
     <string>c21dfcf56764a5bc84d3c9c3f1874c1cb2c5d80e</string>
     <string>c3b79e15be8ebcc2669ff0d39139bcd0955afb91</string>
     <string>c48259b1fe0df0a0df0a16f674005c72b289c965</string>
+    <string>c5bd79940e57d4f432f629bfe2d8ead74407e065</string>
     <string>c64e5540eea3864955bbe8e77a281001ccf52373</string>
     <string>c8156e6eb9d62d011abc6d64e9f7a9eb8cfe785b</string>
     <string>c853d3a09074a2079a30898dac879af5d6a345e4</string>
@@ -166,6 +168,7 @@
     <string>method jenkins.model.Jenkins getItemByFullName java.lang.String</string>
     <string>method jenkins.model.Jenkins rebuildDependencyGraph</string>
     <string>method jenkins.model.ModifiableTopLevelItemGroup createProjectFromXML java.lang.String java.io.InputStream</string>
+    <string>method jenkins.model.ParameterizedJobMixIn$ParameterizedJob isDisabled</string>
     <string>method org.apache.xml.serialize.DOMSerializer serialize org.w3c.dom.Document</string>
     <string>method org.apache.xml.serialize.OutputFormat setIndent int</string>
     <string>method org.apache.xml.serialize.OutputFormat setIndenting boolean</string>
