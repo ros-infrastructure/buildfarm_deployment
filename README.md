@@ -274,8 +274,3 @@ This will be the return address for the automated emails.
 
 Instead of setting up an MTA you can also use an external SMTP server.
 To use this in `Manage Jenkins -> Configure Jenkins` you will find `Extended E-mail Notification` and `E-mail Notification`, both of which you should fill out with your SMTP server's credentials.
-
-# For information on development and testing
-
-See [doc/DevelopmentTesting.md](doc/DevelopmentTesting.md).
-
