@@ -20,11 +20,22 @@ To effectively use this there will be three main steps:
 
 At the end of this process you will have a Jenkins master, a package repository, and N jenkins agents.
 
+## Known issues
+
+#### Ubuntu trusty containers suffer when running apt-get on top of Xenial's 4.4 kernel.
+
+If you're going to be building ROS Indigo on Ubuntu Trusty you may want to use the 4.15 hardware enablement kernel as there is
+a known performance issue with Trusty containers on the stock and AWS Xenial kernels.(See [#199][]).
+
+[#199]: https://github.com/ros-infrastructure/buildfarm_deployment/issues/199)
+
 ## Provisioning
 
 The ROS buldfarm deployment is currently based on Ubuntu 16.04 Xenial.
 The following EC2 instance types are recommended when deploying to Amazon EC2.
 They are intended as a guideline for choosing the appropriate parameters when deploying to other platforms.
+
+
 
 ### Master
 
