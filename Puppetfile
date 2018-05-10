@@ -6,7 +6,9 @@ mod 'puppetlabs-apache', '1.11.0'
 mod 'puppetlabs-concat', '2.2.0'
 mod 'puppetlabs-ntp', '4.2.0'
 mod 'puppetlabs-vcsrepo', '1.5.0'
-mod 'jenkins', :git => 'https://github.com/voxpupuli/puppet-jenkins'
+mod 'jenkins',
+  :git => 'https://github.com/nuclearsandwich/puppet-jenkins',
+  :branch => 'osrf-buildfarm-deployment'
 mod 'stankevich/python', '1.18.2'
 mod 'newrelic-nrsysmond',
   :git => "git://github.com/newrelic/puppet-nrsysmond.git"
