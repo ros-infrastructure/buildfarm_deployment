@@ -49,7 +49,7 @@ class profile::ros::base {
   }
 
 
-  if hiera('autoreconfigure') {
+  if hiera('autoreconfigure', false) {
     cron {'autoreconfigure':
       environment => ['PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games
       '],
