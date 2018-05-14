@@ -1,4 +1,4 @@
-# This module was automatically generated on 2018-03-21 13:38:39
+# This module was automatically generated on 2018-05-14 11:08:09
 # Instead of editing it, update plugins via the Jenkins web UI and rerun the generator.
 # Otherwise your changes will be overwritten the next time it is run.
 class profile::jenkins::rosplugins {
@@ -135,6 +135,11 @@ class profile::jenkins::rosplugins {
   ::jenkins::plugin { 'git-client':
     version => '2.5.0',
     require => [ Jenkins::Plugin['bouncycastle-api'], Jenkins::Plugin['credentials'], Jenkins::Plugin['ssh-credentials'], Jenkins::Plugin['structs'] ]
+  }
+
+  ::jenkins::plugin { 'git-server':
+    version => '1.7',
+    require => [ Jenkins::Plugin['bouncycastle-api'], Jenkins::Plugin['git-client'] ]
   }
 
   ::jenkins::plugin { 'github':
@@ -289,7 +294,7 @@ class profile::jenkins::rosplugins {
 
   ::jenkins::plugin { 'script-security':
     version => '1.34',
-    require => [  ]
+    require => [ Jenkins::Plugin['bouncycastle-api'] ]
   }
 
   ::jenkins::plugin { 'ssh-agent':
@@ -355,6 +360,11 @@ class profile::jenkins::rosplugins {
   ::jenkins::plugin { 'workflow-cps':
     version => '2.40',
     require => [ Jenkins::Plugin['ace-editor'], Jenkins::Plugin['bouncycastle-api'], Jenkins::Plugin['jquery-detached'], Jenkins::Plugin['scm-api'], Jenkins::Plugin['script-security'], Jenkins::Plugin['structs'], Jenkins::Plugin['workflow-api'], Jenkins::Plugin['workflow-scm-step'], Jenkins::Plugin['workflow-step-api'], Jenkins::Plugin['workflow-support'] ]
+  }
+
+  ::jenkins::plugin { 'workflow-cps-global-lib':
+    version => '2.9',
+    require => [ Jenkins::Plugin['bouncycastle-api'], Jenkins::Plugin['cloudbees-folder'], Jenkins::Plugin['git-client'], Jenkins::Plugin['git-server'], Jenkins::Plugin['scm-api'], Jenkins::Plugin['script-security'], Jenkins::Plugin['workflow-cps'], Jenkins::Plugin['workflow-scm-step'] ]
   }
 
   ::jenkins::plugin { 'workflow-job':
