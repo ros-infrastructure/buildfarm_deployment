@@ -13,6 +13,7 @@
     <string>2125762cda9f3056d7b04c1dd654a06d5fe2b7a0</string>
     <string>214b6890c4ff70ad9ce6d9a5ebe46a63a8f916dc</string>
     <string>23210158dc83a310ac3f1d111d9c05e50836df04</string>
+    <string>2371a7c5f6d3d6de305af3e8efa7a732f82221a4</string>
     <string>2471ce98d4d0a83272d4c0246b765d285ed5b4c3</string>
     <string>24f4383f435ad1ade758d03abf5f2843761183cc</string>
     <string>27a86f0cd4d314a46eb8c069fcf50e9639e5e97a</string>
@@ -22,6 +23,7 @@
     <string>2ed008c4353fa4b311609ff2e84590514d7dd6c2</string>
     <string>2fcbf3c58101c87c4c8abc9939d9afc0e0b22ae9</string>
     <string>3159843068557e99d2d7569d28f7b1a64898b70e</string>
+    <string>3242dfaf69d528b9aea6845b4819b47d3da86dfc</string>
     <string>33252ea83853c2faa15a8df1de164cb552d72a70</string>
     <string>3537606809410b675dd30019dfc707183739322c</string>
     <string>37d3635e52c85bbc90fb7683a0b681e1871c91d9</string>
@@ -32,6 +34,7 @@
     <string>3d2c301e021e54d126b42b49e4042c3fcb20c396</string>
     <string>3f8a3351054a0b017e599a8643cb4e9f76f58fa3</string>
     <string>3f9428e04afd0490ea1d292716b697a6e0a70fb5</string>
+    <string>421c2373905d76d11cac67380f879fe5b0ce94ef</string>
     <string>43c0c09c9bf966e8458a4c86d934abf85a80b0fc</string>
     <string>449fd3243c49eec3fcd64dfc547d7d800a8fc810</string>
     <string>474bd1edd887204cf29d26933c648b6d6ca5f25f</string>
@@ -69,6 +72,7 @@
     <string>9369a08d2b3d3a1ef9a69055e4f64a1a39461209</string>
     <string>9586ed41b96b251d159fbc4f4977e4f71e633412</string>
     <string>974aceaae2a833ef7bcfc18c5937b50eae29dd03</string>
+    <string>977208166c7802d6d3f6e87fbe2ee7d06e7f6a0c</string>
     <string>9d77a2853af389b6f89176f2614f6cd0e92fe282</string>
     <string>9ef5fd4e37fcbb3b7d7c97ee440496934fae663c</string>
     <string>9fb8784cf298e069b536a4228baa06e8e4630b1a</string>
@@ -92,7 +96,6 @@
     <string>c21dfcf56764a5bc84d3c9c3f1874c1cb2c5d80e</string>
     <string>c3b79e15be8ebcc2669ff0d39139bcd0955afb91</string>
     <string>c48259b1fe0df0a0df0a16f674005c72b289c965</string>
-    <string>c5bd79940e57d4f432f629bfe2d8ead74407e065</string>
     <string>c64e5540eea3864955bbe8e77a281001ccf52373</string>
     <string>c8156e6eb9d62d011abc6d64e9f7a9eb8cfe785b</string>
     <string>c853d3a09074a2079a30898dac879af5d6a345e4</string>
@@ -101,6 +104,7 @@
     <string>ca84bef0a3e71d307d065fff298ddb340f096d8c</string>
     <string>cbaeccc04a4e80d8ba7dc6f504a0debe640abb51</string>
     <string>cbea425777c89f4a5d09c21637b5698bfd93c2a0</string>
+    <string>cc7bbe85321f8ddc9ce563d4b48d8fdc00157e04</string>
     <string>cd6c43359a37983fa3965b22f13264d9d8c3db90</string>
     <string>ce62ac4dab5b05f09dc94655d2a7efd73913e0e4</string>
     <string>cead0fc496cdee7e0b07188007156a0c47df4dfe</string>
@@ -111,6 +115,7 @@
     <string>d3952689b6e730f85d7b279dccc702b9c17a0b0c</string>
     <string>d603fd0b38d1fc69f9b74663b05bb185901e9c27</string>
     <string>d8902acf5a5eb4aa9119e389f8db5fef87b1185a</string>
+    <string>d94f40e4999df243ad1478b9a2ee329bb70d3177</string>
     <string>d957bbb4969ff61334f6864d393f6852ee65b045</string>
     <string>db3de05964c06031cd05d407a368b021330231c9</string>
     <string>dd39eaa8f95ff58db3f2df606950223db8ebea11</string>
@@ -125,6 +130,7 @@
     <string>ee658d9f2a2a3040462e6fce21b2f35411fecf13</string>
     <string>f05404db7967d399b402b3a7d211c470eb6e7b42</string>
     <string>f51d90b8a90c9e46bfa5fc6259e71a526b4e88f0</string>
+    <string>f760d60c07214818754a7d7acbe7c3d800a60eb4</string>
     <string>f76f077550115287371001313753a00d68f90ec8</string>
     <string>f929c9c93e271dc7a6854fe3959bfe6e4deffeff</string>
     <string>fa09f007c6b2ea46899a8af2bc0bcfae0c7d68ff</string>
@@ -168,7 +174,6 @@
     <string>method jenkins.model.Jenkins getItemByFullName java.lang.String</string>
     <string>method jenkins.model.Jenkins rebuildDependencyGraph</string>
     <string>method jenkins.model.ModifiableTopLevelItemGroup createProjectFromXML java.lang.String java.io.InputStream</string>
-    <string>method jenkins.model.ParameterizedJobMixIn$ParameterizedJob isDisabled</string>
     <string>method org.apache.xml.serialize.DOMSerializer serialize org.w3c.dom.Document</string>
     <string>method org.apache.xml.serialize.OutputFormat setIndent int</string>
     <string>method org.apache.xml.serialize.OutputFormat setIndenting boolean</string>
