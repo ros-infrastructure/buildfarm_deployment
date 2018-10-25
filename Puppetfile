@@ -6,7 +6,7 @@ mod 'puppetlabs-apache', '1.11.0'
 mod 'puppetlabs-concat', '2.2.0'
 mod 'puppetlabs-ntp', '4.2.0'
 mod 'puppetlabs-vcsrepo', '1.5.0'
-mod 'jenkins', 
+mod 'voxpupuli-jenkins', 
   :git => 'https://github.com/nuclearsandwich/puppet-jenkins',
   :ref => '1.7.0-rosbuildfarm0'
 mod 'stankevich/python', '1.18.2'
