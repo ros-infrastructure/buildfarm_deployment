@@ -1,11 +1,11 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<jenkins.advancedqueue.PriorityConfiguration plugin="PrioritySorter@3.4">
+<?xml version='1.1' encoding='UTF-8'?>
+<jenkins.advancedqueue.PriorityConfiguration plugin="PrioritySorter@3.6.0">
   <jobGroups class="linked-list">
     <jenkins.advancedqueue.JobGroup>
       <id>0</id>
       <priority>-1</priority>
       <jobGroupStrategy class="jenkins.advancedqueue.jobinclusion.strategy.AllJobsJobInclusionStrategy"/>
-      <description>All</description>
+      <description></description>
       <runExclusive>false</runExclusive>
       <useJobFilter>false</useJobFilter>
       <jobPattern>.*</jobPattern>
