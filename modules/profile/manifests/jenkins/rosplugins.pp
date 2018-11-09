@@ -1,4 +1,4 @@
-# This module was automatically generated on 2019-01-22 11:07:54
+# This module was automatically generated on 2019-01-22 11:09:04
 # Instead of editing it, update plugins via the Jenkins web UI and rerun the generator.
 # Otherwise your changes will be overwritten the next time it is run.
 class profile::jenkins::rosplugins {
