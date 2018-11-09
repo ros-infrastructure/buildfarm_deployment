@@ -1,5 +1,5 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<scriptApproval plugin="script-security@1.34">
+<?xml version='1.1' encoding='UTF-8'?>
+<scriptApproval plugin="script-security@1.48">
   <approvedScriptHashes>
     <string>017d0db438428731cd600b6ebda805065433520f</string>
     <string>0494f61790c2498fd791726e7f80c2b4bf5667b2</string>
@@ -40,6 +40,8 @@
     <string>474bd1edd887204cf29d26933c648b6d6ca5f25f</string>
     <string>47eaea85b4cc7b98d4e5659cda316dc115ff18e6</string>
     <string>480d7bfe3a438d84bdb7fe651a433673a86a4c87</string>
+    <string>4817c7d417ff715180834f53c557bb1cfac72a9e</string>
+    <string>483032c6f144977b3f2038089f77d63c02f9f213</string>
     <string>4b840f0c38ac2cf4e9794df5769fe6a6debaf5b3</string>
     <string>55c8ca4db89a812ad8d81ae49fd8edf6757711a4</string>
     <string>55e514163f6853223b40c24a17d726f95b7f739e</string>
@@ -109,6 +111,7 @@
     <string>ce62ac4dab5b05f09dc94655d2a7efd73913e0e4</string>
     <string>cead0fc496cdee7e0b07188007156a0c47df4dfe</string>
     <string>cebd1305dba6437516c80810068fefe8fbf8ab65</string>
+    <string>cebf359f51d6f485a831074ecd81ec7659c95407</string>
     <string>cf7f7d5b0f5008bb41ca0935aec071753c4a7b37</string>
     <string>d070c19c21dabe933d4c94ca7d3788fa73b0afb2</string>
     <string>d27eeee179147948d370f2302aacb00defa564ae</string>
@@ -151,6 +154,7 @@
     <string>method hudson.model.BuildableItem scheduleBuild hudson.model.Cause</string>
     <string>method hudson.model.Item delete</string>
     <string>method hudson.model.Item getName</string>
+    <string>method hudson.model.ItemGroup getAllItems</string>
     <string>method hudson.model.Job getLastBuild</string>
     <string>method hudson.model.Job getNextBuildNumber</string>
     <string>method hudson.model.Job isBuilding</string>
@@ -174,6 +178,7 @@
     <string>method jenkins.model.Jenkins getItemByFullName java.lang.String</string>
     <string>method jenkins.model.Jenkins rebuildDependencyGraph</string>
     <string>method jenkins.model.ModifiableTopLevelItemGroup createProjectFromXML java.lang.String java.io.InputStream</string>
+    <string>method jenkins.model.ParameterizedJobMixIn$ParameterizedJob isDisabled</string>
     <string>method org.apache.xml.serialize.DOMSerializer serialize org.w3c.dom.Document</string>
     <string>method org.apache.xml.serialize.OutputFormat setIndent int</string>
     <string>method org.apache.xml.serialize.OutputFormat setIndenting boolean</string>
