@@ -12,8 +12,35 @@ class profile::jenkins::agent_gpu {
 
   include apt
 
-  package { 'nvidia-375':
+  # neeed for xhost
+  package { 'x11-xserver-utils' :
     ensure => installed,
+  }
+
+  # needed for gpu-manager used by nvidia-prime
+  package { 'ubuntu-drivers-common':
+    ensure => installed,
+  }
+
+  package { 'linux-aws':
+    ensure => installed,
+  }
+
+  package { 'xserver-xorg-dev':
+    ensure => installed,
+  }
+
+  # needs to update first the kernel and headers before
+  # compiling the nvidia driver
+  package { 'nvidia-375':
+    ensure  => installed,
+    require => [ Package[linux-aws], Package[ubuntu-drivers-common] ]
+  }
+
+  file { '/etc/X11/xorg.conf':
+    source  => 'puppet:///modules/agent_files/etc/X11/xorg.conf',
+    mode    => '0744',
+    require => Package[xserver-xorg-dev],
   }
 
   package { 'wget':
@@ -51,8 +78,7 @@ class profile::jenkins::agent_gpu {
   file { '/etc/lightdm/xhost.sh':
     source  => 'puppet:///modules/agent_files/etc/lightdm/xhost.sh',
     mode    => '0744',
-    require => Package[lightdm],
-    notify  => Exec[service_lightdm_restart],
+    require => [ Package[lightdm], Package[x11-xserver-utils] ]
   }
 
   # This two rules do: check if no lightdm is present and create one
@@ -62,7 +88,8 @@ class profile::jenkins::agent_gpu {
     ensure  => 'present',
     source  => 'puppet:///modules/agent_files/etc/lightdm/lightdm.conf',
     replace => 'no', # this is the important property
-    require => File['/etc/lightdm/xhost.sh']
+    notify  => Exec[service_lightdm_restart],
+    require => [ File['/etc/lightdm/xhost.sh'], File['/etc/X11/xorg.conf'] ]
   }
 
   file_line { '/etc/lightdm/lightdm.conf':
