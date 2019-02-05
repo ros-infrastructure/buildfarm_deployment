@@ -38,8 +38,8 @@ class profile::jenkins::agent_gpu {
   # compiling the nvidia driver
   package { 'nvidia-375':
     ensure  => installed,
-    require => [ Package[linux-aws], Package[ubuntu-drivers-common] ]
-    before  => File['/etc/X11/xorg.conf']
+    require => [ Package[linux-aws], Package[ubuntu-drivers-common] ],
+    before  => File['/etc/X11/xorg.conf'],
   }
 
   file { '/etc/X11/xorg.conf':
