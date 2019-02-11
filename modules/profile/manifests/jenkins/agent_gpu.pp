@@ -19,10 +19,10 @@ class profile::jenkins::agent_gpu {
   }
 
   # needed for gpu-manager used by nvidia-prime
-  package { 'ubuntu-drivers-common':
-    ensure => installed,
-    before => File['/etc/X11/xorg.conf']
-  }
+  # package { 'ubuntu-drivers-common':
+  #  ensure => installed,
+  #  before => File['/etc/X11/xorg.conf']
+  # }
 
   package { 'linux-aws':
     ensure => installed,
@@ -38,7 +38,7 @@ class profile::jenkins::agent_gpu {
   # compiling the nvidia driver
   package { 'nvidia-375':
     ensure  => installed,
-    require => [ Package[linux-aws], Package[ubuntu-drivers-common] ],
+    require => Package[linux-aws], # [, Package[ubuntu-drivers-common] ],
     before  => File['/etc/X11/xorg.conf'],
   }
 
