@@ -18,12 +18,6 @@ class profile::jenkins::agent_gpu {
     before => File['/etc/X11/xorg.conf']
   }
 
-  # needed for gpu-manager used by nvidia-prime
-  # package { 'ubuntu-drivers-common':
-  #  ensure => installed,
-  #  before => File['/etc/X11/xorg.conf']
-  # }
-
   package { 'linux-aws':
     ensure => installed,
     before => File['/etc/X11/xorg.conf']
@@ -38,7 +32,7 @@ class profile::jenkins::agent_gpu {
   # compiling the nvidia driver
   package { 'nvidia-375':
     ensure  => installed,
-    require => Package[linux-aws], # [, Package[ubuntu-drivers-common] ],
+    require => Package[linux-aws],
     before  => File['/etc/X11/xorg.conf'],
   }
 
@@ -107,13 +101,13 @@ class profile::jenkins::agent_gpu {
 
   service { 'lightdm':
     ensure     => running,
+    require    => [ Package['lightdm'], File['/etc/lightdm/xhost.sh'], File['/etc/lightdm/lightdm.conf'], File['/etc/X11/xorg.conf'] ],
     enable     => true,
     hasrestart => true,
   }
 
-  exec { 'service_lightdm_restart':
-    refreshonly => true,
-    command     => '/usr/sbin/service lightdm restart',
-    require     => [ Package['lightdm'], File['/etc/lightdm/lightdm.conf'], File['/etc/X11/xorg.conf'] ]
-  }
+  # exec { 'service_lightdm_restart':
+  #  refreshonly => true,
+  #  command     => '/usr/sbin/service lightdm restart',
+  # }
 }
