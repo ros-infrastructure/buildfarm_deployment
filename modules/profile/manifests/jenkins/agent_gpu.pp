@@ -88,7 +88,6 @@ class profile::jenkins::agent_gpu {
     ensure  => 'present',
     source  => 'puppet:///modules/agent_files/etc/lightdm/lightdm.conf',
     replace => 'no', # this is the important property
-    notify  => Exec[service_lightdm_restart],
     require => [ File['/etc/lightdm/xhost.sh'], File['/etc/X11/xorg.conf'] ]
   }
 
@@ -96,18 +95,19 @@ class profile::jenkins::agent_gpu {
     ensure  => present,
     require => File['/etc/lightdm/lightdm.conf'],
     line    => 'display-setup-script=/etc/lightdm/xhost.sh',
+    notify  => Exec[service_lightdm_restart],
     path    => '/etc/lightdm/lightdm.conf',
   }
 
   service { 'lightdm':
     ensure     => running,
-    require    => [ Package['lightdm'], File['/etc/lightdm/xhost.sh'], File['/etc/lightdm/lightdm.conf'], File['/etc/X11/xorg.conf'] ],
     enable     => true,
     hasrestart => true,
   }
 
-  # exec { 'service_lightdm_restart':
-  #  refreshonly => true,
-  #  command     => '/usr/sbin/service lightdm restart',
-  # }
+  exec { 'service_lightdm_restart':
+    refreshonly => true,
+    command     => '/usr/sbin/service lightdm restart',
+    require    => [ Package['lightdm'], File['/etc/lightdm/xhost.sh'], File['/etc/lightdm/lightdm.conf'], File['/etc/X11/xorg.conf'] ],
+  }
 }
