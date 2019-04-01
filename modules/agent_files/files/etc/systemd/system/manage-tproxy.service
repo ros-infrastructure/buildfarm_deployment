@@ -9,3 +9,5 @@ RestartSec=5
 StartLimitBurst=10
 StartLimitInterval=300s
 
+[Install]
+WantedBy=multi-user.target
