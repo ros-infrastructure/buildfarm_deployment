@@ -42,32 +42,20 @@ class profile::jenkins::agent_gpu {
     require => Package[xserver-xorg-dev],
   }
 
-  package { 'wget':
-    ensure => installed,
-  }
-
-  exec { 'apt-update':
-    command => "/usr/bin/apt-get update"
-  }
-
-  exec { 'retrieve_docker_repo':
-    command => '/usr/bin/wget -q https://nvidia.github.io/nvidia-docker/ubuntu16.04/nvidia-docker.list -O /etc/apt/sources.list.d/nvidia-docker.list',
-    creates => '/etc/apt/sources.list.d/nvidia-docker.list',
-    require => Package['wget'],
-  }
-
   apt::key { 'nvidia_docker_key' :
     source => 'https://nvidia.github.io/nvidia-docker/gpgkey',
     id     => 'C95B321B61E88C1809C4F759DDCAE044F796ECB0',
   }
 
+  file { '/etc/apt/sources.list.d/nvidia-docker.list':
+    source  => 'puppet:///modules/profile/jenkins/agent_gpu/nvidia-docker.list',
+    require => Apt::Key['nvidia_docker_key'],
+    notify  =>  Exec['apt_update']
+  }
+
   package { 'nvidia-docker2':
     ensure  => installed,
-    require => [
-      Exec['retrieve_docker_repo'],
-      Apt::Key['nvidia_docker_key'],
-      Exec['apt-update']
-    ],
+    require => File['/etc/apt/sources.list.d/nvidia-docker.list']
   }
 
   package { 'lightdm':
