@@ -15,7 +15,6 @@ class profile::jenkins::agent_gpu {
   # neeed for xhost
   package { 'x11-xserver-utils' :
     ensure => installed,
-    before => File['/etc/X11/xorg.conf']
   }
 
   if $facts['ec2_instance_id'] {
@@ -37,13 +36,17 @@ class profile::jenkins::agent_gpu {
   # compiling the nvidia driver
   package { 'nvidia-375':
     ensure  => installed,
-    before  => File['/etc/X11/xorg.conf'],
   }
 
   file { '/etc/X11/xorg.conf':
     source  => 'puppet:///modules/profile/jenkins/agent_gpu/etc/X11/xorg.conf',
     mode    => '0744',
-    require => Package[xserver-xorg-dev],
+    require => [
+      Package[lightdm],
+      Package['nvidia-375'],
+      Package['x11-xserver-utils'],
+      Package[xserver-xorg-dev],
+    ],
   }
 
   apt::key { 'nvidia_docker_key' :
@@ -64,7 +67,6 @@ class profile::jenkins::agent_gpu {
 
   package { 'lightdm':
     ensure => installed,
-    before => File['/etc/X11/xorg.conf']
   }
 
   file { '/etc/lightdm/xhost.sh':
