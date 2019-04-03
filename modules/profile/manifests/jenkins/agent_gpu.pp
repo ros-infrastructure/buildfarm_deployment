@@ -37,7 +37,7 @@ class profile::jenkins::agent_gpu {
   }
 
   file { '/etc/X11/xorg.conf':
-    source  => 'puppet:///modules/agent_files/etc/X11/xorg.conf',
+    source  => 'puppet:///modules/profile/jenkins/agent_gpu/etc/X11/xorg.conf',
     mode    => '0744',
     require => Package[xserver-xorg-dev],
   }
@@ -64,7 +64,7 @@ class profile::jenkins::agent_gpu {
   } ->
 
   file { '/etc/lightdm/xhost.sh':
-    source  => 'puppet:///modules/agent_files/etc/lightdm/xhost.sh',
+    source  => 'puppet:///modules/profile/jenkins/agent_gpu/etc/lightdm/xhost.sh',
     mode    => '0744',
     require => [ Package[lightdm], Package[x11-xserver-utils] ]
   } ->
@@ -74,7 +74,7 @@ class profile::jenkins::agent_gpu {
 
   file { '/etc/lightdm/lightdm.conf':
     ensure  => 'present',
-    source  => 'puppet:///modules/agent_files/etc/lightdm/lightdm.conf',
+    source  => 'puppet:///modules/profile/jenkins/agent_gpu/etc/lightdm/lightdm.conf',
     replace => 'no', # this is the important property
     require => [ File['/etc/lightdm/xhost.sh'], File['/etc/X11/xorg.conf'] ]
   } ->
