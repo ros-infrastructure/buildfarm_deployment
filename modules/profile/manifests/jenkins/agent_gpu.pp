@@ -61,13 +61,13 @@ class profile::jenkins::agent_gpu {
   package { 'lightdm':
     ensure => installed,
     before => File['/etc/X11/xorg.conf']
-  } ->
+  }
 
   file { '/etc/lightdm/xhost.sh':
     source  => 'puppet:///modules/profile/jenkins/agent_gpu/etc/lightdm/xhost.sh',
     mode    => '0744',
     require => [ Package[lightdm], Package[x11-xserver-utils] ]
-  } ->
+  }
 
   # This two rules do: check if no lightdm is present and create one
   # Ensure that display-setup-script is set
@@ -77,7 +77,7 @@ class profile::jenkins::agent_gpu {
     source  => 'puppet:///modules/profile/jenkins/agent_gpu/etc/lightdm/lightdm.conf',
     replace => 'no', # this is the important property
     require => [ File['/etc/lightdm/xhost.sh'], File['/etc/X11/xorg.conf'] ]
-  } ->
+  }
 
   file_line { '/etc/lightdm/lightdm.conf':
     ensure  => present,
@@ -85,7 +85,7 @@ class profile::jenkins::agent_gpu {
     line    => 'display-setup-script=/etc/lightdm/xhost.sh',
     notify  => Exec[service_lightdm_restart],
     path    => '/etc/lightdm/lightdm.conf',
-  } ->
+  }
 
   exec { 'service_lightdm_restart':
     refreshonly => true,
