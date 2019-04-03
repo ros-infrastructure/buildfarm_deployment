@@ -31,7 +31,6 @@ class profile::jenkins::agent_gpu {
 
   package { 'xserver-xorg-dev':
     ensure => installed,
-    before => File['/etc/X11/xorg.conf']
   }
 
   # needs to update first the kernel and headers before
