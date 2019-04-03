@@ -18,9 +18,15 @@ class profile::jenkins::agent_gpu {
     before => File['/etc/X11/xorg.conf']
   }
 
-  package { 'linux-aws':
-    ensure => installed,
-    before => File['/etc/X11/xorg.conf']
+  if $facts['ec2_instance_id'] {
+    package { 'linux-aws':
+      ensure => installed,
+      # When running in EC2 the AWS kernel needs to be installed before
+      # compiling the nvidia driver.
+      # TODO(nuclearsandwich) Does the xorg.conf really depend on the kernel or
+      # is it implicit based on drivers?
+      before => [ File['/etc/X11/xorg.conf'], Package['nvidia-375'] ]
+    }
   }
 
   package { 'xserver-xorg-dev':
@@ -32,7 +38,6 @@ class profile::jenkins::agent_gpu {
   # compiling the nvidia driver
   package { 'nvidia-375':
     ensure  => installed,
-    require => Package[linux-aws],
     before  => File['/etc/X11/xorg.conf'],
   }
 
