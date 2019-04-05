@@ -32,16 +32,12 @@ Section "Monitor"
     Option         "DPMS"
 EndSection
 
-# jrivero: be sure of using always the right BusID
-# can be obtained by: nvidia-xconfig --query-gpu-info
-# The current BusID is the one corresponding to GRID K520
-# at AWS machines of the g2 series.
 Section "Device"
     Identifier     "Device0"
     Driver         "nvidia"
     VendorName     "NVIDIA Corporation"
     BoardName      "GRID K520"
-    BusID          "PCI:0:3:0"
+    BusID          <%=@busid%>
 EndSection
 
 Section "Screen"
