@@ -37,7 +37,7 @@ Section "Device"
     Driver         "nvidia"
     VendorName     "NVIDIA Corporation"
     BoardName      "GRID K520"
-    BusID          <%=@busid%>
+    BusID          <%= @facts['busid'] %>
 EndSection
 
 Section "Screen"

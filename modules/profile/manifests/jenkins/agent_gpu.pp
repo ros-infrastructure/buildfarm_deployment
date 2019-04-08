@@ -38,8 +38,6 @@ class profile::jenkins::agent_gpu {
     ensure  => installed,
   }
 
-  $busid = generate('nvidia-xconfig --query-gpu-info  | grep BusID | sed "s/.*PCI:/PCI:/g"')
-
   file { '/etc/X11/xorg.conf':
     content => template('agent_files/xorg.conf.erb'),
     mode    => '0744',
