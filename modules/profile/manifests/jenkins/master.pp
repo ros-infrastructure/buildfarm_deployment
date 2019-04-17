@@ -22,6 +22,15 @@ class profile::jenkins::master {
     require => Jenkins::Plugin['git'],
   }
 
+  # Complete the setup wizard so it is not shown on login.
+  file { '/tmp/complete_setup.groovy':
+    source => 'puppet:///modules/profile/jenkins/master/complete_setup.groovy',
+  } ->
+  rosjenkins::groovy { '/tmp/complete_setup.groovy':
+    require =>  Service['Jenkins'],
+  }
+
+
   # config for audit-trail
   file { '/var/lib/jenkins/audit-trail.xml':
     mode => '0640',
