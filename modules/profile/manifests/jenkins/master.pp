@@ -27,7 +27,7 @@ class profile::jenkins::master {
     source => 'puppet:///modules/profile/jenkins/master/complete_setup.groovy',
   } ->
   rosjenkins::groovy { '/tmp/complete_setup.groovy':
-    require =>  Service['Jenkins'],
+    require =>  Service['jenkins'],
   }
 
 
