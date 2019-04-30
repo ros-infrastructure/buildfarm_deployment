@@ -223,7 +223,7 @@ class profile::jenkins::master {
     docroot => '/var/www.html',
     port    => '80',
     proxy_pass => [
-      { 'path' => '/', 'url' => 'http://localhost:8080/'},
+      { 'path' => '/', 'url' => 'http://localhost:8080/', 'keywords' => ['nocanon'] },
     ],
   }
 
