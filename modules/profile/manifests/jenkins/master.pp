@@ -220,6 +220,7 @@ class profile::jenkins::master {
   }
 
   apache::vhost { 'master':
+    allow_encoded_slashes => 'nodecode',
     docroot => '/var/www.html',
     port    => '80',
     proxy_pass => [
