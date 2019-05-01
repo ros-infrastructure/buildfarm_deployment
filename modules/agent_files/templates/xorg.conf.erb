@@ -37,7 +37,7 @@ Section "Device"
     Driver         "nvidia"
     VendorName     "NVIDIA Corporation"
     BoardName      "GRID K520"
-    BusID          "<%= @facts['gpu_device_bus_id'] %>"
+    BusID          "<%= `nvidia-xconfig --query-gpu-info | grep BusID | sed 's/.*PCI:/PCI:/g'` %>"
 EndSection
 
 Section "Screen"
