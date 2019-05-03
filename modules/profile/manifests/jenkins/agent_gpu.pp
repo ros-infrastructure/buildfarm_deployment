@@ -39,7 +39,7 @@ class profile::jenkins::agent_gpu {
   }
 
   file { '/etc/X11/xorg.conf':
-    content => template('agent_files/xorg.conf.erb'),
+    source  => 'puppet:///modules/profile/jenkins/agent_gpu/etc/X11/xorg.conf',
     mode    => '0744',
     require => [
       Package[lightdm],
