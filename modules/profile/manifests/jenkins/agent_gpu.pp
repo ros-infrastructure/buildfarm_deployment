@@ -56,13 +56,12 @@ class profile::jenkins::agent_gpu {
 
   file { '/etc/apt/sources.list.d/nvidia-docker.list':
     source  => 'puppet:///modules/profile/jenkins/agent_gpu/nvidia-docker.list',
-    require => Apt::Key['nvidia_docker_key'],
-    notify  =>  Exec['apt_update']
+    require => [ Apt::Key['nvidia_docker_key'] ]
   }
 
   package { 'nvidia-docker2':
     ensure  => installed,
-    require => File['/etc/apt/sources.list.d/nvidia-docker.list']
+    require => [ File['/etc/apt/sources.list.d/nvidia-docker.list'], Exec['apt_update'] ]
   }
 
   package { 'lightdm':
