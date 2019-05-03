@@ -32,12 +32,20 @@ Section "Monitor"
     Option         "DPMS"
 EndSection
 
+# Be sure of using always the right BusID
+# can be obtained by: nvidia-xconfig --query-gpu-info
+# The current BusID is the one corresponding to GRID K520
+# at AWS machines of the g2 series.
+# The nvidia-config command can not be integrated into
+# erb files since they are evaluated before the
+# dependency resolution. See:
+# https://github.com/ros-infrastructure/buildfarm_deployment/pull/211#discussion_r279920242
 Section "Device"
     Identifier     "Device0"
     Driver         "nvidia"
     VendorName     "NVIDIA Corporation"
     BoardName      "GRID K520"
-    BusID          "<%= @facts['gpu_device_bus_id'] %>"
+    BusID          "PCI:0:3:0"
 EndSection
 
 Section "Screen"
