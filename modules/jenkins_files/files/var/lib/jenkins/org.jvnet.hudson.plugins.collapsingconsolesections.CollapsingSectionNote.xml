@@ -15,6 +15,27 @@
       <collapseOnlyOneLevel>false</collapseOnlyOneLevel>
       <collapseSection>false</collapseSection>
     </org.jvnet.hudson.plugins.collapsingconsolesections.CollapsingSectionNote>
+    <org.jvnet.hudson.plugins.collapsingconsolesections.CollapsingSectionNote>
+      <sectionDisplayName>{1}</sectionDisplayName>
+      <sectionStartPattern>^Starting >>> (.+)$</sectionStartPattern>
+      <sectionEndPattern>.*</sectionEndPattern>
+      <collapseOnlyOneLevel>false</collapseOnlyOneLevel>
+      <collapseSection>false</collapseSection>
+    </org.jvnet.hudson.plugins.collapsingconsolesections.CollapsingSectionNote>
+    <org.jvnet.hudson.plugins.collapsingconsolesections.CollapsingSectionNote>
+      <sectionDisplayName>{1} (output)</sectionDisplayName>
+      <sectionStartPattern>^--- output: (.+)$</sectionStartPattern>
+      <sectionEndPattern>^---$</sectionEndPattern>
+      <collapseOnlyOneLevel>false</collapseOnlyOneLevel>
+      <collapseSection>false</collapseSection>
+    </org.jvnet.hudson.plugins.collapsingconsolesections.CollapsingSectionNote>
+    <org.jvnet.hudson.plugins.collapsingconsolesections.CollapsingSectionNote>
+      <sectionDisplayName>{1} (stderr)</sectionDisplayName>
+      <sectionStartPattern>^--- stderr: (.+)$</sectionStartPattern>
+      <sectionEndPattern>^---$</sectionEndPattern>
+      <collapseOnlyOneLevel>false</collapseOnlyOneLevel>
+      <collapseSection>false</collapseSection>
+    </org.jvnet.hudson.plugins.collapsingconsolesections.CollapsingSectionNote>
   </sections>
   <numberingEnabled>true</numberingEnabled>
 </org.jvnet.hudson.plugins.collapsingconsolesections.CollapsingSectionNote_-DescriptorImpl>
