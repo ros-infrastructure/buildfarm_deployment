@@ -1,4 +1,4 @@
-# This module was automatically generated on 2019-01-22 11:09:04
+# This module was automatically generated on 2019-10-02 14:10:44
 # Instead of editing it, update plugins via the Jenkins web UI and rerun the generator.
 # Otherwise your changes will be overwritten the next time it is run.
 class profile::jenkins::rosplugins {
@@ -148,12 +148,12 @@ class profile::jenkins::rosplugins {
   }
 
   ::jenkins::plugin { 'git':
-    version => '3.9.1',
-    require => [ Jenkins::Plugin['bouncycastle-api'], Jenkins::Plugin['command-launcher'], Jenkins::Plugin['credentials'], Jenkins::Plugin['git-client'], Jenkins::Plugin['jdk-tool'], Jenkins::Plugin['mailer'], Jenkins::Plugin['matrix-project'], Jenkins::Plugin['parameterized-trigger'], Jenkins::Plugin['scm-api'], Jenkins::Plugin['ssh-credentials'], Jenkins::Plugin['structs'], Jenkins::Plugin['token-macro'], Jenkins::Plugin['workflow-scm-step'], Jenkins::Plugin['workflow-step-api'] ]
+    version => '3.10.0',
+    require => [ Jenkins::Plugin['credentials'], Jenkins::Plugin['git-client'], Jenkins::Plugin['mailer'], Jenkins::Plugin['matrix-project'], Jenkins::Plugin['parameterized-trigger'], Jenkins::Plugin['scm-api'], Jenkins::Plugin['ssh-credentials'], Jenkins::Plugin['structs'], Jenkins::Plugin['token-macro'], Jenkins::Plugin['workflow-scm-step'], Jenkins::Plugin['workflow-step-api'] ]
   }
 
   ::jenkins::plugin { 'git-client':
-    version => '2.7.3',
+    version => '2.7.7',
     require => [ Jenkins::Plugin['apache-httpcomponents-client-4-api'], Jenkins::Plugin['bouncycastle-api'], Jenkins::Plugin['command-launcher'], Jenkins::Plugin['credentials'], Jenkins::Plugin['jdk-tool'], Jenkins::Plugin['jsch'], Jenkins::Plugin['ssh-credentials'], Jenkins::Plugin['structs'] ]
   }
 
@@ -163,22 +163,22 @@ class profile::jenkins::rosplugins {
   }
 
   ::jenkins::plugin { 'github':
-    version => '1.29.3',
+    version => '1.29.4',
     require => [ Jenkins::Plugin['bouncycastle-api'], Jenkins::Plugin['command-launcher'], Jenkins::Plugin['credentials'], Jenkins::Plugin['display-url-api'], Jenkins::Plugin['git'], Jenkins::Plugin['github-api'], Jenkins::Plugin['jdk-tool'], Jenkins::Plugin['plain-credentials'], Jenkins::Plugin['scm-api'], Jenkins::Plugin['structs'], Jenkins::Plugin['token-macro'] ]
   }
 
   ::jenkins::plugin { 'github-api':
-    version => '1.92',
-    require => [ Jenkins::Plugin['bouncycastle-api'], Jenkins::Plugin['command-launcher'], Jenkins::Plugin['jackson2-api'], Jenkins::Plugin['jdk-tool'] ]
+    version => '1.95',
+    require => [ Jenkins::Plugin['command-launcher'], Jenkins::Plugin['jackson2-api'], Jenkins::Plugin['jdk-tool'] ]
   }
 
   ::jenkins::plugin { 'github-branch-source':
-    version => '2.4.1',
-    require => [ Jenkins::Plugin['bouncycastle-api'], Jenkins::Plugin['command-launcher'], Jenkins::Plugin['credentials'], Jenkins::Plugin['display-url-api'], Jenkins::Plugin['git'], Jenkins::Plugin['github'], Jenkins::Plugin['github-api'], Jenkins::Plugin['jdk-tool'], Jenkins::Plugin['scm-api'], Jenkins::Plugin['structs'] ]
+    version => '2.5.3',
+    require => [ Jenkins::Plugin['credentials'], Jenkins::Plugin['display-url-api'], Jenkins::Plugin['git'], Jenkins::Plugin['github'], Jenkins::Plugin['github-api'], Jenkins::Plugin['scm-api'], Jenkins::Plugin['structs'], Jenkins::Plugin['workflow-step-api'] ]
   }
 
   ::jenkins::plugin { 'github-oauth':
-    version => '0.29',
+    version => '0.32',
     require => [ Jenkins::Plugin['bouncycastle-api'], Jenkins::Plugin['command-launcher'], Jenkins::Plugin['git'], Jenkins::Plugin['github-api'], Jenkins::Plugin['github-branch-source'], Jenkins::Plugin['jdk-tool'], Jenkins::Plugin['mailer'], Jenkins::Plugin['matrix-project'], Jenkins::Plugin['workflow-multibranch'] ]
   }
 
@@ -188,12 +188,12 @@ class profile::jenkins::rosplugins {
   }
 
   ::jenkins::plugin { 'groovy':
-    version => '2.0',
+    version => '2.2',
     require => [ Jenkins::Plugin['bouncycastle-api'], Jenkins::Plugin['command-launcher'], Jenkins::Plugin['jdk-tool'], Jenkins::Plugin['script-security'], Jenkins::Plugin['token-macro'] ]
   }
 
   ::jenkins::plugin { 'groovy-postbuild':
-    version => '2.4.2',
+    version => '2.4.3',
     require => [ Jenkins::Plugin['badge'], Jenkins::Plugin['command-launcher'], Jenkins::Plugin['jdk-tool'], Jenkins::Plugin['matrix-project'], Jenkins::Plugin['workflow-cps'] ]
   }
 
@@ -253,7 +253,7 @@ class profile::jenkins::rosplugins {
   }
 
   ::jenkins::plugin { 'mailer':
-    version => '1.22',
+    version => '1.23',
     require => [ Jenkins::Plugin['bouncycastle-api'], Jenkins::Plugin['command-launcher'], Jenkins::Plugin['display-url-api'], Jenkins::Plugin['jdk-tool'] ]
   }
 
@@ -263,12 +263,12 @@ class profile::jenkins::rosplugins {
   }
 
   ::jenkins::plugin { 'matrix-auth':
-    version => '2.3',
-    require => [ Jenkins::Plugin['cloudbees-folder'], Jenkins::Plugin['command-launcher'], Jenkins::Plugin['jdk-tool'] ]
+    version => '2.4.2',
+    require => [ Jenkins::Plugin['cloudbees-folder'] ]
   }
 
   ::jenkins::plugin { 'matrix-project':
-    version => '1.13',
+    version => '1.14',
     require => [ Jenkins::Plugin['bouncycastle-api'], Jenkins::Plugin['command-launcher'], Jenkins::Plugin['jdk-tool'], Jenkins::Plugin['junit'], Jenkins::Plugin['script-security'] ]
   }
 
@@ -283,13 +283,13 @@ class profile::jenkins::rosplugins {
   }
 
   ::jenkins::plugin { 'monitoring':
-    version => '1.74.0',
+    version => '1.77.0',
     require => [ Jenkins::Plugin['bouncycastle-api'], Jenkins::Plugin['command-launcher'], Jenkins::Plugin['jdk-tool'] ]
   }
 
   ::jenkins::plugin { 'pam-auth':
-    version => '1.4',
-    require => [ Jenkins::Plugin['bouncycastle-api'], Jenkins::Plugin['command-launcher'], Jenkins::Plugin['jdk-tool'], Jenkins::Plugin['junit'] ]
+    version => '1.5.1',
+    require => [  ]
   }
 
   ::jenkins::plugin { 'parameterized-trigger':
@@ -322,6 +322,11 @@ class profile::jenkins::rosplugins {
     require => [ Jenkins::Plugin['ant'], Jenkins::Plugin['antisamy-markup-formatter'], Jenkins::Plugin['bouncycastle-api'], Jenkins::Plugin['command-launcher'], Jenkins::Plugin['external-monitor-job'], Jenkins::Plugin['javadoc'], Jenkins::Plugin['jdk-tool'], Jenkins::Plugin['junit'], Jenkins::Plugin['ldap'], Jenkins::Plugin['mailer'], Jenkins::Plugin['matrix-auth'], Jenkins::Plugin['matrix-project'], Jenkins::Plugin['pam-auth'], Jenkins::Plugin['windows-slaves'] ]
   }
 
+  ::jenkins::plugin { 'rebuild':
+    version => '1.31',
+    require => [ Jenkins::Plugin['command-launcher'], Jenkins::Plugin['jdk-tool'], Jenkins::Plugin['matrix-project'] ]
+  }
+
   ::jenkins::plugin { 'run-condition':
     version => '1.2',
     require => [ Jenkins::Plugin['bouncycastle-api'], Jenkins::Plugin['command-launcher'], Jenkins::Plugin['jdk-tool'], Jenkins::Plugin['token-macro'] ]
@@ -333,7 +338,7 @@ class profile::jenkins::rosplugins {
   }
 
   ::jenkins::plugin { 'script-security':
-    version => '1.48',
+    version => '1.59',
     require => [ Jenkins::Plugin['jdk-tool'] ]
   }
 
@@ -353,7 +358,7 @@ class profile::jenkins::rosplugins {
   }
 
   ::jenkins::plugin { 'structs':
-    version => '1.17',
+    version => '1.19',
     require => [ Jenkins::Plugin['command-launcher'], Jenkins::Plugin['jdk-tool'] ]
   }
 
@@ -393,12 +398,12 @@ class profile::jenkins::rosplugins {
   }
 
   ::jenkins::plugin { 'workflow-api':
-    version => '2.31',
+    version => '2.34',
     require => [ Jenkins::Plugin['scm-api'], Jenkins::Plugin['structs'], Jenkins::Plugin['workflow-step-api'] ]
   }
 
   ::jenkins::plugin { 'workflow-cps':
-    version => '2.60',
+    version => '2.68',
     require => [ Jenkins::Plugin['ace-editor'], Jenkins::Plugin['jquery-detached'], Jenkins::Plugin['scm-api'], Jenkins::Plugin['script-security'], Jenkins::Plugin['structs'], Jenkins::Plugin['workflow-api'], Jenkins::Plugin['workflow-scm-step'], Jenkins::Plugin['workflow-step-api'], Jenkins::Plugin['workflow-support'] ]
   }
 
@@ -408,7 +413,7 @@ class profile::jenkins::rosplugins {
   }
 
   ::jenkins::plugin { 'workflow-job':
-    version => '2.28',
+    version => '2.32',
     require => [ Jenkins::Plugin['workflow-api'], Jenkins::Plugin['workflow-step-api'], Jenkins::Plugin['workflow-support'] ]
   }
 
@@ -423,12 +428,12 @@ class profile::jenkins::rosplugins {
   }
 
   ::jenkins::plugin { 'workflow-step-api':
-    version => '2.16',
-    require => [ Jenkins::Plugin['bouncycastle-api'], Jenkins::Plugin['command-launcher'], Jenkins::Plugin['jdk-tool'], Jenkins::Plugin['structs'] ]
+    version => '2.19',
+    require => [ Jenkins::Plugin['structs'] ]
   }
 
   ::jenkins::plugin { 'workflow-support':
-    version => '2.22',
+    version => '3.3',
     require => [ Jenkins::Plugin['scm-api'], Jenkins::Plugin['script-security'], Jenkins::Plugin['workflow-api'], Jenkins::Plugin['workflow-step-api'] ]
   }
 
