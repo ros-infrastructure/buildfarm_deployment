@@ -197,6 +197,11 @@ class profile::jenkins::rosplugins {
     require => [ Jenkins::Plugin['badge'], Jenkins::Plugin['command-launcher'], Jenkins::Plugin['jdk-tool'], Jenkins::Plugin['matrix-project'], Jenkins::Plugin['workflow-cps'] ]
   }
 
+  ::jenkins::plugin { 'htmlpublisher':
+    version => '1.21',
+    require => [ Jenkins::Plugin['bouncycastle-api'], Jenkins::Plugin['command-launcher'], Jenkins::Plugin['jdk-tool'], Jenkins::Plugin['matrix-project'], Jenkins::Plugin['trilead-api'], Jenkins::Plugin['workflow-step-api'] ]
+  }
+
   ::jenkins::plugin { 'icon-shim':
     version => '2.0.3',
     require => [ Jenkins::Plugin['bouncycastle-api'], Jenkins::Plugin['command-launcher'], Jenkins::Plugin['jdk-tool'] ]
@@ -250,6 +255,11 @@ class profile::jenkins::rosplugins {
   ::jenkins::plugin { 'ldap':
     version => '1.20',
     require => [ Jenkins::Plugin['bouncycastle-api'], Jenkins::Plugin['command-launcher'], Jenkins::Plugin['jdk-tool'], Jenkins::Plugin['mailer'] ]
+  }
+
+  ::jenkins::plugin { 'log-parser':
+    version => '2.1',
+    require => [ Jenkins::Plugin['trilead-api'] ]
   }
 
   ::jenkins::plugin { 'mailer':
@@ -380,6 +390,11 @@ class profile::jenkins::rosplugins {
   ::jenkins::plugin { 'translation':
     version => '1.16',
     require => [ Jenkins::Plugin['bouncycastle-api'], Jenkins::Plugin['command-launcher'], Jenkins::Plugin['jdk-tool'] ]
+  }
+
+  ::jenkins::plugin { 'trilead-api':
+    version => '1.0.4',
+    require => [  ]
   }
 
   ::jenkins::plugin { 'warnings':
