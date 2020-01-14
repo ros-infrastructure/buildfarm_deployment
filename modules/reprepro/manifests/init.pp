@@ -21,7 +21,7 @@ class reprepro {
     package { 'liblzma5':
       ensure => present,
     }
-    package { 'libz1g':
+    package { 'zlib1g':
       ensure => present,
     }
 
@@ -31,7 +31,7 @@ class reprepro {
       logoutput => on_failure,
       require   => [ File['/tmp/reprepro_5.3.0-1_amd64.deb'], Package['libarchive13'], Package['libbz2-1.0'],
                     Package['libc6'], Package['libdb5.3'], Package['libgpg-error0'], Package['libgpgme11'],
-                    Package['liblzma5'], Package['libz1g'] ]
+                    Package['liblzma5'], Package['zlib1g'] ]
     }
 
     file { '/tmp/reprepro_5.3.0-1_amd64.deb':
