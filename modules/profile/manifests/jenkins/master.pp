@@ -30,6 +30,14 @@ class profile::jenkins::master {
     require =>  Service['jenkins'],
   }
 
+  # Enable TCP port for inbound agents
+  file { '/tmp/enable_tcp_agents.groovy':
+    source => 'puppet:///modules/profile/jenkins/master/enable_tcp_agents.groovy',
+  } ->
+  rosjenkins::groovy { '/tmp/enable_tcp_agents.groovy':
+    require =>  Service['jenkins'],
+  }
+
 
   # config for audit-trail
   file { '/var/lib/jenkins/audit-trail.xml':
