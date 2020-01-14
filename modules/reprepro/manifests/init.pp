@@ -23,15 +23,15 @@ class reprepro {
     }
 
     exec { 'install-prebuilt-reprepro-deb':
-      command   => '/usr/bin/dpkg -i /tmp/reprepro_5.1.1-1_amd64.deb',
-      unless    => '/usr/bin/dpkg-query -l reprepro | tail -1 | grep -qs 5.1.1-1',
+      command   => '/usr/bin/dpkg -i /tmp/reprepro_5.3.0-1_amd64.deb',
+      unless    => '/usr/bin/dpkg-query -l reprepro | tail -1 | grep -qs 5.3.0-1',
       logoutput => on_failure,
-      require   => [ File['/tmp/reprepro_5.1.1-1_amd64.deb'], Package['debhelper'], Package['libarchive-dev'],
+      require   => [ File['/tmp/reprepro_5.3.0-1_amd64.deb'], Package['debhelper'], Package['libarchive-dev'],
                     Package['libbz2-dev'], Package['libdb-dev'], Package['libgpgme11-dev'], Package['liblzma-dev'],
                     Package['libz-dev'] ]
     }
 
-    file { '/tmp/reprepro_5.1.1-1_amd64.deb':
-      source => 'puppet:///modules/reprepro/reprepro_5.1.1-1_amd64.deb',
+    file { '/tmp/reprepro_5.3.0-1_amd64.deb':
+      source => 'puppet:///modules/reprepro/reprepro_5.3.0-1_amd64.deb',
     }
 }
