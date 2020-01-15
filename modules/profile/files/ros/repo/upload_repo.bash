@@ -14,6 +14,7 @@ case "$1" in
 		exit 1
 esac
 
+mkdir -p /var/repos/ubuntu/$repo/project/trace/
 date -u > /var/repos/ubuntu/$repo/project/trace/repositories.ros.org
 ssh -T -i $HOME/upload_triggers/$key ftpsync@ftp-osl.osuosl.org
 exit_code=$?
