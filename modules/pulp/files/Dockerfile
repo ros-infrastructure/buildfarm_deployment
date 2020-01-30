@@ -53,7 +53,7 @@ ENV PATH="/usr/local/lib/pulp/bin:${PATH}"
 ENV PYTHONPATH="/usr/local/lib/pulp/lib/python3.6/site-packages"
 
 RUN pip3 install scikit-build
-RUN pip3 install pulpcore==3.0.1 pulp-rpm==3.0.0
+RUN pip3 install pulpcore==3.0.0 pulp-rpm==3.0.0
 
 RUN useradd -r pulp -m -d /var/lib/pulp -u 1000
 RUN usermod -a -G postgres pulp

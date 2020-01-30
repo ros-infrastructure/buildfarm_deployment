@@ -113,11 +113,15 @@ class profile::ros::repo {
     default_vhost => false,
   }
 
+  class { 'apache::mod::rewrite':
+  }
+
   # Make your repo publicly accessible
   apache::vhost { 'repos':
     port       => '80',
     docroot    => '/var/repos',
     priority   => '10',
+    override   => 'FileInfo',
     #  servername => 'localhost',
     #  require    => Reprepro::Distribution['precise'],
     }
@@ -238,25 +242,38 @@ class profile::ros::repo {
 
       if hiera('jenkins-agent::pulp_config', {})['rpm'] {
         hiera('jenkins-agent::pulp_config')['rpm'].each |String $distro_name, Hash $distro| {
-          $distro['versions'].each |String $distro_ver| {
-            pulp::rpm_repo { "ros-${distro_name}-${distro_ver}-SRPMS":
-              repo_endpoints => [
-                "ros-building-${distro_name}-${distro_ver}-SRPMS",
-                "ros-testing-${distro_name}-${distro_ver}-SRPMS",
-                "ros-main-${distro_name}-${distro_ver}-SRPMS",
-              ],
-              require => Pulp::Core['pulpcore'],
-            }
+          file { "/var/repos/${distro_name}":
+            ensure => 'directory',
+            owner  => $agent_username,
+            group  => $agent_username,
+            mode   => '0755',
+            require => File['/var/repos'],
+          }
 
-            $distro['architectures'].each |String $distro_arch| {
-              pulp::rpm_repo { "ros-${distro_name}-${distro_ver}-${distro_arch}":
-                repo_endpoints => [
-                  "ros-building-${distro_name}-${distro_ver}-${distro_arch}",
-                  "ros-testing-${distro_name}-${distro_ver}-${distro_arch}",
-                  "ros-main-${distro_name}-${distro_ver}-${distro_arch}",
-                ],
-                require => Pulp::Core['pulpcore'],
-              }
+          file { "/var/repos/${distro_name}/.htaccess":
+            ensure => 'file',
+            owner  => $agent_username,
+            group  => $agent_username,
+            mode   => '0644',
+            require => File["/var/repos/${distro_name}"],
+            content => epp('profile/rpm_repo_htaccess.epp', {'distro_name' => $distro_name}),
+          }
+
+          ['building', 'testing', 'main'].each |String $repo_name| {
+            file { "/var/repos/${distro_name}/${repo_name}":
+              ensure => 'directory',
+              owner  => $agent_username,
+              group  => $agent_username,
+              mode   => '0755',
+              require => File["/var/repos/${distro_name}"],
+            }
+          }
+
+          $distro['versions'].each |String $distro_ver| {
+            profile::ros::rpm_repo { "repo-${distro_name}-${distro_ver}":
+              distro_name => $distro_name,
+              distro_ver => $distro_ver,
+              distro_arches => $distro['architectures'],
             }
           }
         }

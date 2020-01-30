@@ -124,7 +124,7 @@ class profile::jenkins::agent (
   if hiera('jenkins-agent::pulp_config', false) {
     # required by pulp_upload and pulp_publish scripts
     python::pip { 'pulpcore_client':
-      ensure  => '3.0.1',
+      ensure  => '3.0.0',
       pkgname => 'pulpcore-client',
     }
 
