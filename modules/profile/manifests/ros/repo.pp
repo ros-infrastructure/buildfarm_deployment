@@ -3,6 +3,8 @@ class profile::ros::repo {
   # This is not a class parameter so it cannot be overloaded separately from the jenkins::agent value.
   $agent_username = $profile::jenkins::agent::agent_username
 
+  include pulp
+
   include reprepro
 
   package {'openssh-server':
@@ -186,7 +188,7 @@ class profile::ros::repo {
     }
 
     ['building', 'testing', 'main'].each |String $reponame| {
-      exec {"init_${reponame}_repo":
+      exec {"init_ubuntu_${reponame}_repo":
         path        => '/bin:/usr/bin',
         command     => "python /home/${agent_username}/reprepro-updater/scripts/setup_repo.py ubuntu_${reponame} -c",
         environment => ["PYTHONPATH=/home/${agent_username}/reprepro-updater/src"],
@@ -225,5 +227,39 @@ class profile::ros::repo {
     # Pull reprepro updater
     if hiera('jenkins-agent::reprepro_config', false){
       create_resources(file, hiera('jenkins-agent::reprepro_config'))
+    }
+
+    if hiera('jenkins-agent::pulp_config', false) {
+      pulp::core { 'pulpcore':
+        data_dir => '/var/repos/.pulp',
+        admin_password => hiera('jenkins-agent::pulp_config')['admin_passphrase'],
+        require => File['/var/repos'],
+      }
+
+      if hiera('jenkins-agent::pulp_config', {})['rpm'] {
+        hiera('jenkins-agent::pulp_config')['rpm'].each |String $distro_name, Hash $distro| {
+          $distro['versions'].each |String $distro_ver| {
+            pulp::rpm_repo { "ros-${distro_name}-${distro_ver}-SRPMS":
+              repo_endpoints => [
+                "ros-building-${distro_name}-${distro_ver}-SRPMS",
+                "ros-testing-${distro_name}-${distro_ver}-SRPMS",
+                "ros-main-${distro_name}-${distro_ver}-SRPMS",
+              ],
+              require => Pulp::Core['pulpcore'],
+            }
+
+            $distro['architectures'].each |String $distro_arch| {
+              pulp::rpm_repo { "ros-${distro_name}-${distro_ver}-${distro_arch}":
+                repo_endpoints => [
+                  "ros-building-${distro_name}-${distro_ver}-${distro_arch}",
+                  "ros-testing-${distro_name}-${distro_ver}-${distro_arch}",
+                  "ros-main-${distro_name}-${distro_ver}-${distro_arch}",
+                ],
+                require => Pulp::Core['pulpcore'],
+              }
+            }
+          }
+        }
+      }
     }
 }

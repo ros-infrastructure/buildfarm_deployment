@@ -121,6 +121,22 @@ class profile::jenkins::agent (
     pkgname => 'docker',
   }
 
+  if hiera('jenkins-agent::pulp_config', false) {
+    # required by pulp_upload and pulp_publish scripts
+    python::pip { 'pulpcore_client':
+      ensure  => '3.0.1',
+      pkgname => 'pulpcore-client',
+    }
+
+    if hiera('jenkins-agent::pulp_config', {})['rpm'] {
+      python::pip { 'pulp_rpm_client':
+        ensure  => '3.0.0',
+        pkgname => 'pulp-rpm-client',
+      }
+    }
+  }
+
+
   # script to clean up docker images from oldest
   file { "/home/${agent_username}/cleanup_docker_images.py":
     mode => '0774',
