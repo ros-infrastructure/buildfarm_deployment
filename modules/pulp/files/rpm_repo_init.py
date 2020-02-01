@@ -60,8 +60,11 @@ class PulpTaskPoller:
             time.sleep(0.5)
             timeout -= 0.5
             if timeout <= 0:
-                raise Exception(
-                    "Pulp task '%s' did not complete (timed out)" % task.pulp_href)
+                task_cancel = pulpcore.TaskCancel('canceled')
+                task = self._tasks_api.tasks_cancel(task.pulp_href, task_cancel)
+                if task.state != 'completed':
+                    raise Exception(
+                        "Pulp task '%s' did not complete (timed out)" % task.pulp_href)
 
             task = self._tasks_api.read(task.pulp_href)
 
@@ -74,15 +77,15 @@ def main(argv=sys.argv[1:]):
         description='Ensure RPM repositories exist in pulp')
     parser.add_argument(
         '--pulp-base-url',
-        default=os.environ.get('PULP_BASE_URL'),
+        default=os.environ.get('PULP_BASE_URL'), required=not bool(os.environ.get('PULP_BASE_URL')),
         help='URL of the pulp API endpoint')
     parser.add_argument(
         '--pulp-username',
-        default=os.environ.get('PULP_USERNAME'),
+        default=os.environ.get('PULP_USERNAME'), required=not bool(os.environ.get('PULP_USERNAME')),
         help='Username used to access the pulp API endpoint')
     parser.add_argument(
         '--pulp-password',
-        default=os.environ.get('PULP_PASSWORD'),
+        default=os.environ.get('PULP_PASSWORD'), required=not bool(os.environ.get('PULP_PASSWORD')),
         help='Password used to access the pulp API endpoint')
     parser.add_argument(
         '--pulp-task-timeout',
