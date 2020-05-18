@@ -363,7 +363,7 @@ class profile::jenkins::rosplugins {
   }
 
   ::jenkins::plugin { 'structs':
-    version => '1.17',
+    version => '1.20',
     require => [ Jenkins::Plugin['command-launcher'], Jenkins::Plugin['jdk-tool'] ]
   }
 
