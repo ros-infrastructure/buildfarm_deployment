@@ -114,6 +114,32 @@ class profile::jenkins::agent (
     require => Class[docker],
   }
 
+  package { 'iptables-persistent':
+    ensure => 'installed',
+  }
+
+  # docker versions < 19.03.3 don't provide the DOCKER-USER chain
+  exec { 'setup_docker_iptables_chain':
+    user    => 'root',
+    unless  => '/sbin/iptables -nL DOCKER-USER',
+    command => '/sbin/iptables -A DOCKER-USER -j RETURN && /sbin/iptables -I FORWARD -j DOCKER-USER && /sbin/iptables -N DOCKER-USER',
+    before  => Exec['setup_iptables_ec2_block_for_docker'],
+    require => Class[docker],
+  }
+
+  exec { 'setup_iptables_ec2_block_for_docker':
+    user    => 'root',
+    unless  => '/sbin/iptables -nL DOCKER-USER  | grep REJECT.*169.254.169.254',
+    command => '/sbin/iptables --insert DOCKER-USER --destination 169.254.169.254 --jump REJECT',
+    before  => Exec['save_iptables_rule'],
+    require => Exec['setup_docker_iptables_chain'],
+  }
+
+  exec { 'save_iptables_rule':
+    user    => 'root',
+    command => '/sbin/iptables-save > /etc/iptables/rules.v4',
+    require => [Exec['setup_iptables_ec2_block_for_docker'], Package['iptables-persistent']],
+  }
 
   # required by cleanup_docker script
   python::pip { 'docker':
