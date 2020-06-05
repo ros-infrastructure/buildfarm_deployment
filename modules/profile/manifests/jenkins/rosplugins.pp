@@ -398,7 +398,7 @@ class profile::jenkins::rosplugins {
   }
 
   ::jenkins::plugin { 'script-security':
-    version => '1.70',
+    version => '1.71',
     require => [ Jenkins::Plugin['jdk-tool'], Jenkins::Plugin['trilead-api'] ]
   }
 
