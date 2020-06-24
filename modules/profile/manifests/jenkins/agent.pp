@@ -124,13 +124,13 @@ class profile::jenkins::agent (
   if hiera('jenkins-agent::pulp_config', false) {
     # required by pulp_upload and pulp_publish scripts
     python::pip { 'pulpcore_client':
-      ensure  => '3.2.0',
+      ensure  => '3.3.1',
       pkgname => 'pulpcore-client',
     }
 
     if hiera('jenkins-agent::pulp_config', {})['rpm'] {
       python::pip { 'pulp_rpm_client':
-        ensure  => '3.2.1',
+        ensure  => '3.3.2',
         pkgname => 'pulp-rpm-client',
       }
     }

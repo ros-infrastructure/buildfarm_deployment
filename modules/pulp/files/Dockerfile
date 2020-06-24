@@ -42,6 +42,7 @@ RUN yum -y install \
   rpm-devel \
   screen \
   sqlite-devel \
+  swig3 \
   zchunk-devel \
   zlib-devel
 
@@ -50,7 +51,7 @@ ENV PATH="/usr/local/lib/pulp/bin:${PATH}"
 ENV PYTHONPATH="/usr/local/lib/pulp/lib/python3.6/site-packages"
 
 RUN pip3 install scikit-build
-RUN pip3 install pulpcore==3.2.1 pulp-rpm==3.2.0 'toml>=0.10.0'
+RUN pip3 install pulpcore==3.3.1 pulp-rpm==3.3.2 'toml>=0.10.0'
 
 ENV DJANGO_SETTINGS_MODULE="pulpcore.app.settings"
 ENV LANG="en_US.utf8"
