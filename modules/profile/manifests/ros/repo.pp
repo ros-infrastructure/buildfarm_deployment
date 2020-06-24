@@ -3,8 +3,6 @@ class profile::ros::repo {
   # This is not a class parameter so it cannot be overloaded separately from the jenkins::agent value.
   $agent_username = $profile::jenkins::agent::agent_username
 
-  include pulp
-
   include reprepro
 
   package {'openssh-server':
@@ -234,14 +232,14 @@ class profile::ros::repo {
     }
 
     if hiera('jenkins-agent::pulp_config', false) {
-      pulp::core { 'pulpcore':
+      class { 'pulp':
         data_dir => '/var/repos/.pulp',
-        admin_password => hiera('jenkins-agent::pulp_config')['admin_passphrase'],
+        admin_password => hiera('jenkins-agent::pulp_config.admin_passphrase'),
         require => File['/var/repos'],
       }
 
-      if hiera('jenkins-agent::pulp_config', {})['rpm'] {
-        hiera('jenkins-agent::pulp_config')['rpm'].each |String $distro_name, Hash $distro| {
+      if hiera('jenkins-agent::pulp_config.rpm', false) {
+        hiera('jenkins-agent::pulp_config.rpm').each |String $distro_name, Hash $distro| {
           file { "/var/repos/${distro_name}":
             ensure => 'directory',
             owner  => $agent_username,
@@ -249,16 +247,13 @@ class profile::ros::repo {
             mode   => '0755',
             require => File['/var/repos'],
           }
-
-          file { "/var/repos/${distro_name}/.htaccess":
+          -> file { "/var/repos/${distro_name}/.htaccess":
             ensure => 'file',
             owner  => $agent_username,
             group  => $agent_username,
             mode   => '0644',
-            require => File["/var/repos/${distro_name}"],
             content => epp('profile/rpm_repo_htaccess.epp', {'distro_name' => $distro_name}),
           }
-
           ['building', 'testing', 'main'].each |String $repo_name| {
             file { "/var/repos/${distro_name}/${repo_name}":
               ensure => 'directory',

@@ -128,7 +128,7 @@ class profile::jenkins::agent (
       pkgname => 'pulpcore-client',
     }
 
-    if hiera('jenkins-agent::pulp_config', {})['rpm'] {
+    if hiera('jenkins-agent::pulp_config.rpm', false) {
       python::pip { 'pulp_rpm_client':
         ensure  => '3.3.2',
         pkgname => 'pulp-rpm-client',
