@@ -1,9 +1,15 @@
-FROM centos:7
+FROM centos:8
 
-RUN yum -y install epel-release
-RUN yum -y update
+RUN dnf install \
+  epel-release \
+  dnf-plugins-core \
+  -y
 
-RUN yum -y install \
+RUN dnf config-manager --set-enabled PowerTools
+
+RUN dnf update -y
+
+RUN dnf install \
   bzip2-devel \
   cmake \
   expat-devel \
@@ -11,47 +17,70 @@ RUN yum -y install \
   gcc \
   glib2-devel \
   libcurl-devel \
-  libmodulemd2-devel \
+  libmodulemd-devel \
   libxml2-devel \
   make \
   openssl-devel \
   python3-devel \
+  python3-distro \
   python3-pip \
   python3-psycopg2 \
   python3-wheel \
-  python36-attrs \
-  python36-certifi \
-  python36-chardet \
-  python36-click \
-  python36-django \
-  python36-gobject \
-  python36-idna \
-  python36-jinja2 \
-  python36-markupsafe \
-  python36-nose \
-  python36-packaging \
-  python36-productmd \
-  python36-pyparsing \
-  python36-pytz \
-  python36-PyYAML \
-  python36-requests \
-  python36-rfc3986 \
-  python36-ruamel-yaml \
-  python36-six \
-  python36-urllib3 \
+  python3-attrs \
+  python3-certifi \
+  python3-chardet \
+  python3-click \
+  python3-django \
+  python3-gobject \
+  python3-idna \
+  python3-jinja2 \
+  python3-markupsafe \
+  python3-nose \
+  python3-packaging \
+  python3-productmd \
+  python3-pyparsing \
+  python3-pytz \
+  python3-PyYAML \
+  python3-requests \
+  python3-ruamel-yaml \
+  python3-six \
+  python3-urllib3 \
+  python3-async-timeout \
+  python3-backoff \
+  python3-defusedxml \
+  python3-gunicorn \
+  python3-importlib-metadata \
+  python3-jsonschema \
+  python3-pycparser \
+  python3-redis \
+  python3-toml \
+  python3-typing-extensions \
+  python3-uritemplate \
+  python3-whitenoise \
+  python3-xlrd \
+  python3-zipp \
+  python-idna-ssl \
+  python3-aiohttp \
+  python3-cffi \
+  python3-createrepo_c \
+  python3-ipmi \
+  python3-multidict \
+  python3-yarl \
   rpm-devel \
   screen \
   sqlite-devel \
-  swig3 \
+  swig \
   zchunk-devel \
-  zlib-devel
+  zlib-devel \
+  -y
 
 RUN python3 -m venv --system-site-packages /usr/local/lib/pulp
 ENV PATH="/usr/local/lib/pulp/bin:${PATH}"
 ENV PYTHONPATH="/usr/local/lib/pulp/lib/python3.6/site-packages"
 
 RUN pip3 install scikit-build
-RUN pip3 install pulpcore==3.3.1 pulp-rpm==3.3.2 'toml>=0.10.0'
+RUN pip3 install pulpcore==3.3.1 pulp-rpm==3.3.2
+RUN pip3 install --upgrade jsonschema
 
 ENV DJANGO_SETTINGS_MODULE="pulpcore.app.settings"
 ENV LANG="en_US.utf8"
