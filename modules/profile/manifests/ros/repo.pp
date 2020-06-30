@@ -189,6 +189,95 @@ class profile::ros::repo {
       require    => File["/home/${agent_username}/.ssh/gpg_private_key.sec"]
     }
 
+    # GPG vault
+
+    user { 'gpg-vault' :
+      ensure => present,
+      managehome => true,
+    }
+    -> exec { 'gpg-init':
+      path    => '/bin:/usr/bin:',
+      command => 'gpg -K',
+      unless  => 'test -d /home/gpg-vault/.gnupg',
+      user    => 'gpg-vault',
+      group   => 'gpg-vault',
+    }
+    -> exec { 'gpg-config':
+      path    => '/bin:/usr/bin:',
+      command => 'echo "extra-socket /var/run/gpg-vault/S.gpg-agent" > /home/gpg-vault/.gnupg/gpg-agent.conf',
+      unless  => 'grep -q extra-socket /home/gpg-vault/.gnupg/gpg-agent.conf',
+      user    => 'gpg-vault',
+      group   => 'gpg-vault',
+    }
+
+    file { '/var/run/gpg-vault':
+      ensure  => 'directory',
+      mode    => 0750,
+      owner   => 'gpg-vault',
+      group   => 'gpg-vault',
+      require => User['gpg-vault'],
+    }
+
+    file { '/etc/systemd/system/gpg-vault-agent.service':
+      source => 'puppet:///modules/profile/gpg-vault-agent.service',
+    }
+    ~> exec { 'gpg-vault-agent-service-reload':
+      path        => '/bin:/usr/bin:',
+      command     => 'systemctl daemon-reload',
+      refreshonly => true,
+    }
+    -> service { 'gpg-vault-agent':
+      ensure     => 'running',
+      enable     => true,
+      hasrestart => true,
+      require    => File['/var/run/gpg-vault'],
+      subscribe  => [
+        Exec['gpg-config'],
+        File['/etc/systemd/system/gpg-vault-agent.service'],
+      ],
+    }
+
+    file { '/home/gpg-vault/.gnupg/gpg_public_key.pub':
+      mode    => '0644',
+      owner   => 'gpg-vault',
+      group   => 'gpg-vault',
+      content => hiera('jenkins-agent::gpg_public_key'),
+      require => Exec['gpg-init'],
+    }
+    ~> exec { 'import_gpg_public_key':
+      path      => '/bin:/usr/bin:',
+      command   => 'gpg --import /home/gpg-vault/.gnupg/gpg_public_key.pub',
+      user      => 'gpg-vault',
+      group     => 'gpg-vault',
+      unless    => "gpg --list-keys ${gpg_key_id}",
+      logoutput => on_failure,
+    }
+
+    file { '/home/gpg-vault/.gnupg/gpg_private_key.sec':
+      mode    => '0600',
+      owner   => 'gpg-vault',
+      group   => 'gpg-vault',
+      content => hiera('jenkins-agent::gpg_private_key'),
+      require => Exec['gpg-init'],
+    }
+    ~> exec { 'import_gpg_private_key':
+      path      => '/bin:/usr/bin:',
+      command   => 'gpg --import /home/gpg-vault/.gnupg/gpg_private_key.sec',
+      user      => 'gpg-vault',
+      group     => 'gpg-vault',
+      unless    => "gpg --list-secret-keys ${gpg_key_id}",
+      logoutput => on_failure,
+    }
+
+    exec { 'gpg-vault-member-jenkins-agent':
+      unless  => '/bin/bash -c "/usr/bin/id -nG jenkins-agent | /bin/grep -wq gpg-vault"',
+      command => '/usr/sbin/usermod -aG gpg-vault jenkins-agent',
+      require => [
+        User['gpg-vault'],
+        User['jenkins-agent'],
+      ],
+    }
+
     ['building', 'testing', 'main'].each |String $reponame| {
       exec {"init_ubuntu_${reponame}_repo":
         path        => '/bin:/usr/bin',
@@ -236,6 +325,49 @@ class profile::ros::repo {
         data_dir => '/var/repos/.pulp',
         admin_password => hiera('jenkins-agent::pulp_config.admin_passphrase'),
         require => File['/var/repos'],
+        gpg_socket => '/var/run/gpg-vault/S.gpg-agent',
+        gpg_key_id => hiera('jenkins-agent::gpg_key_id'),
+      }
+
+      exec { 'gpg-vault-member-pulp':
+        unless  => '/bin/bash -c "/usr/bin/id -nG pulp | /bin/grep -wq gpg-vault"',
+        command => '/usr/sbin/usermod -aG gpg-vault pulp',
+        require => [
+          User['gpg-vault'],
+          User['pulp'],
+        ],
+      }
+
+      exec { 'pulp-gpg-init':
+        path    => '/bin:/usr/bin:',
+        command => 'gpg -K',
+        unless  => 'test -d /home/pulp/.gnupg',
+        user    => 'pulp',
+        group   => 'pulp',
+        require => User['pulp'],
+      }
+      -> file { '/home/pulp/.gnupg/gpg_public_key.pub':
+        mode    => '0644',
+        owner   => 'pulp',
+        group   => 'pulp',
+        content => hiera('jenkins-agent::gpg_public_key'),
+      }
+      ~> exec { 'pulp_import_gpg_public_key':
+        path      => '/bin:/usr/bin:',
+        command   => 'gpg --import /home/pulp/.gnupg/gpg_public_key.pub',
+        user      => 'pulp',
+        group     => 'pulp',
+        unless    => "gpg --list-keys ${gpg_key_id}",
+        logoutput => on_failure,
+      }
+      # Pulp requires that we trust our own public key
+      ~> exec { 'pulp_trust_gpg_public_key':
+        path      => '/bin:/usr/bin:',
+        command   => "(echo 5; echo y; echo save) | gpg --command-fd 0 --no-tty --no-greeting -q --edit-key ${gpg_key_id} trust",
+        user      => 'pulp',
+        group     => 'pulp',
+        unless    => "gpg2 --list-keys ${gpg_key_id} | grep -q '\\[ultimate\\]'",
+        logoutput => on_failure,
       }
 
       if hiera('jenkins-agent::pulp_config.rpm', false) {
@@ -269,6 +401,7 @@ class profile::ros::repo {
               distro_name => $distro_name,
               distro_ver => $distro_ver,
               distro_arches => $distro['architectures'],
+              gpg_key_id => hiera('jenkins-agent::gpg_key_id'),
             }
           }
         }

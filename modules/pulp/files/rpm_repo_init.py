@@ -92,6 +92,9 @@ def main(argv=sys.argv[1:]):
         default=60.0,
         help='Duration to wait (in seconds) for a pulp task to complete')
     parser.add_argument(
+        '--signing-service-name',
+        help='Name of the pulp signing service to use with the repository')
+    parser.add_argument(
         'repository_name',
         help='Name of the repository to be created')
     parser.add_argument(
@@ -143,12 +146,27 @@ def main(argv=sys.argv[1:]):
 
     pulp_task_poller = PulpTaskPoller(pulp_config, args.pulp_task_timeout)
 
+    metadata_signing_service = None
+    if args.signing_service_name:
+        pulp_signing_api = pulpcore.SigningServicesApi(pulp_client)
+        signing_services = pulp_signing_api.list(name=args.signing_service_name)
+        if not signing_services.results:
+            print("Invalid signing service name '%s'." % args.signing_service_name)
+            return 1
+        metadata_signing_service = signing_services.results[0].pulp_href
+        print("Using signing service '%s' (%s)" % (signing_services.results[0].name, metadata_signing_service))
+
     # Check if the repository exists. If not, create it.
     repositories = pulp_repos_api.list(name=args.repository_name)
     if repositories.results:
         repository = repositories.results[0]
+
+        if metadata_signing_service and not (repository.metadata_signing_service or '').endswith(metadata_signing_service):
+            repository.metadata_signing_service = metadata_signing_service
+            pulp_repos_api.partial_update(repository.pulp_href, repository)
     else:
-        new_repository = pulp_rpm.RpmRpmRepository(name=args.repository_name)
+        new_repository = pulp_rpm.RpmRpmRepository(
+            name=args.repository_name, metadata_signing_service=signing_service_href)
 
         print("Creating repository '%s'" % new_repository.name)
         repository = pulp_repos_api.create(new_repository)

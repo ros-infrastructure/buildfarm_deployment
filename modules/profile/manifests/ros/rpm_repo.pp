@@ -2,6 +2,7 @@ define profile::ros::rpm_repo(
   $distro_name,
   $distro_ver,
   $distro_arches,
+  $gpg_key_id = undef,
 ) {
   pulp::rpm_repo { "ros-${distro_name}-${distro_ver}-SRPMS":
     repo_endpoints => [
@@ -9,6 +10,7 @@ define profile::ros::rpm_repo(
       "ros-testing-${distro_name}-${distro_ver}-SRPMS",
       "ros-main-${distro_name}-${distro_ver}-SRPMS",
     ],
+    gpg_key_id => $gpg_key_id,
     require => Class['pulp'],
   }
 

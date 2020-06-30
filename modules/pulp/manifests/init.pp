@@ -2,6 +2,8 @@ class pulp (
   String           $data_dir       = $pulp::params::data_dir,
   Integer          $num_workers    = $pulp::params::num_workers,
   Optional[String] $admin_password = $pulp::params::admin_password,
+  Optional[String] $gpg_socket     = $pulp::params::gpg_socket,
+  Optional[String] $gpg_key_id     = $pulp::params::gpg_key_id,
 ) inherits pulp::params {
   user { 'pulp':
     ensure => present,
@@ -91,7 +93,6 @@ class pulp (
   ~> docker::image {'pulp_image':
     ensure => 'latest',
     docker_dir => $data_dir,
-    subscribe => File["${data_dir}/Dockerfile"],
   }
 
   #
@@ -102,7 +103,7 @@ class pulp (
 
   exec { 'pulp_django_migration':
     path => ['/bin', '/usr/bin'],
-    command => "docker run --user 1200 --rm -v /var/run/postgresql:/var/run/postgresql pulp_image pulpcore-manager migrate --noinput",
+    command => "docker run --user 1200:1200 --rm -v /var/run/postgresql:/var/run/postgresql pulp_image pulpcore-manager migrate --noinput",
     require => [
       Docker::Image['pulp_image'],
       Exec['postgres_db'],
@@ -111,7 +112,7 @@ class pulp (
   }
   -> exec { 'pulp_collect_static':
     path => ['/bin', '/usr/bin'],
-    command => "docker run --user 1200 --rm -v ${data_dir}:/var/repos/.pulp pulp_image pulpcore-manager collectstatic --noinput",
+    command => "docker run --user 1200:1200 --rm -v ${data_dir}:/var/repos/.pulp pulp_image pulpcore-manager collectstatic --noinput",
     require => [
       File[$data_dir],
     ],
@@ -120,7 +121,46 @@ class pulp (
   if ($admin_password) {
     exec { 'pulp_admin_pw':
       path => ['/bin', '/usr/bin'],
-      command => "docker run --user 1200 --rm -v /var/run/postgresql:/var/run/postgresql pulp_image pulpcore-manager reset-admin-password -p ${admin_password}",
+      command => "docker run --user 1200:1200 --rm -v /var/run/postgresql:/var/run/postgresql pulp_image pulpcore-manager reset-admin-password -p ${admin_password}",
+      require => [
+        Docker::Image['pulp_image'],
+        Exec['postgres_db'],
+      ],
+    }
+  }
+
+  # Make sure ~/.gnupg exists prior to running
+  exec { 'pulp_gnupg_dir':
+    path    => '/bin:/usr/bin:',
+    command => 'gpg -K',
+    unless  => 'test -d /home/pulp/.gnupg',
+    user    => 'pulp',
+    group   => 'pulp',
+    require => User['pulp'],
+  }
+
+  if ($gpg_key_id) {
+    if ($gpg_socket) {
+      $gpg_socket_arg = "-v ${gpg_socket}:/home/pulp/.gnupg/S.gpg-agent"
+    }
+
+    file { "/home/pulp/.gnupg/pulp_sign_${gpg_key_id}.sh":
+      ensure  => 'file',
+      owner   => 'pulp',
+      group   => 'pulp',
+      mode    => '750',
+      content => epp('pulp/pulp_sign.sh.epp', { 'gpg_key_id' => $gpg_key_id }),
+      require => Exec['pulp_gnupg_dir'],
+    }
+    -> exec { 'pulp_init_signing_service':
+      path => ['/bin', '/usr/bin'],
+      command => "docker run --user 1200:1200 --rm -e GNUPGHOME=/home/pulp/.gnupg -v /home/pulp/.gnupg:/home/pulp/.gnupg ${gpg_socket_arg} -v /var/run/postgresql:/var/run/postgresql pulp_image pulpcore-manager shell --command='\
+from pulpcore.app.models.content import AsciiArmoredDetachedSigningService; \
+AsciiArmoredDetachedSigningService.objects.get_or_create(name=\"${gpg_key_id}\", script=\"/home/pulp/.gnupg/pulp_sign_${gpg_key_id}.sh\")'",
+      require => [
+        Docker::Image['pulp_image'],
+        Exec['postgres_db'],
+      ],
     }
   }
 
@@ -137,7 +177,7 @@ class pulp (
       "/var/run/redis:/var/run/redis",
     ],
     ports => ['24817:24817'],
-    username => '1200',
+    username => '1200:1200',
     command => 'pulpcore-manager runserver 0.0.0.0:24817',
     require => [
       Docker::Image['pulp_image'],
@@ -159,7 +199,7 @@ class pulp (
       "/var/run/redis:/var/run/redis",
     ],
     ports => ['24816:24816'],
-    username => '1200',
+    username => '1200:1200',
     command => 'pulp-content',
     require => [
       Docker::Image['pulp_image'],
@@ -179,7 +219,7 @@ class pulp (
       "/var/run/postgresql:/var/run/postgresql",
       "/var/run/redis:/var/run/redis",
     ],
-    username => '1200',
+    username => '1200:1200',
     command => "rq worker -n 'resource-manager' -w 'pulpcore.tasking.worker.PulpWorker' -c 'pulpcore.rqconfig'",
     require => [
       Docker::Image['pulp_image'],
@@ -191,6 +231,10 @@ class pulp (
     depend_services => ['postgresql', 'redis-server'],
   }
 
+  if ($gpg_socket) {
+    $gpg_socket_mount = ["${gpg_socket}:/home/pulp/.gnupg/S.gpg-agent"]
+  }
+
   range(1, $num_workers).each |Integer $worker_id| {
     docker::run {"pulp_worker_${worker_id}":
       image => 'pulp_image',
@@ -199,13 +243,18 @@ class pulp (
         "${data_dir}:/var/repos/.pulp",
         "/var/run/postgresql:/var/run/postgresql",
         "/var/run/redis:/var/run/redis",
+        "/home/pulp/.gnupg:/home/pulp/.gnupg",
+      ] + $gpg_socket_mount,
+      env => [
+        'GNUPGHOME=/home/pulp/.gnupg',
       ],
-      username => '1200',
+      username => '1200:1200',
       command => "rq worker -n pulp_worker_${worker_id} -w 'pulpcore.tasking.worker.PulpWorker' -c 'pulpcore.rqconfig'",
       require => [
         Docker::Image['pulp_image'],
         Exec['pulp_admin_pw'],
         Exec['pulp_collect_static'],
+        Exec['pulp_gnupg_dir'],
         File[$data_dir],
         User['pulp'],
       ],
