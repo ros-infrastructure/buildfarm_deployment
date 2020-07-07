@@ -49,7 +49,7 @@ They are intended as a guideline for choosing the appropriate parameters when de
 
 <table>
 <tr><td>Disk space</td><td>200Gb+</td></tr>
-<tr><td><strong>Recommendation</strong></td><td>c3.large or faster</td></tr>
+<tr><td><strong>Recommendation</strong></td><td>c5.large or faster</td></tr>
 </table>
 
 ### Repo
