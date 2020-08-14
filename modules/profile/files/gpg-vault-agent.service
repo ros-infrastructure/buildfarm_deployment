@@ -1,0 +1,13 @@
+[Unit]
+Description=GnuPG cryptographic agent and passphrase cache
+Documentation=man:gpg-agent(1)
+
+[Service]
+Type=forking
+User=gpg-vault
+ExecStart=/usr/bin/gpg-agent --daemon
+ExecStartPost=/bin/chmod ga+rw /var/run/gpg-vault/S.gpg-agent
+ExecReload=/usr/bin/gpgconf --reload gpg-agent
+
+[Install]
+WantedBy=default.target
