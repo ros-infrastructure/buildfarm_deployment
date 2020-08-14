@@ -132,7 +132,7 @@ class profile::jenkins::agent (
 
   # clean up containers and dangling images https://github.com/docker/docker/issues/928#issuecomment-58619854
   cron {'docker_cleanup_images':
-    command => "bash -c \"python3 -u /home/${agent_username}/cleanup_docker_images.py --minimum-free-percent 10 --minimum-free-space 50\"",
+    command => "bash -c \"python3 -u /home/${agent_username}/cleanup_docker_images.py --minimum-free-percent 30 --minimum-free-space 60\"",
     user    => $agent_username,
     month   => absent,
     monthday => absent,
