@@ -166,7 +166,7 @@ def main(argv=sys.argv[1:]):
             pulp_repos_api.partial_update(repository.pulp_href, repository)
     else:
         new_repository = pulp_rpm.RpmRpmRepository(
-            name=args.repository_name, metadata_signing_service=signing_service_href)
+            name=args.repository_name, metadata_signing_service=metadata_signing_service)
 
         print("Creating repository '%s'" % new_repository.name)
         repository = pulp_repos_api.create(new_repository)

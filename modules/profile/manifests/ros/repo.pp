@@ -363,7 +363,7 @@ class profile::ros::repo {
       # Pulp requires that we trust our own public key
       ~> exec { 'pulp_trust_gpg_public_key':
         path      => '/bin:/usr/bin:',
-        command   => "(echo 5; echo y; echo save) | gpg --command-fd 0 --no-tty --no-greeting -q --edit-key ${gpg_key_id} trust",
+        command   => "/bin/bash -c '(echo 5; echo y; echo save) | gpg --command-fd 0 --no-tty --no-greeting -q --edit-key ${gpg_key_id} trust'",
         user      => 'pulp',
         group     => 'pulp',
         unless    => "gpg2 --list-keys ${gpg_key_id} | grep -q '\\[ultimate\\]'",
