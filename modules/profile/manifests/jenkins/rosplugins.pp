@@ -197,6 +197,11 @@ class profile::jenkins::rosplugins {
     require => [ Jenkins::Plugin['badge'], Jenkins::Plugin['command-launcher'], Jenkins::Plugin['jdk-tool'], Jenkins::Plugin['matrix-project'], Jenkins::Plugin['workflow-cps'] ]
   }
 
+  ::jenkins::plugin { 'heavy-job':
+    version => '1.1',
+    require => [ Jenkins::Plugin['ant'], Jenkins::Plugin['javadoc'], Jenkins::Plugin['external-monitor-job'], Jenkins::Plugin['ldap'], Jenkins::Plugin['pam-auth'], Jenkins::Plugin['mailer'], Jenkins::Plugin['matrix-auth'], Jenkins::Plugin['windows-slaves'], Jenkins::Plugin['antisamy-markup-formatter'], Jenkins::Plugin['matrix-project'], Jenkins::Plugin['junit'], Jenkins::Plugin['bouncycastle-api'], Jenkins::Plugin['command-launcher'], Jenkins::Plugin['jdk-tool'], Jenkins::Plugin['jaxb'], Jenkins::Plugin['trilead-api'] ]
+  }
+
   ::jenkins::plugin { 'htmlpublisher':
     version => '1.21',
     require => [ Jenkins::Plugin['bouncycastle-api'], Jenkins::Plugin['command-launcher'], Jenkins::Plugin['jdk-tool'], Jenkins::Plugin['matrix-project'], Jenkins::Plugin['trilead-api'], Jenkins::Plugin['workflow-step-api'] ]
@@ -215,6 +220,11 @@ class profile::jenkins::rosplugins {
   ::jenkins::plugin { 'javadoc':
     version => '1.4',
     require => [ Jenkins::Plugin['bouncycastle-api'], Jenkins::Plugin['command-launcher'], Jenkins::Plugin['jdk-tool'] ]
+  }
+
+  ::jenkins::plugin { 'jaxb':
+    version => '2.3.0.1',
+    require => [ Jenkins::Plugin['trilead-api'] ]
   }
 
   ::jenkins::plugin { 'jdk-tool':
