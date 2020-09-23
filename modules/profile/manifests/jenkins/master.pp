@@ -125,7 +125,7 @@ class profile::jenkins::master {
     owner => jenkins,
     group => jenkins,
     source => 'puppet:///modules/jenkins_files/var/lib/jenkins/hudson.plugins.warnings.WarningsPublisher.xml',
-    require => Jenkins::Plugin['warnings'],
+    require => Jenkins::Plugin['warnings-ng'],
     notify => Service['jenkins'],
   }
 
