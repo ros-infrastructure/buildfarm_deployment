@@ -1,0 +1,4 @@
+RewriteEngine On
+RewriteRule ([^/]*)/([^/]*)/SRPMS/(.*) http://%{HTTP_HOST}:24816/pulp/content/ros-$1-<%= $distro_name %>-$2-SRPMS/$3 [L]
+RewriteRule ([^/]*)/([^/]*)/([^/]*)/debug/(.*) http://%{HTTP_HOST}:24816/pulp/content/ros-$1-<%= $distro_name %>-$2-$3-debug/$4 [L]
+RewriteRule ([^/]*)/([^/]*)/([^/]*)/(.*) http://%{HTTP_HOST}:24816/pulp/content/ros-$1-<%= $distro_name %>-$2-$3/$4 [L]
