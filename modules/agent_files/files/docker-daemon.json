@@ -1,3 +1,0 @@
-{
-	"seccomp-profile": "/etc/docker/seccomp-profiles/docker-default-with-personality.json"
-}
