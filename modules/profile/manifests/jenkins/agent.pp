@@ -110,7 +110,7 @@ class profile::jenkins::agent (
   }
 
   file { '/etc/docker/daemon.json':
-    source  => 'puppet:///modules/agent_files/docker-daemon.json',
+    source  => template('agent_files/docker-daemon.json'),
     require => Class[docker],
   }
 

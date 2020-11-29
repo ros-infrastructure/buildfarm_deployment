@@ -1,0 +1,4 @@
+{
+<% if ! scope.function_hiera(["docker::registry_mirror"], "").empty? %> "registry-mirrors": ["<%= scope.function_hiera(["docker::registry_mirror"])%>"],<% end -%>
+	"seccomp-profile": "/etc/docker/seccomp-profiles/docker-default-with-personality.json"
+}
