@@ -42,7 +42,7 @@ class profile::ros::base {
     $defaults = {
       'ensure' => 'present',
     }
-    create_resources(ssh_authorized_key, hiera('ssh_keys'), $defaults)
+    # create_resources(ssh_authorized_key, hiera('ssh_keys'), $defaults)
   }
   else{
     notice("No ssh_keys defined. You should probably have at least one.")
